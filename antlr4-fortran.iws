@@ -2,33 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="049e1eae-3fc3-4efe-95a5-4e002199d37e" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.gradle/4.6/fileChanges/last-build.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/4.6/fileHashes/fileHashes.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/4.6/fileHashes/fileHashes.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/4.6/taskHistory/taskHistory.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/4.6/taskHistory/taskHistory.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/vcsWorkingDirs/gc.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/antlr4-fortran.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/antlr4-fortran.ipr" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/antlr4-fortran.iws" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code/p01.gyoo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/created/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/created/MyListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOO.g4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOO.tokens" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOOBaseListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOOLexer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOOLexer.tokens" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOOListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOOParser.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/code/fortran/fun01.f90" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/App.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/Listener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77.g4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77.tokens" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77BaseListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77Lexer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77Lexer.tokens" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77Listener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77Parser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/antlr4-fortran.iws" beforeDir="false" afterPath="$PROJECT_DIR$/antlr4-fortran.iws" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/p01.gyoo" beforeDir="false" afterPath="$PROJECT_DIR$/code/gyoo/p01.gyoo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/antlr4-fortran/com/agh/a2f/generated/GYOO.g4" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/antlr4-fortran/com/agh/a2f/gyoo/generated/GYOO.g4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/antlr4-fortran/com/agh/a2f/generated/GYOO.tokens" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/antlr4-fortran/com/agh/a2f/gyoo/generated/GYOO.tokens" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/antlr4-fortran/com/agh/a2f/generated/GYOOLexer.tokens" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/antlr4-fortran/com/agh/a2f/gyoo/generated/GYOOLexer.tokens" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agh/a2f/created/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/created/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agh/a2f/created/MyListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/created/MyListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOO.g4" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/generated/GYOO.g4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOO.tokens" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/generated/GYOO.tokens" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOOBaseListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/generated/GYOOBaseListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOOLexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/generated/GYOOLexer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOOLexer.tokens" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/generated/GYOOLexer.tokens" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOOListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/generated/GYOOListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOOParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/generated/GYOOParser.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -83,24 +80,54 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="MyListener.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/created/MyListener.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/created/MyListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="918">
-              <caret line="51" column="39" selection-start-line="51" selection-start-column="39" selection-end-line="51" selection-end-column="39" />
+            <state relative-caret-position="180">
+              <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#121#122#0" expanded="true" />
-                <element signature="e#164#165#0" expanded="true" />
               </folding>
             </state>
           </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="App.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/App.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="36">
+              <caret line="2" column="16" selection-start-line="2" selection-start-column="16" selection-end-line="2" selection-end-column="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="fun01.f90" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/code/fortran/fun01.f90">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="198">
+              <caret line="11" column="12" selection-start-line="11" selection-start-column="12" selection-end-line="11" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Listener.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/Listener.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="108">
+              <caret line="6" selection-start-line="6" selection-end-line="6" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="fortran77.g4" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77.g4">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/created/Main.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/created/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" column="47" selection-start-line="16" selection-start-column="47" selection-end-line="16" selection-end-column="47" />
+            <state relative-caret-position="360">
+              <caret line="20" column="42" selection-start-line="20" selection-start-column="42" selection-end-line="20" selection-end-column="42" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -108,58 +135,43 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="p01.gyoo" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/code/p01.gyoo">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="8" column="3" selection-start-line="8" selection-start-column="3" selection-end-line="8" selection-end-column="3" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GYOOBaseListener.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOOBaseListener.java">
+      <file leaf-file-name="fortran77BaseListener.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77BaseListener.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="180">
-              <caret line="12" column="46" selection-start-line="12" selection-start-column="46" selection-end-line="12" selection-end-column="46" />
+              <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GYOOListener.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOOListener.java">
+      <file leaf-file-name="fortran77Lexer.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77Lexer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
-              <caret line="1" column="19" selection-start-line="1" selection-start-column="19" selection-end-line="1" selection-end-column="19" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GYOOParser.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOOParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
-              <caret line="1" column="19" selection-start-line="1" selection-start-column="19" selection-end-line="1" selection-end-column="19" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GYOOLexer.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOOLexer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1105">
-              <caret line="1" column="19" selection-start-line="1" selection-start-column="19" selection-end-line="1" selection-end-column="19" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/build.gradle">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="486">
-              <caret line="27" column="14" selection-start-line="27" selection-start-column="14" selection-end-line="27" selection-end-column="14" />
+            <state relative-caret-position="194">
+              <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
               <folding>
-                <element signature="n#!!doc" expanded="true" />
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="fortran77Listener.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77Listener.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="144">
+              <caret line="8" column="17" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="fortran77Parser.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77Parser.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="198">
+              <caret line="11" column="69" selection-start-line="11" selection-start-column="69" selection-end-line="11" selection-end-column="69" />
+              <folding>
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -192,8 +204,15 @@
         <option value="$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOOBaseListener.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/agh/a2f/created/App.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/agh/a2f/created/MyListener.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/agh/a2f/created/Main.java" />
         <option value="$PROJECT_DIR$/code/p01.gyoo" />
+        <option value="$PROJECT_DIR$/src/main/java/com/agh/a2f/created/Main.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/created/Main.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77BaseListener.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77Lexer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77Listener.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77Parser.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/Listener.java" />
+        <option value="$PROJECT_DIR$/code/fortran/fun01.f90" />
       </list>
     </option>
   </component>
@@ -248,6 +267,17 @@
             <path>
               <item name="antlr4-fortran" type="b2602c69:ProjectViewProjectNode" />
               <item name="antlr4-fortran" type="462c0819:PsiDirectoryNode" />
+              <item name="code" type="462c0819:PsiDirectoryNode" />
+              <item name="fortran" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="antlr4-fortran" type="b2602c69:ProjectViewProjectNode" />
+              <item name="antlr4-fortran" type="462c0819:PsiDirectoryNode" />
+              <item name="gradle" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="antlr4-fortran" type="b2602c69:ProjectViewProjectNode" />
+              <item name="antlr4-fortran" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -278,6 +308,45 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="a2f" type="462c0819:PsiDirectoryNode" />
+              <item name="fortran" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="antlr4-fortran" type="b2602c69:ProjectViewProjectNode" />
+              <item name="antlr4-fortran" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="a2f" type="462c0819:PsiDirectoryNode" />
+              <item name="fortran" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="antlr4-fortran" type="b2602c69:ProjectViewProjectNode" />
+              <item name="antlr4-fortran" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="a2f" type="462c0819:PsiDirectoryNode" />
+              <item name="fortran" type="462c0819:PsiDirectoryNode" />
+              <item name="generated" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="antlr4-fortran" type="b2602c69:ProjectViewProjectNode" />
+              <item name="antlr4-fortran" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="a2f" type="462c0819:PsiDirectoryNode" />
+              <item name="gyoo" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="antlr4-fortran" type="b2602c69:ProjectViewProjectNode" />
+              <item name="antlr4-fortran" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="a2f" type="462c0819:PsiDirectoryNode" />
+              <item name="gyoo" type="462c0819:PsiDirectoryNode" />
               <item name="created" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -287,6 +356,7 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="a2f" type="462c0819:PsiDirectoryNode" />
+              <item name="gyoo" type="462c0819:PsiDirectoryNode" />
               <item name="generated" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -315,7 +385,11 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.agh.a2f.fortran" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/code/gyoo" />
       <recent name="$PROJECT_DIR$/src/main/java/com/agh/a2f/generated" />
     </key>
   </component>
@@ -340,12 +414,12 @@
       </method>
     </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.agh.a2f.created.Main" />
+      <option name="MAIN_CLASS_NAME" value="com.agh.a2f.gyoo.created.Main" />
       <module name="antlr4-fortran" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.agh.a2f.created.*" />
+          <option name="PATTERN" value="com.agh.a2f.gyoo.created.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -412,16 +486,16 @@
       <option name="presentableId" value="Default" />
       <updated>1523482054441</updated>
       <workItem from="1523482055584" duration="950000" />
-      <workItem from="1523483129629" duration="1107000" />
+      <workItem from="1523483129629" duration="1274000" />
+      <workItem from="1523560849708" duration="2133000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2057000" />
+    <option name="totallyTimeSpent" value="4357000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="right" id="sbt" order="3" />
@@ -436,12 +510,12 @@
       <window_info id="UI Designer" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Messages" />
+      <window_info anchor="bottom" id="Messages" order="8" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32910052" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32910052" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24986508" />
       <window_info anchor="bottom" id="sbt-shell-toolwindow" order="7" />
@@ -471,121 +545,224 @@
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/created/MyListener.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/created/MyListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="19" column="1" lean-forward="true" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#121#122#0" expanded="true" />
-            <element signature="e#164#165#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="27" column="14" selection-start-line="27" selection-start-column="14" selection-end-line="27" selection-end-column="14" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/MarkupParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" column="44" selection-start-line="6" selection-start-column="44" selection-end-line="6" selection-end-column="44" />
+        <state relative-caret-position="810">
+          <caret line="51" column="39" selection-start-line="51" selection-start-column="39" selection-end-line="51" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/LibraryTest.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/Library.java" />
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="27" column="14" selection-start-line="27" selection-start-column="14" selection-end-line="27" selection-end-column="14" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/MarkupParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" column="44" selection-start-line="6" selection-start-column="44" selection-end-line="6" selection-end-column="44" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/GYOO.g4">
+    <entry file="file://$PROJECT_DIR$/code/gyoo/p01.gyoo">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+          <caret line="8" column="3" selection-start-line="8" selection-start-column="3" selection-end-line="8" selection-end-column="3" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOOLexer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1105">
-          <caret line="1" column="19" selection-start-line="1" selection-start-column="19" selection-end-line="1" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOOListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" column="19" selection-start-line="1" selection-start-column="19" selection-end-line="1" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOOParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" column="19" selection-start-line="1" selection-start-column="19" selection-end-line="1" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/generated/GYOOBaseListener.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/generated/GYOOBaseListener.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="12" column="46" selection-start-line="12" selection-start-column="46" selection-end-line="12" selection-end-column="46" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/created/MyListener.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/generated/GYOOListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="918">
-          <caret line="51" column="39" selection-start-line="51" selection-start-column="39" selection-end-line="51" selection-end-column="39" />
+        <state relative-caret-position="18">
+          <caret line="1" column="19" selection-start-line="1" selection-start-column="19" selection-end-line="1" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/generated/GYOOParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="1" column="19" selection-start-line="1" selection-start-column="19" selection-end-line="1" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/generated/GYOOLexer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="1" column="19" selection-start-line="1" selection-start-column="19" selection-end-line="1" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="27" column="14" selection-start-line="27" selection-start-column="14" selection-end-line="27" selection-end-column="14" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#121#122#0" expanded="true" />
-            <element signature="e#164#165#0" expanded="true" />
+            <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/created/Main.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/created/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="47" selection-start-line="16" selection-start-column="47" selection-end-line="16" selection-end-column="47" />
+        <state relative-caret-position="414">
+          <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/p01.gyoo">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/created/MyListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="19" column="1" lean-forward="true" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="486">
+          <caret line="27" column="14" selection-start-line="27" selection-start-column="14" selection-end-line="27" selection-end-column="14" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/MarkupParser.java" />
+    <entry file="file://$PROJECT_DIR$/src/test/java/LibraryTest.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/Library.java" />
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="27" column="14" selection-start-line="27" selection-start-column="14" selection-end-line="27" selection-end-column="14" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/MarkupParser.java" />
+    <entry file="file://$PROJECT_DIR$/src/GYOO.g4" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/generated/GYOOLexer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="1" column="19" selection-start-line="1" selection-start-column="19" selection-end-line="1" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/generated/GYOOListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="1" column="19" selection-start-line="1" selection-start-column="19" selection-end-line="1" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/generated/GYOOParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="1" column="19" selection-start-line="1" selection-start-column="19" selection-end-line="1" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/generated/GYOOBaseListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="46" selection-start-line="12" selection-start-column="46" selection-end-line="12" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/gyoo/p01.gyoo">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
           <caret line="8" column="3" selection-start-line="8" selection-start-column="3" selection-end-line="8" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/generated/GYOO.g4">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77.tokens">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3941" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77Listener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="8" column="17" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77Parser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" column="69" selection-start-line="11" selection-start-column="69" selection-end-line="11" selection-end-column="69" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77.g4">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/Listener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77BaseListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/generated/fortran77Lexer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/created/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="20" column="42" selection-start-line="20" selection-start-column="42" selection-end-line="20" selection-end-column="42" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/gyoo/created/MyListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/App.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="16" selection-start-line="2" selection-start-column="16" selection-end-line="2" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/fortran/fun01.f90">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" column="12" selection-start-line="11" selection-start-column="12" selection-end-line="11" selection-end-column="12" />
         </state>
       </provider>
     </entry>

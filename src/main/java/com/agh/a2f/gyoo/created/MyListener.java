@@ -1,9 +1,9 @@
 
-package com.agh.a2f.created;
+package com.agh.a2f.gyoo.created;
 
 
-import com.agh.a2f.generated.GYOOBaseListener;
-import com.agh.a2f.generated.GYOOParser;
+import com.agh.a2f.gyoo.generated.GYOOBaseListener;
+import com.agh.a2f.gyoo.generated.GYOOParser;
 
 import java.util.HashMap;
 import java.util.Map;

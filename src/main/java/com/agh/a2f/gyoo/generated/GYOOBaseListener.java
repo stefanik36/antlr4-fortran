@@ -1,5 +1,5 @@
 // Generated from GYOO.g4 by ANTLR 4.5.3
-package com.agh.a2f.generated;
+package com.agh.a2f.gyoo.generated;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
