@@ -1,5 +1,5 @@
 // Generated from fortran77.g4 by ANTLR 4.5.3
-package com.agh.a2f.fortran.generated;
+package com.agh.a2f.fortranDeprecated.generated;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -856,6 +856,18 @@ public class fortran77BaseListener implements fortran77Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterGotoStatement(fortran77Parser.GotoStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1163,18 +1175,6 @@ public class fortran77BaseListener implements fortran77Listener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPrintStatement(fortran77Parser.PrintStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

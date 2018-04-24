@@ -35,11 +35,86 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
+          <root url="jar:///home/daniel/.gradle/caches/modules-2/files-2.1/org.bytedeco.javacpp-presets/llvm-platform/5.0.1-1.4.1/b1b3ef398a3bbbf41bf37489780ddb3897323ab/llvm-platform-5.0.1-1.4.1.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES/>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
           <root url="jar:///home/daniel/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/23.0/c947004bb13d18182be60077ade044099e4f26f1/guava-23.0.jar!/"/>
         </CLASSES>
         <JAVADOC/>
         <SOURCES>
           <root url="jar:///home/daniel/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/23.0/ed233607c5c11e1a13a3fd760033ed5d9fe525c2/guava-23.0-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/daniel/.gradle/caches/modules-2/files-2.1/org.bytedeco.javacpp-presets/llvm/5.0.1-1.4.1/ada38a7ec5ade1298a92b4a4d8cde0092718fe1b/llvm-5.0.1-1.4.1.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar:///home/daniel/.gradle/caches/modules-2/files-2.1/org.bytedeco.javacpp-presets/llvm/5.0.1-1.4.1/a17207f3909c72a1efb7068fb22de2a5d7bfa498/llvm-5.0.1-1.4.1-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/daniel/.gradle/caches/modules-2/files-2.1/org.bytedeco.javacpp-presets/llvm/5.0.1-1.4.1/aa7b0d9f776c572f13ed5a7c63f214cc94812531/llvm-5.0.1-1.4.1-linux-x86.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar:///home/daniel/.gradle/caches/modules-2/files-2.1/org.bytedeco.javacpp-presets/llvm/5.0.1-1.4.1/a17207f3909c72a1efb7068fb22de2a5d7bfa498/llvm-5.0.1-1.4.1-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/daniel/.gradle/caches/modules-2/files-2.1/org.bytedeco.javacpp-presets/llvm/5.0.1-1.4.1/fcf5438aef7b8c0c4a263bbfa02c0f9064ae423f/llvm-5.0.1-1.4.1-linux-x86_64.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar:///home/daniel/.gradle/caches/modules-2/files-2.1/org.bytedeco.javacpp-presets/llvm/5.0.1-1.4.1/a17207f3909c72a1efb7068fb22de2a5d7bfa498/llvm-5.0.1-1.4.1-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/daniel/.gradle/caches/modules-2/files-2.1/org.bytedeco.javacpp-presets/llvm/5.0.1-1.4.1/949de28bab97f5931c50fa803bbb14d7036a2534/llvm-5.0.1-1.4.1-macosx-x86_64.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar:///home/daniel/.gradle/caches/modules-2/files-2.1/org.bytedeco.javacpp-presets/llvm/5.0.1-1.4.1/a17207f3909c72a1efb7068fb22de2a5d7bfa498/llvm-5.0.1-1.4.1-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/daniel/.gradle/caches/modules-2/files-2.1/org.bytedeco.javacpp-presets/llvm/5.0.1-1.4.1/ddaa9bde13273ffd93a9086b3add23c65191a3a4/llvm-5.0.1-1.4.1-windows-x86.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar:///home/daniel/.gradle/caches/modules-2/files-2.1/org.bytedeco.javacpp-presets/llvm/5.0.1-1.4.1/a17207f3909c72a1efb7068fb22de2a5d7bfa498/llvm-5.0.1-1.4.1-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/daniel/.gradle/caches/modules-2/files-2.1/org.bytedeco.javacpp-presets/llvm/5.0.1-1.4.1/a88c990b5d9ce2945bcc4964e7f9b9f2f403cfd9/llvm-5.0.1-1.4.1-windows-x86_64.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar:///home/daniel/.gradle/caches/modules-2/files-2.1/org.bytedeco.javacpp-presets/llvm/5.0.1-1.4.1/a17207f3909c72a1efb7068fb22de2a5d7bfa498/llvm-5.0.1-1.4.1-sources.jar!/"/>
         </SOURCES>
       </library>
     </orderEntry>
@@ -83,6 +158,26 @@
         <SOURCES>
           <root url="jar:///home/daniel/.gradle/caches/modules-2/files-2.1/org.codehaus.mojo/animal-sniffer-annotations/1.14/886474da3f761d39fcbb723d97ecc5089e731f42/animal-sniffer-annotations-1.14-sources.jar!/"/>
         </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/daniel/.gradle/caches/modules-2/files-2.1/org.bytedeco/javacpp/1.4.1/94b0d8239434d88f1069033aab20a71f2e9f106b/javacpp-1.4.1.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar:///home/daniel/.gradle/caches/modules-2/files-2.1/org.bytedeco/javacpp/1.4.1/a184ef185810a96ea5d5aafd9d24452758a88fe0/javacpp-1.4.1-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/gradle/libs/Cover-Of-Darkness-all.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES/>
       </library>
     </orderEntry>
     <orderEntry type="module-library" scope="TEST">

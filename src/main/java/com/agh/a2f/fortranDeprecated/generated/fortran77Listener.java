@@ -1,5 +1,5 @@
 // Generated from fortran77.g4 by ANTLR 4.5.3
-package com.agh.a2f.fortran.generated;
+package com.agh.a2f.fortranDeprecated.generated;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -708,6 +708,16 @@ public interface fortran77Listener extends ParseTreeListener {
 	 */
 	void exitDataImpliedDoListWhat(fortran77Parser.DataImpliedDoListWhatContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link fortran77Parser#assignmentStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link fortran77Parser#assignmentStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link fortran77Parser#gotoStatement}.
 	 * @param ctx the parse tree
 	 */
@@ -967,16 +977,6 @@ public interface fortran77Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPrintStatement(fortran77Parser.PrintStatementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link fortran77Parser#assignmentStatement}.
-	 * @param ctx the parse tree
-	 */
-	void enterAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link fortran77Parser#assignmentStatement}.
-	 * @param ctx the parse tree
-	 */
-	void exitAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link fortran77Parser#controlInfoList}.
 	 * @param ctx the parse tree
