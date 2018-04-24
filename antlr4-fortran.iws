@@ -2,25 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="049e1eae-3fc3-4efe-95a5-4e002199d37e" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/code/fortran/Hello.f" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code/fortran/doLoops.f" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code/fortran/doWhileloops.f" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code/fortran/functions.f" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code/fortran/simplecalc.f" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code/fortran/subroutines.f" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/LLVMTranslator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/Preprocessor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/tmpToPython/driver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/tmpToPython/f_to_py.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/tmpToPython/postprocess.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/tmpToPython/preprocess.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/antlr4-fortran.iws" beforeDir="false" afterPath="$PROJECT_DIR$/antlr4-fortran.iws" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/fortran/fun01.f90" beforeDir="false" afterPath="$PROJECT_DIR$/code/fortran/fun01.f" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/fortran/hello" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/fortran/hello.f90" beforeDir="false" afterPath="$PROJECT_DIR$/code/fortran/hello.f" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/Listener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortranDeprecated/app/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortranDeprecated/app/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/LLVMTranslator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/LLVMTranslator.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -77,8 +60,32 @@
       <file leaf-file-name="App.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/App.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="677">
-              <caret line="73" column="70" lean-forward="true" selection-start-line="73" selection-start-column="70" selection-end-line="73" selection-end-column="70" />
+            <state relative-caret-position="-315">
+              <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IrBuilderExample.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/IrBuilderExample.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="402">
+              <caret line="81" column="43" lean-forward="true" selection-start-line="10" selection-start-column="7" selection-end-line="81" selection-end-column="43" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Preprocessor.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/Preprocessor.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="576">
+              <caret line="35" column="22" lean-forward="true" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="22" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -89,82 +96,11 @@
       <file leaf-file-name="LLVMTranslator.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/LLVMTranslator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="612">
-              <caret line="34" column="20" lean-forward="true" selection-start-line="34" selection-start-column="20" selection-end-line="34" selection-end-column="20" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#291#292#0" expanded="true" />
-                <element signature="e#327#328#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="postprocess.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/tmpToPython/postprocess.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-300">
-              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="preprocess.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/tmpToPython/preprocess.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-198">
-              <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="f_to_py.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/tmpToPython/f_to_py.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="72">
-              <caret line="23" column="36" lean-forward="true" selection-start-line="23" selection-start-column="36" selection-end-line="23" selection-end-column="36" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IrBuilderExample.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/IrBuilderExample.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="222">
-              <caret line="17" column="67" lean-forward="true" selection-start-line="10" selection-start-column="6" selection-end-line="17" selection-end-column="67" />
+            <state relative-caret-position="186">
+              <caret line="35" column="53" selection-start-line="35" selection-start-column="53" selection-end-line="35" selection-end-column="53" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="driver.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/tmpToPython/driver.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="22" column="14" selection-start-line="22" selection-start-column="14" selection-end-line="22" selection-end-column="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Preprocessor.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/Preprocessor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="414">
-              <caret line="35" column="22" lean-forward="true" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="22" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Hello.f" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/fortran/Hello.f">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
-              <caret line="1" column="18" selection-start-line="1" selection-start-column="18" selection-end-line="1" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -184,6 +120,7 @@
       <find>115</find>
       <find>EOS</find>
       <find>111</find>
+      <find>Exe</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -232,8 +169,8 @@
         <option value="$PROJECT_DIR$/src/main/java/com/agh/a2f/tmpToPython/f_to_py.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/agh/a2f/tmpToPython/driver.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/Listener.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/App.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/LLVMTranslator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/App.java" />
       </list>
     </option>
   </component>
@@ -552,12 +489,12 @@
       <workItem from="1523560849708" duration="2133000" />
       <workItem from="1524597582862" duration="249000" />
       <workItem from="1524597857259" duration="4184000" />
-      <workItem from="1524602218194" duration="4520000" />
+      <workItem from="1524602218194" duration="6147000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15372000" />
+    <option name="totallyTimeSpent" value="16999000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
@@ -583,7 +520,7 @@
       <window_info id="Image Layers" order="3" />
       <window_info anchor="right" id="Capture Analysis" order="5" />
       <window_info anchor="bottom" id="Version Control" order="10" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32910052" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32910052" />
       <window_info anchor="bottom" id="Terminal" order="8" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24986508" />
       <window_info anchor="bottom" id="sbt-shell-toolwindow" order="7" />
@@ -921,16 +858,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/Preprocessor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="35" column="22" lean-forward="true" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="22" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/tmpToPython/driver.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
@@ -957,10 +884,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/Preprocessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="576">
+          <caret line="35" column="22" lean-forward="true" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="22" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/IrBuilderExample.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="17" column="67" lean-forward="true" selection-start-line="10" selection-start-column="6" selection-end-line="17" selection-end-column="67" />
+        <state relative-caret-position="402">
+          <caret line="81" column="43" lean-forward="true" selection-start-line="10" selection-start-column="7" selection-end-line="81" selection-end-column="43" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -969,8 +906,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/App.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="677">
-          <caret line="73" column="70" lean-forward="true" selection-start-line="73" selection-start-column="70" selection-end-line="73" selection-end-column="70" />
+        <state relative-caret-position="-315">
+          <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -979,12 +916,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/agh/a2f/fortran/app/LLVMTranslator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="34" column="20" lean-forward="true" selection-start-line="34" selection-start-column="20" selection-end-line="34" selection-end-column="20" />
+        <state relative-caret-position="186">
+          <caret line="35" column="53" selection-start-line="35" selection-start-column="53" selection-end-line="35" selection-end-column="53" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#291#292#0" expanded="true" />
-            <element signature="e#327#328#0" expanded="true" />
           </folding>
         </state>
       </provider>
