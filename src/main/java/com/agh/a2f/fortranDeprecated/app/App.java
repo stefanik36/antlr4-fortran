@@ -20,7 +20,7 @@ public class App {
 
     public static void main(String[] args) {
         String path = "code/fortran/hello.f77";
-//        String path = "code/fortran/fun01.f90";
+//        String path = "code/fortran/fun01.f";
         App app = new App();
         app.start(path);
 
