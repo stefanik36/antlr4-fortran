@@ -15,6 +15,10 @@ import static org.bytedeco.javacpp.LLVM.LLVMModuleCreateWithName;
 
 public class LLVMTranslator extends fortran77BaseListener {
     private static final COD cod = CODFactory.get();
+
+    private LLVMModuleRef mod;
+    private BytePointer error;
+
     private BufferedTokenStream tokens;
 
     public LLVMTranslator(BufferedTokenStream tokens) {
@@ -23,7 +27,7 @@ public class LLVMTranslator extends fortran77BaseListener {
 
 
     @Override
-    public void enterMainProgram(fortran77Parser.MainProgramContext ctx) {
+    public void enterProgram(fortran77Parser.ProgramContext ctx) {
         BytePointer error = new BytePointer((Pointer) null); // Used to retrieve messages from functions
         LLVMLinkInMCJIT();
         LLVMInitializeNativeAsmPrinter();
@@ -31,7 +35,15 @@ public class LLVMTranslator extends fortran77BaseListener {
         LLVMInitializeNativeDisassembler();
         LLVMInitializeNativeTarget();
 
-        LLVMModuleRef mod = LLVMModuleCreateWithName("fac_module");
+        cod.i(ctx.getRuleIndex());
+        LLVMModuleRef mod = LLVMModuleCreateWithName("module");
+    }
+
+
+    @Override
+    public void enterMainProgram(fortran77Parser.MainProgramContext ctx) {
+
+
         LLVMTypeRef[] fac_args = {LLVMInt32Type()};
         LLVMValueRef fac = LLVMAddFunction(mod, "main", LLVMFunctionType(LLVMInt32Type(), fac_args[0], 1, 0));
         LLVMSetFunctionCallConv(fac, LLVMCCallConv);
