@@ -1,5 +1,4 @@
-// Generated from fortran77.g4 by ANTLR 4.5.3
-package com.agh.a2f.fortranDeprecated.generated;
+package com.agh.a2f.fortranDeprecated.generated;// Generated from fortran77.g4 by ANTLR 4.7.1
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**

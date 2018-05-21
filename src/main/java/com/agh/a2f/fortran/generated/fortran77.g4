@@ -457,7 +457,7 @@ elseStatement
 /* 39 */
 endIfStatement
    : ('endif' | 'end' 'if')
-   |('ENDIF' | 'END' 'IF')
+   | ('ENDIF' | 'END' 'IF')
    ;
 
 /* 40 */
@@ -677,8 +677,7 @@ controlName
    ;
 
 controlSequential
-   : 'sequential'
-   | 'SEQUETIAL'
+   : 'sequential' | 'SEQUETIAL'
    ;
 
 controlDirect
@@ -865,6 +864,8 @@ lexpr4
    : aexpr0 ((LT | LE | EQ | NE | GT | GE) aexpr0)?
    ;
 
+
+//ASSIGN EXPRESIONS
 aexpr0
    : aexpr1 ((PLUS | MINUS) aexpr1)*
    ;
@@ -882,12 +883,24 @@ aexpr3
    ;
 
 aexpr4
-   : (unsignedArithmeticConstant) unsignedArithmeticConstant
-   | (HOLLERITH | SCON)
+   : arealexpr
+   | (HOLLERITH | astringexpr)
    | logicalConstant
+   | aintegerexpr
    | varRef
    | LPAREN expression RPAREN
    ;
+
+arealexpr
+    : (unsignedArithmeticConstant) unsignedArithmeticConstant
+    ;
+
+astringexpr
+    : SCON
+    ;
+aintegerexpr
+    : ICON
+    ;
 
 /* integer expression */
 iexpr
@@ -975,6 +988,7 @@ subscripts
    : LPAREN (expression (COMMA expression)*)? RPAREN
    ;
 
+//holding var and functions?
 varRef
    : (NAME | 'real') (subscripts (substringApp)?)?
    ;
@@ -1424,7 +1438,8 @@ CONTINUATION
 
 
 EOS
-   : (('\r')?'\n') 
+   : (('\r')?'\n')
+
 //(('\n' | '\r' ('\n')?))+  (('     ' CONTINUATION) '     ' CONTINUATION |)
    ;
 
@@ -1448,10 +1463,17 @@ COMMENT
 // single quotes is meant as a literal single quote
 
 SCON
-   : '\'' ('\'' '\'' | ~ ('\'' | '\n' | '\r') | (('\n' | '\r' ('\n')?) '     ' CONTINUATION) ('\n' | '\r' ('\n')?) '     ' CONTINUATION)* '\''
+   : '\'' STRING '\''
    ;
+
+fragment STRING
+    : ('\'' '\'' | ~ ('\'' | '\n' | '\r') | (('\n' | '\r' ('\n')?) '     ' CONTINUATION) ('\n' | '\r' ('\n')?) '     ' CONTINUATION)*
+    ;
 // numeral literal: ICON goes here what to do what to do?
 
+ICON
+    : INTVAL
+    ;
 
 
 RCON:
@@ -1464,8 +1486,8 @@ ZCON
 // identifier (keyword or variable)
 
 NAME
-   : 
-   (('i' | 'f' | 'd' | 'g' | 'e') (NUM) + '.') FDESC | (ALNUM+)(ALNUM)* 
+   : (('i' | 'f' | 'd' | 'g' | 'e') (NUM) + '.') FDESC
+   | (ALNUM+)(ALNUM)*
    ;
 
 
@@ -1505,7 +1527,7 @@ NOTNL
    ;
 
 
-INTVAL
+fragment INTVAL
    : (NUM) +
    ;
 

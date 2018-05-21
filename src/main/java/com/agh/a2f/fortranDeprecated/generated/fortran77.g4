@@ -439,8 +439,10 @@ doStatement
    ;
 
 doVarArgs
-   : variableName ASSIGN intRealDpExpr COMMA intRealDpExpr (COMMA intRealDpExpr)?
+   : variableName ASSIGN MYNUM COMMA MYNUM (COMMA MYNUM)?
    ;
+
+MYNUM : [0-9]+;
 
 doWithLabel
    : lblRef (COMMA)? doVarArgs
@@ -1270,10 +1272,14 @@ CONTINUATION
    : ~ ('0' | ' ')
    ;
 
-
 EOS
-   : (('\n' | '\r' ('\n')?)) + (('     ' CONTINUATION) '     ' CONTINUATION |)
+   : (('\r')?'\n')
    ;
+
+
+//EOS
+   : (('\n' | '\r' ('\n')?)) + (('     ' CONTINUATION) '     ' CONTINUATION |)
+//   ;
 
 // Fortran 77 doesn't allow for empty lines. Therefore EOS (newline) is NOT
 // part of ignored white spaces. It is only ignored for line continuations.

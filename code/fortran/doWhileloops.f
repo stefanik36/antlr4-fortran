@@ -1,7 +1,7 @@
-      program doWhile
-      nn = 0
-      nfact = 1
-      do while (nn <= 10) 
+      program aWhile
+      nn = 10
+      nfact = 10
+      do while (nn .gt. 10)
          nfact = nfact*nn
          nn = nn + 1
          print *, nn

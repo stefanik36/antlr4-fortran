@@ -2,95 +2,156 @@ package com.agh.a2f.fortran.app;
 
 import com.agh.a2f.fortran.generated.fortran77BaseListener;
 import com.agh.a2f.fortran.generated.fortran77Parser;
-import com.stefanik.cod.controller.COD;
-import com.stefanik.cod.controller.CODFactory;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.bytedeco.javacpp.BytePointer;
-import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.PointerPointer;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Stack;
+
 import static org.bytedeco.javacpp.LLVM.*;
-import static org.bytedeco.javacpp.LLVM.LLVMInitializeNativeTarget;
 import static org.bytedeco.javacpp.LLVM.LLVMModuleCreateWithName;
 
 public class LLVMTranslator extends fortran77BaseListener {
-    private static final COD cod = CODFactory.get();
+    //    private static final COD cod = CODFactory.get();
     private BufferedTokenStream tokens;
 
     public LLVMTranslator(BufferedTokenStream tokens) {
         this.tokens = tokens;
     }
 
+    private LLVMModuleRef mod = null;
+    private LLVMBuilderRef builder = null;
+
+    private Stack<LLVMValueRef> stack = new Stack<>();
+    private Stack<String> stringStack = new Stack<>();
+
+    private Map<String, LLVMValueRef> functions = new HashMap<>();
+
+    private String currentFunction = null;
+
 
     @Override
     public void enterMainProgram(fortran77Parser.MainProgramContext ctx) {
-        BytePointer error = new BytePointer((Pointer) null); // Used to retrieve messages from functions
-        LLVMLinkInMCJIT();
-        LLVMInitializeNativeAsmPrinter();
-        LLVMInitializeNativeAsmParser();
-        LLVMInitializeNativeDisassembler();
-        LLVMInitializeNativeTarget();
+    }
 
-        LLVMModuleRef mod = LLVMModuleCreateWithName("fac_module");
-        LLVMTypeRef[] fac_args = {LLVMInt32Type()};
-        LLVMValueRef fac = LLVMAddFunction(mod, "main", LLVMFunctionType(LLVMInt32Type(), fac_args[0], 1, 0));
-        LLVMSetFunctionCallConv(fac, LLVMCCallConv);
-        LLVMValueRef n = LLVMGetParam(fac, 0);
+    @Override
+    public void exitProgram(fortran77Parser.ProgramContext ctx) {
+        LLVMDumpModule(mod);
+        LLVMWriteBitcodeToFile(mod, "f2llvm.bc"); //save to bytecode
 
-        //initialization blocks
-        LLVMBasicBlockRef entry = LLVMAppendBasicBlock(fac, "entry");
-        LLVMBasicBlockRef iftrue = LLVMAppendBasicBlock(fac, "iftrue");
-        LLVMBasicBlockRef iffalse = LLVMAppendBasicBlock(fac, "iffalse");
-        LLVMBasicBlockRef end = LLVMAppendBasicBlock(fac, "end");
-        LLVMBuilderRef builder = LLVMCreateBuilder();
+        LLVMFunctions.executeCode(mod, functions.get("main"));
 
-        LLVMPositionBuilderAtEnd(builder, entry);
-        LLVMValueRef If = LLVMBuildICmp(builder, LLVMIntEQ, n, LLVMConstInt(LLVMInt32Type(), 0, 0), "n == 0");
-        LLVMBuildCondBr(builder, If, iftrue, iffalse);
-
-        LLVMPositionBuilderAtEnd(builder, iftrue);
-        LLVMValueRef res_iftrue = LLVMConstInt(LLVMInt32Type(), 1, 0);
-        LLVMBuildBr(builder, end);
-
-        LLVMPositionBuilderAtEnd(builder, iffalse);
-        LLVMValueRef n_minus = LLVMBuildSub(builder, n, LLVMConstInt(LLVMInt32Type(), 1, 0), "n - 1");
-        LLVMValueRef[] call_fac_args = {n_minus};
-        LLVMValueRef call_fac = LLVMBuildCall(builder, fac, new PointerPointer(call_fac_args), 1, "fac(n - 1)");
-        LLVMValueRef res_iffalse = LLVMBuildMul(builder, n, call_fac, "n * fac(n - 1)");
-        LLVMBuildBr(builder, end);
-
-        LLVMPositionBuilderAtEnd(builder, end);
-        LLVMValueRef res = LLVMBuildPhi(builder, LLVMInt32Type(), "result");
-        LLVMValueRef[] phi_vals = {res_iftrue, res_iffalse};
-        LLVMBasicBlockRef[] phi_blocks = {iftrue, iffalse};
-        LLVMAddIncoming(res, new PointerPointer(phi_vals), new PointerPointer(phi_blocks), 2);
-        LLVMBuildRet(builder, res);
-
-        LLVMVerifyModule(mod, LLVMAbortProcessAction, error);
-        LLVMDisposeMessage(error); // Handler == LLVMAbortProcessAction -> No need to check errors
+//        LLVMDisposeModule(mod);
+    }
 
 
-        LLVMExecutionEngineRef engine = new LLVMExecutionEngineRef();
-        if (LLVMCreateJITCompilerForModule(engine, mod, 2, error) != 0) {
-            System.err.println(error.getString());
-            LLVMDisposeMessage(error);
-            System.exit(-1);
+    @Override
+    public void enterProgramStatement(fortran77Parser.ProgramStatementContext ctx) {
+        String name = ctx.NAME().getSymbol().getText();
+        mod = LLVMModuleCreateWithName(name);
+        LLVMValueRef mainFunc = LLVMAddFunction(mod,
+                "main", LLVMFunctionType(LLVMVoidType(), LLVMVoidType(), 0, 0));
+        functions.put("main", mainFunc);
+        currentFunction = "main";
+        LLVMSetFunctionCallConv(mainFunc, LLVMCCallConv);
+
+    }
+
+    @Override
+    public void enterPrintStatement(fortran77Parser.PrintStatementContext ctx) {
+        final String printfStr = "printf";
+        LLVMValueRef printf = functions.get(printfStr);
+        if (printf == null) {
+            printf = LLVMFunctions.declareExternalPrintf(mod);
+            functions.put(printfStr, printf);
+        }
+        //get first elem and print it
+
+        String txt = ctx.ioList(0).getText().substring(1, ctx.ioList(0).getText().length() - 1) + " %s || %d \n";
+        for (fortran77Parser.IoListContext l : ctx.ioList()){
+            l.getText();
         }
 
-        LLVMPassManagerRef pass = LLVMCreatePassManager();
-        LLVMAddConstantPropagationPass(pass);
-        LLVMAddInstructionCombiningPass(pass);
-        LLVMAddPromoteMemoryToRegisterPass(pass);
-        LLVMAddDemoteMemoryToRegisterPass(pass); // Demotes every possible value to memory
-        LLVMAddGVNPass(pass);
-        LLVMAddCFGSimplificationPass(pass);
-        LLVMRunPassManager(pass, mod);
-        LLVMDumpModule(mod);
+        LLVMValueRef it = functions.get("it");
+        LLVMValueRef loadedItVal = LLVMBuildLoad(builder,it,"");
 
-        System.out.println();//TODO
+        LLVMValueRef kkk = functions.get("kkk");
+//        LLVMValueRef loadedKkkVal = LLVMBuildLoad(builder,kkk,"");
 
-        LLVMDisposePassManager(pass);
+        LLVMValueRef printfArgs[] = {LLVMBuildGlobalStringPtr(builder, txt, "no sam nie wiem"),kkk, loadedItVal};
+        LLVMBuildCall(builder, printf, new PointerPointer<>(printfArgs), 3, "");
+
+    }
+
+
+    @Override
+    public void enterTypeStatementNameList(fortran77Parser.TypeStatementNameListContext ctx) {
+        for (fortran77Parser.TypeStatementNameContext name : ctx.typeStatementName()) {
+            LLVMValueRef var = LLVMBuildAlloca(builder, LLVMInt32Type(), name.getText());
+            functions.put(name.getText(), var);
+        }
+    }
+
+    @Override
+    public void exitTypeStatementNameCharList(fortran77Parser.TypeStatementNameCharListContext ctx) {
+        Integer length = Integer.valueOf(stringStack.pop());
+
+        for (fortran77Parser.TypeStatementNameCharContext name : ctx.typeStatementNameChar()) {
+            LLVMValueRef var = LLVMBuildAlloca(builder, LLVMArrayType(LLVMInt8Type(), length), name.getText());
+            functions.put(name.getText(), var);
+        }
+    }
+
+    @Override
+    public void enterCharacterWithLen(fortran77Parser.CharacterWithLenContext ctx) {
+        super.enterCharacterWithLen(ctx);
+    }
+
+    @Override
+    public void enterIntConstantExpr(fortran77Parser.IntConstantExprContext ctx) {
+        stringStack.push(ctx.getText());
+    }
+
+    @Override
+    public void exitAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx) {
+        if (ctx.children == null) return;
+        String name = ctx.varRef().getText();
+        Optional.ofNullable(functions.get(name)).ifPresent(var -> {
+            LLVMValueRef value =  stack.pop();
+            LLVMBuildStore(builder, value, var);
+        });
+
+
+    }
+
+    @Override
+    public void enterExpression(fortran77Parser.ExpressionContext ctx) {
+        String strVal = ctx.getText();
+        try {
+            Integer val = Integer.valueOf(strVal);
+            stack.push(LLVMConstInt(LLVMInt32Type(), val, 0));
+        } catch (Exception ex) {
+            stack.push(LLVMConstString(strVal.substring(1, strVal.length()-1), strVal.length()-2, 1));
+        }
+    }
+
+
+    ////////SUBPROGRAM_BODY
+
+    @Override
+    public void enterSubprogramBody(fortran77Parser.SubprogramBodyContext ctx) {
+        LLVMBasicBlockRef entry = LLVMAppendBasicBlock(functions.get(currentFunction), "entry_" + currentFunction);
+        builder = LLVMCreateBuilder();
+        LLVMPositionBuilderAtEnd(builder, entry);
+    }
+
+    @Override
+    public void exitSubprogramBody(fortran77Parser.SubprogramBodyContext ctx) {
+        LLVMBuildRetVoid(builder);
         LLVMDisposeBuilder(builder);
-        LLVMDisposeExecutionEngine(engine);
+        super.exitSubprogramBody(ctx);
     }
 }

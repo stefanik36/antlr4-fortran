@@ -41,7 +41,13 @@ public class IrBuilderExample {
         LLVMValueRef[] call_fac_args = {n_minus};
         LLVMValueRef call_fac = LLVMBuildCall(builder, fac, new PointerPointer(call_fac_args), 1, "fac(n - 1)");
         LLVMValueRef res_iffalse = LLVMBuildMul(builder, n, call_fac, "n * fac(n - 1)");
+
         LLVMBuildBr(builder, end);
+        LLVMValueRef val = LLVMBuildAlloca(builder, LLVMInt32Type(), "x");
+        LLVMValueRef a = LLVMConstInt(LLVMInt32Type(), 20, 0);
+        LLVMBuildStore(builder, val,a);
+
+        LLVMBuildBinOp(builder, LLVMMul, val,val,"ad1");
 
         LLVMPositionBuilderAtEnd(builder, end);
         LLVMValueRef res = LLVMBuildPhi(builder, LLVMInt32Type(), "result");
@@ -61,15 +67,15 @@ public class IrBuilderExample {
             System.exit(-1);
         }
 
-        LLVMPassManagerRef pass = LLVMCreatePassManager();
-        LLVMAddConstantPropagationPass(pass);
-        LLVMAddInstructionCombiningPass(pass);
-        LLVMAddPromoteMemoryToRegisterPass(pass);
-        LLVMAddDemoteMemoryToRegisterPass(pass); // Demotes every possible value to memory
-        LLVMAddGVNPass(pass);
-        LLVMAddCFGSimplificationPass(pass);
-        LLVMRunPassManager(pass, mod);
-        LLVMDumpModule(mod);
+//        LLVMPassManagerRef pass = LLVMCreatePassManager();
+//        LLVMAddConstantPropagationPass(pass);
+//        LLVMAddInstructionCombiningPass(pass);
+//        LLVMAddPromoteMemoryToRegisterPass(pass);
+//        LLVMAddDemoteMemoryToRegisterPass(pass); // Demotes every possible value to memory
+//        LLVMAddGVNPass(pass);
+//        LLVMAddCFGSimplificationPass(pass);
+//        LLVMRunPassManager(pass, mod);
+//        LLVMDumpModule(mod);
 //
 //            LLVMGenericValueRef exec_args = LLVMCreateGenericValueOfInt(LLVMInt32Type(), 10, 0);
 //            LLVMGenericValueRef exec_res = LLVMRunFunction(engine, fac, 1, exec_args);
@@ -77,7 +83,7 @@ public class IrBuilderExample {
 //            System.err.println("; Running fac(10) with JIT...");
 //            System.err.println("; Result: " + LLVMGenericValueToInt(exec_res, 0));
 //
-        LLVMDisposePassManager(pass);
+//        LLVMDisposePassManager(pass);
         LLVMDisposeBuilder(builder);
         LLVMDisposeExecutionEngine(engine);
 

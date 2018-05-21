@@ -4,14 +4,14 @@ package com.agh.a2f.gyoo.created;
 
 import com.agh.a2f.gyoo.generated.GYOOBaseListener;
 import com.agh.a2f.gyoo.generated.GYOOParser;
-import com.stefanik.cod.controller.COD;
-import com.stefanik.cod.controller.CODFactory;
+//import com.stefanik.cod.controller.COD;
+//import com.stefanik.cod.controller.CODFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class MyListener extends GYOOBaseListener {
-    private static final COD cod = CODFactory.get();
+//    private static final COD cod = CODFactory.get();
 
 
     private Map<String, Integer> variables;
