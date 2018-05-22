@@ -2,8 +2,6 @@ package com.agh.a2f.fortran.app;
 
 import com.agh.a2f.fortran.generated.fortran77BaseListener;
 import com.agh.a2f.fortran.generated.fortran77Parser;
-import com.stefanik.cod.controller.COD;
-import com.stefanik.cod.controller.CODFactory;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.PointerPointer;
@@ -43,7 +41,7 @@ public class LLVMTranslator extends fortran77BaseListener {
 
     @Override
     public void enterProgramStatement(fortran77Parser.ProgramStatementContext ctx) {
-        System.out.println("\t-(1)enterProgramStatement");
+//        System.out.println("\t-(1)enterProgramStatement");
         String name = ctx.NAME().getSymbol().getText();
         mod = LLVMModuleCreateWithName(name);
         LLVMValueRef mainFunc = LLVMAddFunction(mod,
@@ -55,7 +53,7 @@ public class LLVMTranslator extends fortran77BaseListener {
 
     @Override
     public void enterTypeStatementNameList(fortran77Parser.TypeStatementNameListContext ctx) {
-        System.out.println("\t-(2)enterTypeStatementNameList");
+//        System.out.println("\t-(2)enterTypeStatementNameList");
         for (fortran77Parser.TypeStatementNameContext name : ctx.typeStatementName()) {
             LLVMValueRef var = LLVMBuildAlloca(builder, LLVMInt32Type(), name.getText());
             functions.put(name.getText(), var);
@@ -65,19 +63,19 @@ public class LLVMTranslator extends fortran77BaseListener {
 
     @Override
     public void enterCharacterWithLen(fortran77Parser.CharacterWithLenContext ctx) {
-        System.out.println("\t-(3)enterCharacterWithLen");
+//        System.out.println("\t-(3)enterCharacterWithLen");
         super.enterCharacterWithLen(ctx);
     }
 
     @Override
     public void enterIntConstantExpr(fortran77Parser.IntConstantExprContext ctx) {
-        System.out.println("\t-(4)enterIntConstantExpr");
+//        System.out.println("\t-(4)enterIntConstantExpr");
         stringStack.push(ctx.getText());
     }
 
     @Override
     public void enterExpression(fortran77Parser.ExpressionContext ctx) {
-        System.out.println("\t-(5)enterExpression");
+//        System.out.println("\t-(5)enterExpression");
         String strVal = ctx.getText();
         try {
             Integer val = Integer.valueOf(strVal);
@@ -89,7 +87,7 @@ public class LLVMTranslator extends fortran77BaseListener {
 
     @Override
     public void exitTypeStatementNameCharList(fortran77Parser.TypeStatementNameCharListContext ctx) {
-        System.out.println("\t-(6)exitTypeStatementNameCharList");
+//        System.out.println("\t-(6)exitTypeStatementNameCharList");
         Integer length = Integer.valueOf(stringStack.pop());
 
         for (fortran77Parser.TypeStatementNameCharContext name : ctx.typeStatementNameChar()) {
@@ -100,7 +98,7 @@ public class LLVMTranslator extends fortran77BaseListener {
 
     @Override
     public void exitAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx) {
-        System.out.println("\t-(7)exitAssignmentStatement");
+//        System.out.println("\t-(7)exitAssignmentStatement");
         if (ctx.children == null) return;
         String name = ctx.varRef().getText();
         Optional.ofNullable(functions.get(name)).ifPresent(var -> {
@@ -113,7 +111,7 @@ public class LLVMTranslator extends fortran77BaseListener {
 
     @Override
     public void enterPrintStatement(fortran77Parser.PrintStatementContext ctx) {
-        System.out.println("\t-(8)enterPrintStatement");
+//        System.out.println("\t-(8)enterPrintStatement");
         final String printfStr = "printf";
         LLVMValueRef printf = functions.get(printfStr);
         if (printf == null) {
@@ -141,7 +139,7 @@ public class LLVMTranslator extends fortran77BaseListener {
 
     @Override
     public void exitProgram(fortran77Parser.ProgramContext ctx) {
-        System.out.println("\t-(9)exitProgram");
+//        System.out.println("\t-(9)exitProgram");
         LLVMDumpModule(mod);
         LLVMWriteBitcodeToFile(mod, "f2llvm.bc"); //save to bytecode
 
