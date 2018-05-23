@@ -25,10 +25,6 @@ public class LLVMTranslator extends fortran77BaseListener {
 
     private Stack<LLVMValueRef> stack = new Stack<>();
     private Stack<String> stringStack = new Stack<>();
-    private int stringStackCurrentBlock = 0;
-    private int stackCurrentBlock = 0;
-
-    private Stack<Integer> blockStack = new Stack<>();
 
     private Map<String, LLVMValueRef> valueRefs = new HashMap<>();
 
@@ -139,26 +135,6 @@ public class LLVMTranslator extends fortran77BaseListener {
     }
 
 
-
-
-    private void resetAndRememberStackPositions() {
-        blockStack.push(stackCurrentBlock);
-        blockStack.push(stringStackCurrentBlock);
-        stackCurrentBlock = 0;
-        stringStackCurrentBlock = 0;
-    }
-
-    private void restorePreviousStackPosition() {
-        stringStackCurrentBlock = blockStack.pop();
-        stackCurrentBlock = blockStack.pop();
-    }
-
-    @Override
-    public void enterPrintStatement(fortran77Parser.PrintStatementContext ctx) {
-        resetAndRememberStackPositions();
-
-    }
-
     @Override
     public void exitPrintStatement(fortran77Parser.PrintStatementContext ctx) {
         final String printfStr = "printf";
@@ -205,7 +181,6 @@ public class LLVMTranslator extends fortran77BaseListener {
         printfArgs.add(0,format);
         LLVMValueRef[] printfArgsArr = printfArgs.toArray(new LLVMValueRef[printfArgs.size()]);
         LLVMBuildCall(builder, printf, new PointerPointer<>(printfArgsArr), printfArgsArr.length, "");
-        restorePreviousStackPosition();
     }
 
 
