@@ -67,6 +67,8 @@ public class LLVMTranslator extends fortran77BaseListener {
 
     /////////**START** MEMORY ALLOCATING BLOCK
 
+    //TODO alokacja pamięci dla real
+
     @Override
     public void enterTypeStatementNameList(fortran77Parser.TypeStatementNameListContext ctx) {
 //        System.out.println("\t-(2)enterTypeStatementNameList");
@@ -113,8 +115,6 @@ public class LLVMTranslator extends fortran77BaseListener {
             stack.push(LLVMConstString(strVal.substring(1, strVal.length() - 1), strVal.length() - 2, 1));
         }
     }
-
-
 
     @Override
     public void exitAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx) {
@@ -180,7 +180,7 @@ public class LLVMTranslator extends fortran77BaseListener {
                     String cutedString = l.getText().substring(1,l.getText().length()-1);
                     printfArgs.add(LLVMBuildGlobalString(builder, cutedString, ""));
                     break;
-                case fortran77Lexer.NAME: //variables
+                case fortran77Lexer.NAME: //variables (? and others i think xd)
                     LLVMValueRef val = valueRefs.get(l.getText());
                     LLVMTypeRef valType = LLVMGetAllocatedType(val);
 
@@ -195,8 +195,10 @@ public class LLVMTranslator extends fortran77BaseListener {
 
                     break;
                 case fortran77Lexer.RPAREN: //math
+                    //TODO odbieranie skądś wyliczonej wartości
                     break;
             }
+            //TODO obsługa real
         }
 
         LLVMValueRef format = LLVMBuildGlobalString(builder, formatJoiner.toString(), "");
