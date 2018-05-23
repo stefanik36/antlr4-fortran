@@ -25,10 +25,6 @@ public class LLVMTranslator extends fortran77BaseListener {
 
     private Stack<LLVMValueRef> stack = new Stack<>();
     private Stack<String> stringStack = new Stack<>();
-    private int stringStackCurrentBlock = 0;
-    private int stackCurrentBlock = 0;
-
-    private Stack<Integer> blockStack = new Stack<>();
 
     private Map<String, LLVMValueRef> valueRefs = new HashMap<>();
 
@@ -53,6 +49,23 @@ public class LLVMTranslator extends fortran77BaseListener {
     }
 
     @Override
+    public void exitProgram(fortran77Parser.ProgramContext ctx) {
+//        System.out.println("\t-(9)exitProgram");
+        LLVMDumpModule(mod);
+        LLVMWriteBitcodeToFile(mod, "f2llvm.bc"); //save to bytecode
+
+        LLVMFunctions.executeCode(mod, valueRefs.get("main"));
+
+//        LLVMDisposeModule(mod);
+    }
+
+
+
+    /////////**START** MEMORY ALLOCATING BLOCK
+
+    //TODO alokacja pamięci dla real
+
+    @Override
     public void enterTypeStatementNameList(fortran77Parser.TypeStatementNameListContext ctx) {
 //        System.out.println("\t-(2)enterTypeStatementNameList");
         for (fortran77Parser.TypeStatementNameContext name : ctx.typeStatementName()) {
@@ -61,7 +74,20 @@ public class LLVMTranslator extends fortran77BaseListener {
         }
     }
 
+    @Override
+    public void exitTypeStatementNameCharList(fortran77Parser.TypeStatementNameCharListContext ctx) {
+//        System.out.println("\t-(6)exitTypeStatementNameCharList");
+        Integer length = Integer.valueOf(stringStack.pop()) + 1; // +1 because it dont work when table has the same length as string (PRINT ISSUE)
 
+        for (fortran77Parser.TypeStatementNameCharContext name : ctx.typeStatementNameChar()) {
+            LLVMValueRef var = LLVMBuildAlloca(builder, LLVMArrayType(LLVMInt8Type(), length), name.getText());
+            valueRefs.put(name.getText(), var);
+        }
+    }
+
+    /////////**END** MEMORY ALLOCATING BLOCK
+
+    /////////**START** ASSIGNMENT BLOCK
     @Override
     public void enterCharacterWithLen(fortran77Parser.CharacterWithLenContext ctx) {
 //        System.out.println("\t-(3)enterCharacterWithLen");
@@ -87,17 +113,6 @@ public class LLVMTranslator extends fortran77BaseListener {
     }
 
     @Override
-    public void exitTypeStatementNameCharList(fortran77Parser.TypeStatementNameCharListContext ctx) {
-//        System.out.println("\t-(6)exitTypeStatementNameCharList");
-        Integer length = Integer.valueOf(stringStack.pop());
-
-        for (fortran77Parser.TypeStatementNameCharContext name : ctx.typeStatementNameChar()) {
-            LLVMValueRef var = LLVMBuildAlloca(builder, LLVMArrayType(LLVMInt8Type(), length), name.getText());
-            valueRefs.put(name.getText(), var);
-        }
-    }
-
-    @Override
     public void exitAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx) {
 //        System.out.println("\t-(7)exitAssignmentStatement");
         if (ctx.children == null) return;
@@ -110,23 +125,15 @@ public class LLVMTranslator extends fortran77BaseListener {
 
     }
 
-    private void resetAndRememberStackPositions() {
-        blockStack.push(stackCurrentBlock);
-        blockStack.push(stringStackCurrentBlock);
-        stackCurrentBlock = 0;
-        stringStackCurrentBlock = 0;
-    }
+    /////////**EXIT** ASSIGNMENT BLOCK
 
-    private void restorePreviousStackPosition() {
-        stringStackCurrentBlock = blockStack.pop();
-        stackCurrentBlock = blockStack.pop();
-    }
+    /////////**START** DISPLAY BLOCK
 
     @Override
-    public void enterPrintStatement(fortran77Parser.PrintStatementContext ctx) {
-        resetAndRememberStackPositions();
-
+    public void enterAexpr0(fortran77Parser.Aexpr0Context ctx) {
+        super.enterAexpr0(ctx);
     }
+
 
     @Override
     public void exitPrintStatement(fortran77Parser.PrintStatementContext ctx) {
@@ -149,7 +156,7 @@ public class LLVMTranslator extends fortran77BaseListener {
                     String cutedString = l.getText().substring(1,l.getText().length()-1);
                     printfArgs.add(LLVMBuildGlobalString(builder, cutedString, ""));
                     break;
-                case fortran77Lexer.NAME: //variables
+                case fortran77Lexer.NAME: //variables (? and others i think xd)
                     LLVMValueRef val = valueRefs.get(l.getText());
                     LLVMTypeRef valType = LLVMGetAllocatedType(val);
 
@@ -164,27 +171,22 @@ public class LLVMTranslator extends fortran77BaseListener {
 
                     break;
                 case fortran77Lexer.RPAREN: //math
+                    //TODO odbieranie skądś wyliczonej wartości
                     break;
             }
+            //TODO obsługa real
         }
 
         LLVMValueRef format = LLVMBuildGlobalString(builder, formatJoiner.toString(), "");
         printfArgs.add(0,format);
         LLVMValueRef[] printfArgsArr = printfArgs.toArray(new LLVMValueRef[printfArgs.size()]);
         LLVMBuildCall(builder, printf, new PointerPointer<>(printfArgsArr), printfArgsArr.length, "");
-        restorePreviousStackPosition();
     }
 
-    @Override
-    public void exitProgram(fortran77Parser.ProgramContext ctx) {
-//        System.out.println("\t-(9)exitProgram");
-        LLVMDumpModule(mod);
-        LLVMWriteBitcodeToFile(mod, "f2llvm.bc"); //save to bytecode
 
-        LLVMFunctions.executeCode(mod, valueRefs.get("main"));
 
-//        LLVMDisposeModule(mod);
-    }
+
+
 
 
     ////////SUBPROGRAM_BODY
