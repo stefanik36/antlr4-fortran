@@ -53,6 +53,21 @@ public class LLVMTranslator extends fortran77BaseListener {
     }
 
     @Override
+    public void exitProgram(fortran77Parser.ProgramContext ctx) {
+//        System.out.println("\t-(9)exitProgram");
+        LLVMDumpModule(mod);
+        LLVMWriteBitcodeToFile(mod, "f2llvm.bc"); //save to bytecode
+
+        LLVMFunctions.executeCode(mod, valueRefs.get("main"));
+
+//        LLVMDisposeModule(mod);
+    }
+
+
+
+    /////////**START** MEMORY ALLOCATING BLOCK
+
+    @Override
     public void enterTypeStatementNameList(fortran77Parser.TypeStatementNameListContext ctx) {
 //        System.out.println("\t-(2)enterTypeStatementNameList");
         for (fortran77Parser.TypeStatementNameContext name : ctx.typeStatementName()) {
@@ -61,7 +76,20 @@ public class LLVMTranslator extends fortran77BaseListener {
         }
     }
 
+    @Override
+    public void exitTypeStatementNameCharList(fortran77Parser.TypeStatementNameCharListContext ctx) {
+//        System.out.println("\t-(6)exitTypeStatementNameCharList");
+        Integer length = Integer.valueOf(stringStack.pop()) + 1; // +1 because it dont work when table has the same length as string (PRINT ISSUE)
 
+        for (fortran77Parser.TypeStatementNameCharContext name : ctx.typeStatementNameChar()) {
+            LLVMValueRef var = LLVMBuildAlloca(builder, LLVMArrayType(LLVMInt8Type(), length), name.getText());
+            valueRefs.put(name.getText(), var);
+        }
+    }
+
+    /////////**END** MEMORY ALLOCATING BLOCK
+
+    /////////**START** ASSIGNMENT BLOCK
     @Override
     public void enterCharacterWithLen(fortran77Parser.CharacterWithLenContext ctx) {
 //        System.out.println("\t-(3)enterCharacterWithLen");
@@ -86,16 +114,7 @@ public class LLVMTranslator extends fortran77BaseListener {
         }
     }
 
-    @Override
-    public void exitTypeStatementNameCharList(fortran77Parser.TypeStatementNameCharListContext ctx) {
-//        System.out.println("\t-(6)exitTypeStatementNameCharList");
-        Integer length = Integer.valueOf(stringStack.pop());
 
-        for (fortran77Parser.TypeStatementNameCharContext name : ctx.typeStatementNameChar()) {
-            LLVMValueRef var = LLVMBuildAlloca(builder, LLVMArrayType(LLVMInt8Type(), length), name.getText());
-            valueRefs.put(name.getText(), var);
-        }
-    }
 
     @Override
     public void exitAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx) {
@@ -109,6 +128,18 @@ public class LLVMTranslator extends fortran77BaseListener {
 
 
     }
+
+    /////////**EXIT** ASSIGNMENT BLOCK
+
+    /////////**START** DISPLAY BLOCK
+
+    @Override
+    public void enterAexpr0(fortran77Parser.Aexpr0Context ctx) {
+        super.enterAexpr0(ctx);
+    }
+
+
+
 
     private void resetAndRememberStackPositions() {
         blockStack.push(stackCurrentBlock);
@@ -175,16 +206,10 @@ public class LLVMTranslator extends fortran77BaseListener {
         restorePreviousStackPosition();
     }
 
-    @Override
-    public void exitProgram(fortran77Parser.ProgramContext ctx) {
-//        System.out.println("\t-(9)exitProgram");
-        LLVMDumpModule(mod);
-        LLVMWriteBitcodeToFile(mod, "f2llvm.bc"); //save to bytecode
 
-        LLVMFunctions.executeCode(mod, valueRefs.get("main"));
 
-//        LLVMDisposeModule(mod);
-    }
+
+
 
 
     ////////SUBPROGRAM_BODY
