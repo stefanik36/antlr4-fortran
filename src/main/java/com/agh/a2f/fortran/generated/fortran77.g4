@@ -1,4 +1,4 @@
-/*	
+/*
  * Fortran 77 grammar for ANTLR 2.7.5
  * Adadpted from Fortran 77 PCCTS grammar by Olivier Dragon
  * Original PCCTS grammar by Terence Parr
