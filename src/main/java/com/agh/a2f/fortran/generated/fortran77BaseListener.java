@@ -1876,6 +1876,18 @@ public class fortran77BaseListener implements fortran77Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterLexprSpec(fortran77Parser.LexprSpecContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLexprSpec(fortran77Parser.LexprSpecContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLexpr1(fortran77Parser.Lexpr1Context ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1895,30 +1907,6 @@ public class fortran77BaseListener implements fortran77Listener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLexpr2(fortran77Parser.Lexpr2Context ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLexpr3(fortran77Parser.Lexpr3Context ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLexpr3(fortran77Parser.Lexpr3Context ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLexpr4(fortran77Parser.Lexpr4Context ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLexpr4(fortran77Parser.Lexpr4Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

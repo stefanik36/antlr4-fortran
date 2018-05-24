@@ -847,23 +847,19 @@ ncExpr
 
 // concatenation
 lexpr0
-   : lexpr1 ((NEQV | EQV) lexpr1)*
+   : lexpr1 (lexprSpec lexpr1)*
    ;
 
+lexprSpec
+    : (NEQV | EQV | LOR | LAND)
+    ;
+
 lexpr1
-   : lexpr2 (LOR lexpr2)*
+   : LNOT lexpr1
+   | lexpr2
    ;
 
 lexpr2
-   : lexpr3 (LAND lexpr3)*
-   ;
-
-lexpr3
-   : LNOT lexpr3
-   | lexpr4
-   ;
-
-lexpr4
    : aexpr0 ((LT | LE | EQ | NE | GT | GE) aexpr0)?
    ;
 

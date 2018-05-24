@@ -4,6 +4,7 @@ import com.agh.a2f.fortran.generated.fortran77BaseListener;
 import com.agh.a2f.fortran.generated.fortran77Lexer;
 import com.agh.a2f.fortran.generated.fortran77Parser;
 import org.antlr.v4.runtime.BufferedTokenStream;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.bytedeco.javacpp.PointerPointer;
 
 import java.util.*;
@@ -283,17 +284,64 @@ public class LLVMTranslator extends fortran77BaseListener {
 
     }
 
+
     @Override
-    public void exitLexpr4(fortran77Parser.Lexpr4Context ctx) {
+    public void exitLexpr0(fortran77Parser.Lexpr0Context ctx) {
+
+        List ch = ctx.lexprSpec();
+        int size = ch.size();
+        if (size == 0) return;
+
+        Stack<LLVMValueRef> exprStack = new Stack<>();
+
+        for (int i = 0; i < size + 1; i++) {
+            exprStack.push(stack.pop());
+        }
+
+        for (fortran77Parser.LexprSpecContext node : ctx.lexprSpec()) {
+            LLVMValueRef lVal = exprStack.pop();
+            LLVMValueRef rVal = exprStack.pop();
+            LLVMValueRef cmp;
+            if (node.EQV() != null) {
+                cmp = LLVMBuildICmp(builder, LLVMIntEQ, lVal, rVal, "");
+            } else if (node.NEQV() != null) {
+                cmp = LLVMBuildICmp(builder, LLVMIntNE, lVal, rVal, "");
+            } else if (node.LAND() != null) {
+                cmp = LLVMBuildAnd(builder, lVal, rVal, "");
+            } else if (node.LOR() != null) {
+                cmp = LLVMBuildOr(builder, lVal, rVal, "");
+            } else return;
+            exprStack.push(cmp);
+        }
+        LLVMValueRef resultExpr = exprStack.pop();
+        stack.push(resultExpr);
+    }
+
+
+    @Override
+    public void exitLexpr1(fortran77Parser.Lexpr1Context ctx) {
+        if (ctx.LNOT() == null) return;
+        LLVMValueRef cmp = stack.pop();
+        LLVMValueRef notCmp = LLVMBuildNot(builder, cmp, "");
+        stack.push(notCmp);
+    }
+
+    @Override
+    public void exitLexpr2(fortran77Parser.Lexpr2Context ctx) {
         int type = 0;
         if (ctx.EQ() != null) {
             type = LLVMIntEQ;
-        } else if (ctx.NE() != null) ;
-        else if (ctx.LE() != null) ;
-        else if (ctx.GT() != null) ;
-        else if (ctx.GE() != null) ;
-        else if (ctx.LT() != null) ;
-        else return;
+        } else if (ctx.NE() != null) {
+            type = LLVMIntNE;
+        } else if (ctx.LE() != null) {
+            type = LLVMIntSLE;
+        } else if (ctx.GT() != null) {
+            type = LLVMIntSGT;
+        } else if (ctx.GE() != null) {
+            type = LLVMIntSGE;
+        } else if (ctx.LT() != null) {
+            type = LLVMIntSLT;
+        } else return;
 
         LLVMValueRef rVal = stack.pop();
         LLVMValueRef lVal = stack.pop();
@@ -302,10 +350,8 @@ public class LLVMTranslator extends fortran77BaseListener {
         //TODO jakoś lepiej ogarnąć kiedy jest zmienna i należy ją załadować?
         if (valueRefs.containsValue(lVal))
             lVal = LLVMBuildLoad(builder, lVal, "");
-         if (valueRefs.containsValue(rVal))
+        if (valueRefs.containsValue(rVal))
             rVal = LLVMBuildLoad(builder, rVal, "");
-
-
 
         LLVMValueRef logic = LLVMBuildICmp(builder, type, lVal, rVal, "");
         stack.push(logic);

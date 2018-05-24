@@ -1558,6 +1558,16 @@ public interface fortran77Listener extends ParseTreeListener {
 	 */
 	void exitLexpr0(fortran77Parser.Lexpr0Context ctx);
 	/**
+	 * Enter a parse tree produced by {@link fortran77Parser#lexprSpec}.
+	 * @param ctx the parse tree
+	 */
+	void enterLexprSpec(fortran77Parser.LexprSpecContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link fortran77Parser#lexprSpec}.
+	 * @param ctx the parse tree
+	 */
+	void exitLexprSpec(fortran77Parser.LexprSpecContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link fortran77Parser#lexpr1}.
 	 * @param ctx the parse tree
 	 */
@@ -1577,26 +1587,6 @@ public interface fortran77Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLexpr2(fortran77Parser.Lexpr2Context ctx);
-	/**
-	 * Enter a parse tree produced by {@link fortran77Parser#lexpr3}.
-	 * @param ctx the parse tree
-	 */
-	void enterLexpr3(fortran77Parser.Lexpr3Context ctx);
-	/**
-	 * Exit a parse tree produced by {@link fortran77Parser#lexpr3}.
-	 * @param ctx the parse tree
-	 */
-	void exitLexpr3(fortran77Parser.Lexpr3Context ctx);
-	/**
-	 * Enter a parse tree produced by {@link fortran77Parser#lexpr4}.
-	 * @param ctx the parse tree
-	 */
-	void enterLexpr4(fortran77Parser.Lexpr4Context ctx);
-	/**
-	 * Exit a parse tree produced by {@link fortran77Parser#lexpr4}.
-	 * @param ctx the parse tree
-	 */
-	void exitLexpr4(fortran77Parser.Lexpr4Context ctx);
 	/**
 	 * Enter a parse tree produced by {@link fortran77Parser#aexpr0}.
 	 * @param ctx the parse tree
