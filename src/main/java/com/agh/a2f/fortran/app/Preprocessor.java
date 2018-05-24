@@ -17,7 +17,7 @@ public class Preprocessor {
             if (str == null) break;
 
             String tokens[] = str.split(" ");
-            if (str.isEmpty() || tokens[0].equals("c")) {
+            if (str.isEmpty() || tokens.length==0 || tokens[0].equals("c")) {
                 // do nothing for blank line or comment line
             } else {
                 String sections[] = str.split("\'");
