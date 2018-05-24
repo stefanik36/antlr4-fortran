@@ -152,16 +152,18 @@ public class LLVMTranslator extends fortran77BaseListener {
         }
 
         List<LLVMValueRef> printfArgs = new ArrayList<>();
-        StringJoiner formatJoiner = new StringJoiner("          ");
+        StringBuilder formatJoiner = new StringBuilder();
 
         for (fortran77Parser.IoListContext l : ctx.ioList()) {
             switch (l.getStop().getType()) {
                 case fortran77Lexer.ICON: //number (?integer)
+                    printfArgs.add(LLVMConstInt(LLVMInt32Type(), Long.valueOf(l.getText()), 1));
+                    formatJoiner.append("          %d ");
                     break;
                 case fortran77Lexer.SCON: //string
-                    formatJoiner.add("%s");
-                    String cutedString = l.getText().substring(1, l.getText().length() - 1);
-                    printfArgs.add(LLVMBuildGlobalString(builder, cutedString, ""));
+                    formatJoiner.append("%s");
+                    String cutString = l.getText().substring(1, l.getText().length() - 1);
+                    printfArgs.add(LLVMBuildGlobalString(builder, cutString, ""));
                     break;
                 case fortran77Lexer.NAME: //variables (? and others i think xd)
                     LLVMValueRef val = valueRefs.get(l.getText());
@@ -170,10 +172,10 @@ public class LLVMTranslator extends fortran77BaseListener {
                     if (valType.equals(LLVMInt32Type())) {
                         LLVMValueRef loadedVal = LLVMBuildLoad(builder, val, "");
                         printfArgs.add(loadedVal);
-                        formatJoiner.add("%d");
+                        formatJoiner.append("          %d ");
                     } else {
                         printfArgs.add(val);
-                        formatJoiner.add("%s");
+                        formatJoiner.append("%s");
                     }
 
                     break;

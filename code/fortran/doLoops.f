@@ -22,5 +22,5 @@
        kkk = 'Ov fire and the void'
        it = 666
        k2 = 22.21
-      print *, 'Jakieś proste rzeczy to tak', it, sq, kkk, (12 -12 * -12 + 12 - 12)
+      print *, 'Jakieś proste rzeczy to tak', it, sq, kkk, 12,(12 -12 * -12 + 12 - 12)
       end
