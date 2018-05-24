@@ -1000,6 +1000,18 @@ public class fortran77BaseListener implements fortran77Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterElseIfBlock(fortran77Parser.ElseIfBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitElseIfBlock(fortran77Parser.ElseIfBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterElseStatement(fortran77Parser.ElseStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}

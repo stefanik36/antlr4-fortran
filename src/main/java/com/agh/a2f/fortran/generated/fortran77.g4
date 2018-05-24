@@ -444,9 +444,12 @@ firstIfBlock
 
 /* 37 */
 elseIfStatement
-   : ('elseif' | 'else' 'if') LPAREN logicalExpression RPAREN 'then' seos (wholeStatement)*
-   | ('ELSEIF' | 'ELSE' 'IF') LPAREN logicalExpression RPAREN 'then' seos (wholeStatement)*
+   : ('elseif' | 'else' 'if') LPAREN logicalExpression RPAREN 'then' seos elseIfBlock
+   | ('ELSEIF' | 'ELSE' 'IF') LPAREN logicalExpression RPAREN 'then' seos elseIfBlock
    ;
+elseIfBlock
+    : (wholeStatement)*
+    ;
 
 /* 38 */
 elseStatement

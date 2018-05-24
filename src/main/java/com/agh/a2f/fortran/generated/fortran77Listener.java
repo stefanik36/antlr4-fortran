@@ -828,6 +828,16 @@ public interface fortran77Listener extends ParseTreeListener {
 	 */
 	void exitElseIfStatement(fortran77Parser.ElseIfStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link fortran77Parser#elseIfBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterElseIfBlock(fortran77Parser.ElseIfBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link fortran77Parser#elseIfBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitElseIfBlock(fortran77Parser.ElseIfBlockContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link fortran77Parser#elseStatement}.
 	 * @param ctx the parse tree
 	 */
