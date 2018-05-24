@@ -25,6 +25,34 @@ public class Arithmetic {
         return fVal;
     }
 
+    public static LLVMValueRef resolveMulAndDiv(List<LLVMValueRef> components, List<String> operators, LLVMBuilderRef builder) {
+        LLVMValueRef fVal = components.get(0);
+        for (int i = 0; i < components.size() - 1; i++) {
+            String op = operators.get(i);
+            if ("*".equals(op)) {
+                fVal = LLVMBuildMul(builder, fVal, components.get(i + 1), i + op);
+            } else if ("/".equals(op)) {
+                fVal = LLVMBuildSDiv(builder, fVal, components.get(i + 1), i + op);
+            } else {
+                throw new RuntimeException("Unknown operator.");
+            }
+        }
+        return fVal;
+    }
+
+    public static LLVMValueRef resolvePow(List<LLVMValueRef> components, List<String> operators, LLVMBuilderRef builder) {
+        LLVMValueRef fVal = components.get(0);
+        for (int i = 0; i < components.size() - 1; i++) {
+            String op = operators.get(i);
+            if ("**".equals(op)) {
+                fVal = LLVMBuildNSWMul(builder, fVal, components.get(i + 1), i + op);//TODO POWER
+            } else {
+                throw new RuntimeException("Unknown operator.");
+            }
+        }
+        return fVal;
+    }
+
     public static Optional<LLVMValueRef> findValue(String name, Map<String, LLVMValueRef> functions, LLVMBuilderRef builder) {
         try {
             Integer val = Integer.valueOf(name);
@@ -42,4 +70,6 @@ public class Arithmetic {
         }
         return component;
     }
+
+
 }
