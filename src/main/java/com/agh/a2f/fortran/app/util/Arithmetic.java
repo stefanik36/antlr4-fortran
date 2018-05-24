@@ -10,6 +10,7 @@ public class Arithmetic {
 
 
     public static LLVMValueRef resolveAddAndSub(List<LLVMValueRef> components, List<String> operators, LLVMBuilderRef builder) {
+//        LLVMValueRef fVal = LLVMBuildLoad(builder, components.get(0),"");
         LLVMValueRef fVal = components.get(0);
         for (int i = 0; i < components.size() - 1; i++) {
             String op = operators.get(i);
@@ -24,13 +25,21 @@ public class Arithmetic {
         return fVal;
     }
 
-    public static Optional<LLVMValueRef> findValue(String name, Map<String, LLVMValueRef> functions) {
+    public static Optional<LLVMValueRef> findValue(String name, Map<String, LLVMValueRef> functions, LLVMBuilderRef builder) {
         try {
             Integer val = Integer.valueOf(name);
             //TODO other types
             return Optional.ofNullable(LLVMConstInt(LLVMInt32Type(), val, 0));
         } catch (Exception e) {
-            return Optional.ofNullable(functions.get(name));
+            return Optional.ofNullable(LLVMBuildLoad(builder, functions.get(name), ""));
         }
+    }
+
+    public static String removeBrackets(String c) {
+        String component = c;
+        if (c.matches("\\(.*\\)")) {
+            component = c.substring(1, c.length() - 1);
+        }
+        return component;
     }
 }

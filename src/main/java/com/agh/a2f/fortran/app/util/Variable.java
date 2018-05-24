@@ -27,11 +27,11 @@ public class Variable {
         return Integer.valueOf(strVal);
     }
 
-    public static boolean isVariable(String strVal, Map<String,LLVM.LLVMValueRef> functions) {
+    public static boolean isInMap(String strVal, Map<String,LLVM.LLVMValueRef> functions) {
        return functions.containsKey(strVal);
     }
 
-    public static LLVM.LLVMValueRef getVariable(String strVal, Map<String,LLVM.LLVMValueRef> functions) {
+    public static LLVM.LLVMValueRef getFromMap(String strVal, Map<String,LLVM.LLVMValueRef> functions) {
         return functions.get(strVal);
     }
 }
