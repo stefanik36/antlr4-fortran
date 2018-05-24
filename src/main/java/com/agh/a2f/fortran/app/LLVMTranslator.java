@@ -104,24 +104,24 @@ public class LLVMTranslator extends fortran77BaseListener {
     @Override
     public void enterAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx) {
         if (ctx.expression() != null) {
-            cod.i("enterAssignmentStatement: " + ctx.getText() + " | " + ctx.expression().getText());
+            cod.c().off().i("enterAssignmentStatement: " + ctx.getText() + " | " + ctx.expression().getText());
             LLVMValueRef llvmValueRef = null;
             String strVal = ctx.expression().getText();
             if (Variable.isString(strVal)) {
                 String val = Variable.getStringValue(strVal);
                 llvmValueRef = LLVMConstString(val, val.length(), 1);
-                cod.i("str: " + llvmValueRef.address());
+                cod.c().off().i("str: " + llvmValueRef.address());
             } else if (Variable.isInteger(strVal)) {
                 llvmValueRef = LLVMConstInt(LLVMInt32Type(), Variable.getIntegerValue(strVal), 0);
-                cod.i("int: " + llvmValueRef.address());
+                cod.c().off().i("int: " + llvmValueRef.address());
             } else if (Variable.isInMap(strVal, valueRefs)) {
                 llvmValueRef = LLVMBuildLoad(builder, Variable.getFromMap(strVal, valueRefs), "");
-                cod.i("var: " + llvmValueRef.address());
+                cod.c().off().i("var: " + llvmValueRef.address());
             }
             //Something else pushed/will push it to the stack?
 
             if (llvmValueRef != null) {
-                cod.i("\t[" + stack.size() + "]PUSH ASSIGN: " + llvmValueRef.address());
+                cod.c().off().i("\t[" + stack.size() + "]PUSH ASSIGN: " + llvmValueRef.address());
                 stack.push(llvmValueRef);
             }
         }
@@ -130,13 +130,13 @@ public class LLVMTranslator extends fortran77BaseListener {
     @Override
     public void exitAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx) {
         if (ctx.children == null) return;
-        cod.i("exitAssignmentStatement: " + ctx.getText() + " | REF: " + ctx.varRef().getText());
+        cod.c().off().i("exitAssignmentStatement: " + ctx.getText() + " | REF: " + ctx.varRef().getText());
         String name = ctx.varRef().getText();
         Optional.ofNullable(valueRefs.get(name)).ifPresent(var -> {
             LLVMValueRef value = stack.pop();
             LLVMBuildStore(builder, value, var);
-            cod.i("\tX: " + value.address());
-            cod.i("\t[" + stack.size() + "]POP ASSIGN: " + value.address());
+            cod.c().off().i("\tX: " + value.address());
+            cod.c().off().i("\t[" + stack.size() + "]POP ASSIGN: " + value.address());
         });
 
 
@@ -224,7 +224,7 @@ public class LLVMTranslator extends fortran77BaseListener {
                     .collect(Collectors.toList());
 
             LLVMValueRef val = Arithmetic.resolveAddAndSub(components, operators, builder);
-            cod.i("\t[" + stack.size() + "]PUSH ADD/SUB:  " + val.address());
+            cod.c().off().i("\t[" + stack.size() + "]PUSH ADD/SUB:  " + val.address());
 //            LLVMBuildLoad(builder, val, "");
 
             stack.push(val);
@@ -257,7 +257,7 @@ public class LLVMTranslator extends fortran77BaseListener {
                     .collect(Collectors.toList());
 
             LLVMValueRef val = Arithmetic.resolveMulAndDiv(components, operators, builder);
-            cod.i("\t[" + stack.size() + "]PUSH MUL/DIV: " + val.address());
+            cod.c().off().i("\t[" + stack.size() + "]PUSH MUL/DIV: " + val.address());
 
             stack.push(val);
             arithmeticMapResults.put(ctx.getText(), val);
@@ -289,14 +289,13 @@ public class LLVMTranslator extends fortran77BaseListener {
                     .collect(Collectors.toList());
 
             LLVMValueRef val = Arithmetic.resolvePow(components, operators, builder);
-            cod.i("\t[" + stack.size() + "]PUSH  POWER: " + val.address());
+            cod.c().off().i("\t[" + stack.size() + "]PUSH  POWER: " + val.address());
 
             stack.push(val);
             arithmeticMapResults.put(ctx.getText(), val);
 
         }
     }
-
 
 
     private List<LLVMValueRef> getArithmeticComponents(List<String> componentsStrings, Map<String, LLVMValueRef> resultsMap) {
