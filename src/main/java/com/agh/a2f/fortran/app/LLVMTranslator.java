@@ -1,5 +1,7 @@
 package com.agh.a2f.fortran.app;
 
+import com.agh.a2f.fortran.app.util.Arithmetic;
+import com.agh.a2f.fortran.app.util.Variable;
 import com.agh.a2f.fortran.generated.fortran77BaseListener;
 import com.agh.a2f.fortran.generated.fortran77Parser;
 import com.stefanik.cod.controller.COD;
@@ -57,14 +59,17 @@ public class LLVMTranslator extends fortran77BaseListener {
 
             List<LLVMValueRef> components = new ArrayList<>();
             for (String c : componentsStrings) {
-                String withoutBrackets = c.replaceAll("\\p{P}", "");
-                Optional<LLVMValueRef> optionalValue = Arithmetic.findValue(withoutBrackets, functions);
+                String component = removeBrackets(c);
+                Optional<LLVMValueRef> optionalValue = Arithmetic.findValue(component, functions);
                 if (optionalValue.isPresent()) {
                     components.add(optionalValue.get());
                 } else {
-                    LLVMValueRef nullableComponent = arithmeticMapResults.get(withoutBrackets);
+                    LLVMValueRef nullableComponent = arithmeticMapResults.get(component);
                     if (nullableComponent != null) {
-                        components.add(arithmeticMapResults.get(withoutBrackets));
+
+                        cod.i("\t[" + stack.size() + "]POP: " + stack.pop().hashCode());
+                        components.add(arithmeticMapResults.get(component));
+
 //                        arithmeticMapResults.remove(withoutBrackets);//TODO remove
                     } else {
                         throw new RuntimeException("no values in map");
@@ -77,21 +82,21 @@ public class LLVMTranslator extends fortran77BaseListener {
                     .filter(c -> c.equals("+") || c.equals("-"))
                     .collect(Collectors.toList());
 
-            arithmeticMapResults.put(ctx.getText(), Arithmetic.resolveAddAndSub(components, operators, builder));
+            LLVMValueRef val = Arithmetic.resolveAddAndSub(components, operators, builder);
+            cod.i("\t[" + stack.size() + "]PUSH: " + val.hashCode());
+            stack.push(val);
+            arithmeticMapResults.put(ctx.getText(), val);
 
         }
     }
 
-
-//    @Override
-//    public void enterAexpr3(fortran77Parser.Aexpr3Context ctx) {
-//        if (ctx.aexpr4().size() > 1) {
-//            System.err.println("\t\t enterAexpr3: " + ctx.children
-//                    .stream().map(ParseTree::getText).collect(Collectors.toList()));
-//
-//
-//        }
-//    }
+    private String removeBrackets(String c) {
+        String component = c;
+        if (c.matches("\\(.*\\)")) {
+            component = c.substring(1, c.length() - 1);
+        }
+        return component;
+    }
 
 
     @Override
@@ -118,22 +123,29 @@ public class LLVMTranslator extends fortran77BaseListener {
         stringStack.push(ctx.getText());
     }
 
-    @Override
-    public void enterExpression(fortran77Parser.ExpressionContext ctx) {
 
-        String strVal = ctx.getText();
-        try {
-            Integer val = Integer.valueOf(strVal);
-            stack.push(LLVMConstInt(LLVMInt32Type(), val, 0));
-        } catch (Exception ex) {
-            stack.push(LLVMConstString(strVal.substring(1, strVal.length() - 1), strVal.length() - 2, 1));
-        }
-    }
+//    @Override
+//    public void enterExpression(fortran77Parser.ExpressionContext ctx) {
+//        cod.i(ctx.getText());
+//        String strVal = ctx.getText();
+//        LLVMValueRef llvmValueRef = null;
+//        try {
+//            Integer val = Integer.valueOf(strVal);
+//            llvmValueRef = LLVMConstInt(LLVMInt32Type(), val, 0);
+//        } catch (Exception ex) {
+//            llvmValueRef = LLVMConstString(strVal.substring(1, strVal.length() - 1), strVal.length() - 2, 1);
+//        } finally {
+//            cod.i("[" + stack.size() + "]PUSH ASSIGN: " + llvmValueRef.hashCode());
+//            stack.push(llvmValueRef);
+//        }
+//    }
 
 
     @Override
     public void exitTypeStatementNameCharList(fortran77Parser.TypeStatementNameCharListContext ctx) {
         Integer length = Integer.valueOf(stringStack.pop());
+
+        cod.i("exitTypeStatementNameCharList: " + ctx.getText());
 
         for (fortran77Parser.TypeStatementNameCharContext name : ctx.typeStatementNameChar()) {
             LLVMValueRef var = LLVMBuildAlloca(builder, LLVMArrayType(LLVMInt8Type(), length), name.getText());
@@ -142,12 +154,43 @@ public class LLVMTranslator extends fortran77BaseListener {
     }
 
     @Override
+    public void enterAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx) {
+        cod.i("enterAssignmentStatement: " + ctx.getText() + " | " + ctx.expression().getText());
+
+        LLVMValueRef llvmValueRef = null;
+        String strVal = ctx.expression().getText();
+        if (Variable.isString(strVal)) {
+            String val = Variable.getStringValue(strVal);
+            llvmValueRef = LLVMConstString(val, val.length(), 1);
+            cod.i("str: " + llvmValueRef.address());
+        } else if (Variable.isInteger(strVal)) {
+            llvmValueRef = LLVMConstInt(LLVMInt32Type(), Variable.getIntegerValue(strVal), 0);
+            cod.i("int: " + llvmValueRef.address());
+            //TODO other types
+        } else if (Variable.isVariable(strVal, functions)) {
+            llvmValueRef = Variable.getVariable(strVal, functions);
+            cod.i("var: " + llvmValueRef.address());
+        }
+        //Something else pushed/will push it to the stack?
+
+        if (llvmValueRef != null) {
+            cod.i("\t[" + stack.size() + "]PUSH ASSIGN: " + llvmValueRef.hashCode());
+            stack.push(llvmValueRef);
+        }
+
+
+    }
+
+    @Override
     public void exitAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx) {
         if (ctx.children == null) return;
+        cod.i("exitAssignmentStatement: " + ctx.getText() + " | REF: " + ctx.varRef().getText());
         String name = ctx.varRef().getText();
         Optional.ofNullable(functions.get(name)).ifPresent(var -> {
             LLVMValueRef value = stack.pop();
             LLVMBuildStore(builder, value, var);
+            cod.i("\tX: " + value.address());
+            cod.i("\t[" + stack.size() + "]POP ASSIGN: " + value.hashCode());
         });
 
 
@@ -168,7 +211,9 @@ public class LLVMTranslator extends fortran77BaseListener {
             l.getText();
         }
 
-        LLVMValueRef it = functions.get("it");
+        LLVMValueRef it = functions.get("s3");
+        cod.i("IT: " + it.address());
+        cod.i(functions.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toList()));
         LLVMValueRef loadedItVal = LLVMBuildLoad(builder, it, "");
 
         LLVMValueRef kkk = functions.get("kkk");

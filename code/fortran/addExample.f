@@ -5,9 +5,9 @@
        kkk = 'Ov fire and the void'
        s1 = 11
        s2 = 13
-       it = 61
+       it = 62
        sq = 12
        s3 = s1
-       sum = (s1) + (s1+31) - (s1+31);
-      print *, 'Jakieś proste rzeczy to tak', sum, sq
+       sum = (s1) + (s1+31) - (s1-(s2)+31)
+      print *, 'Jakieś proste rzeczy to tak', sum, sum
       end

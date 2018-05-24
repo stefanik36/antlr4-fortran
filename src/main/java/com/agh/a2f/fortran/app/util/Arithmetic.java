@@ -1,6 +1,4 @@
-package com.agh.a2f.fortran.app;
-
-import org.bytedeco.javacpp.LLVM;
+package com.agh.a2f.fortran.app.util;
 
 import java.util.List;
 import java.util.Map;
@@ -11,8 +9,8 @@ import static org.bytedeco.javacpp.LLVM.*;
 public class Arithmetic {
 
 
-    public static LLVM.LLVMValueRef resolveAddAndSub(List<LLVM.LLVMValueRef> components, List<String> operators, LLVM.LLVMBuilderRef builder) {
-        LLVM.LLVMValueRef fVal = components.get(0);
+    public static LLVMValueRef resolveAddAndSub(List<LLVMValueRef> components, List<String> operators, LLVMBuilderRef builder) {
+        LLVMValueRef fVal = components.get(0);
         for (int i = 0; i < components.size() - 1; i++) {
             String op = operators.get(i);
             if ("+".equals(op)) {
@@ -26,7 +24,7 @@ public class Arithmetic {
         return fVal;
     }
 
-    public static Optional<LLVM.LLVMValueRef> findValue(String name, Map<String, LLVM.LLVMValueRef> functions) {
+    public static Optional<LLVMValueRef> findValue(String name, Map<String, LLVMValueRef> functions) {
         try {
             Integer val = Integer.valueOf(name);
             //TODO other types
