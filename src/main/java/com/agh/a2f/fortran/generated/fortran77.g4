@@ -898,8 +898,12 @@ astringexpr
     : SCON
     ;
 aintegerexpr
-    : ICON
+    : MYNUM | ICON
     ;
+MYNUM
+    : '0' .. '9';
+MYCHAR
+    : ('a' .. 'z' | 'A' .. 'Z');
 
 /* integer expression */
 iexpr
@@ -989,7 +993,7 @@ subscripts
 
 //holding var and functions?
 varRef
-   : (NAME | 'real') (subscripts (substringApp)?)?
+   :  (NAME | 'real') (subscripts (substringApp)?)?
    ;
 
 varRefCode
@@ -1501,8 +1505,8 @@ ALPHA
 
 // case-insensitive
 
-NUM
-   : ('0' .. '9')
+fragment NUM
+   : '0' .. '9'
    ;
 
 

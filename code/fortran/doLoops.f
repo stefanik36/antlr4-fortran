@@ -14,13 +14,13 @@
         sq = 10
       else if (sq .LT. 51) then
         print *, 'sq == 51', 'piękna sprawa :>'
-        sq = 11
+        sq = 1
       else
         print *, 'ELSE', 'piękna sprawa :>'
-        sq = 16
+        sq = 6
       end if
        kkk = 'Ov fire and the void'
-       it = sq
+       it = 666
        k2 = 22.21
       print *, 'Jakieś proste rzeczy to tak', it, sq, kkk, (12 -12 * -12 + 12 - 12)
       end
