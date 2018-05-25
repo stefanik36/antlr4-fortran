@@ -102,8 +102,9 @@ public class LLVMTranslator extends fortran77BaseListener {
         stringStack.push(ctx.getText());
     }
 
+
     @Override
-    public void enterAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx) {
+    public void exitAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx) {
         if (ctx.expression() != null) {
             cod.c().off().i("enterAssignmentStatement: " + ctx.getText() + " | " + ctx.expression().getText());
             LLVMValueRef llvmValueRef = null;
@@ -126,10 +127,6 @@ public class LLVMTranslator extends fortran77BaseListener {
                 stack.push(llvmValueRef);
             }
         }
-    }
-
-    @Override
-    public void exitAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx) {
         if (ctx.children == null) return;
         cod.c().off().i("exitAssignmentStatement: " + ctx.getText() + " | REF: " + ctx.varRef().getText());
         String name = ctx.varRef().getText();
@@ -374,7 +371,12 @@ public class LLVMTranslator extends fortran77BaseListener {
     public void enterVarRef(fortran77Parser.VarRefContext ctx) {
         String name = ctx.getText();
         LLVMValueRef valRef = valueRefs.get(name);
-        stack.push(valRef);
+        if(valRef!= null) {
+            stack.push(valRef);
+        }
+        else {
+            System.out.print("");
+        }
     }
 
 

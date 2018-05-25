@@ -7,7 +7,7 @@
          sq = 12
       end do
         sq = 50
-      print *, 'uwaga, test ifa', 'BTW zle tego printa zrobilem. te stringi powinny sie polaczyc przy wyswietlaniu'
+      print *, 'uwaga, test ifa', ' :>'
       if (sq .EQ. 50.EQV.sq.EQ.50.AND..NOT.sq.EQ.51) then
         print *, 'sq == 50', 'piękna sprawa :>'
         sq = 10
@@ -19,6 +19,6 @@
         sq = 6
       end if
        kkk = 'Ov fire and the void'
-       it = 12-32
+       it = 12-32*12
       print *, 'Jakieś proste rzeczy to tak', it, sq, kkk, 12
       end
