@@ -30,6 +30,7 @@ public class LLVMTranslator extends fortran77BaseListener {
     private LLVMBuilderRef builder = null;
 
     private Stack<LLVMValueRef> stack = new Stack<>();
+    private Stack<LLVMBasicBlockRef> blockRefStack = new Stack<>();
     private Stack<String> stringStack = new Stack<>();
 
     private Map<String, LLVMValueRef> valueRefs = new HashMap<>();
@@ -212,16 +213,18 @@ public class LLVMTranslator extends fortran77BaseListener {
         }
 
         List<LLVMValueRef> printfArgs = new ArrayList<>();
-        StringJoiner formatJoiner = new StringJoiner("          ");
+        StringBuilder formatJoiner = new StringBuilder();
 
         for (fortran77Parser.IoListContext l : ctx.ioList()) {
             switch (l.getStop().getType()) {
                 case fortran77Lexer.ICON: //number (?integer)
+                    printfArgs.add(LLVMConstInt(LLVMInt32Type(), Long.valueOf(l.getText()), 1));
+                    formatJoiner.append("          %d ");
                     break;
                 case fortran77Lexer.SCON: //string
-                    formatJoiner.add("%s");
-                    String cutedString = l.getText().substring(1, l.getText().length() - 1);
-                    printfArgs.add(LLVMBuildGlobalString(builder, cutedString, ""));
+                    formatJoiner.append("%s");
+                    String cutString = l.getText().substring(1, l.getText().length() - 1);
+                    printfArgs.add(LLVMBuildGlobalString(builder, cutString, ""));
                     break;
                 case fortran77Lexer.NAME: //variables (? and others i think xd)
                     LLVMValueRef val = valueRefs.get(l.getText());
@@ -230,10 +233,10 @@ public class LLVMTranslator extends fortran77BaseListener {
                     if (valType.equals(LLVMInt32Type())) {
                         LLVMValueRef loadedVal = LLVMBuildLoad(builder, val, "");
                         printfArgs.add(loadedVal);
-                        formatJoiner.add("%d");
+                        formatJoiner.append("          %d ");
                     } else {
                         printfArgs.add(val);
-                        formatJoiner.add("%s");
+                        formatJoiner.append("%s");
                     }
 
                     break;
@@ -244,10 +247,192 @@ public class LLVMTranslator extends fortran77BaseListener {
             //TODO obsługa real
         }
 
-        LLVMValueRef format = LLVMBuildGlobalString(builder, formatJoiner.toString(), "");
+        LLVMValueRef format = LLVMBuildGlobalString(builder, formatJoiner.toString() + "\n", "");
         printfArgs.add(0, format);
         LLVMValueRef[] printfArgsArr = printfArgs.toArray(new LLVMValueRef[printfArgs.size()]);
         LLVMBuildCall(builder, printf, new PointerPointer<>(printfArgsArr), printfArgsArr.length, "");
+    }
+
+
+    /////////**END** DISPLAY BLOCK
+
+    /////////**START** IF STATEMENT BLOCK
+
+    @Override
+    public void exitIfStatement(fortran77Parser.IfStatementContext ctx) {
+        LLVMBasicBlockRef endBlock = blockRefStack.pop();
+        LLVMPositionBuilderAtEnd(builder, endBlock);
+    }
+
+    @Override
+    public void enterIfStatement(fortran77Parser.IfStatementContext ctx) {
+        LLVMValueRef fun = valueRefs.get(currentFunction);
+        assert fun != null;
+        LLVMBasicBlockRef endBlock = LLVMAppendBasicBlock(fun, "end_block");
+        blockRefStack.push(endBlock);
+    }
+
+    @Override
+    public void enterFirstIfBlock(fortran77Parser.FirstIfBlockContext ctx) {
+        LLVMBasicBlockRef trueBlock = blockRefStack.pop();
+        LLVMPositionBuilderAtEnd(builder, trueBlock);
+    }
+
+    @Override
+    public void exitFirstIfBlock(fortran77Parser.FirstIfBlockContext ctx) {
+        LLVMBasicBlockRef falseBlock = blockRefStack.pop();
+        LLVMBasicBlockRef endBlock = blockRefStack.pop();
+
+        blockRefStack.push(endBlock);
+        blockRefStack.push(falseBlock);
+        LLVMBuildBr(builder, endBlock);
+
+    }
+
+    @Override
+    public void enterElseIfBlock(fortran77Parser.ElseIfBlockContext ctx) {
+        enterFirstIfBlock(null);
+
+    }
+
+    @Override
+    public void exitElseIfBlock(fortran77Parser.ElseIfBlockContext ctx) {
+        exitFirstIfBlock(null);
+    }
+
+    @Override
+    public void enterElseIfStatement(fortran77Parser.ElseIfStatementContext ctx) {
+        LLVMBasicBlockRef falseBlockFinal = blockRefStack.pop();
+        LLVMPositionBuilderAtEnd(builder, falseBlockFinal);
+
+    }
+
+    @Override
+    public void exitElseIfStatement(fortran77Parser.ElseIfStatementContext ctx) {
+
+
+        super.exitElseIfStatement(ctx);
+    }
+
+    @Override
+    public void enterElseStatement(fortran77Parser.ElseStatementContext ctx) {
+        LLVMBasicBlockRef falseBlock = blockRefStack.pop();
+//        LLVMBasicBlockRef endBlock = blockRefStack.pop();
+//        blockRefStack.push(endBlock);
+        LLVMPositionBuilderAtEnd(builder, falseBlock);
+    }
+
+    @Override
+    public void exitElseStatement(fortran77Parser.ElseStatementContext ctx) {
+        LLVMBasicBlockRef endBlock = blockRefStack.pop();
+        blockRefStack.push(endBlock);
+        LLVMBuildBr(builder, endBlock);
+    }
+
+
+    /////////**END** IF STATEMENT BLOCK
+
+    @Override
+    public void exitLogicalExpression(fortran77Parser.LogicalExpressionContext ctx) {
+        LLVMValueRef fun = valueRefs.get(currentFunction);
+        assert fun != null;
+
+        LLVMBasicBlockRef trueBlock = LLVMAppendBasicBlock(fun, "");
+        LLVMBasicBlockRef falseBlock = LLVMAppendBasicBlock(fun, "");
+        LLVMValueRef iF = stack.pop();
+        LLVMBuildCondBr(builder, iF, trueBlock, falseBlock);
+
+        blockRefStack.push(falseBlock);
+        blockRefStack.push(trueBlock);
+
+    }
+
+
+    @Override
+    public void exitLexpr0(fortran77Parser.Lexpr0Context ctx) {
+
+        List ch = ctx.lexprSpec();
+        int size = ch.size();
+        if (size == 0) return;
+
+        Stack<LLVMValueRef> exprStack = new Stack<>();
+
+        for (int i = 0; i < size + 1; i++) {
+            exprStack.push(stack.pop());
+        }
+
+        for (fortran77Parser.LexprSpecContext node : ctx.lexprSpec()) {
+            LLVMValueRef lVal = exprStack.pop();
+            LLVMValueRef rVal = exprStack.pop();
+            LLVMValueRef cmp;
+            if (node.EQV() != null) {
+                cmp = LLVMBuildICmp(builder, LLVMIntEQ, lVal, rVal, "");
+            } else if (node.NEQV() != null) {
+                cmp = LLVMBuildICmp(builder, LLVMIntNE, lVal, rVal, "");
+            } else if (node.LAND() != null) {
+                cmp = LLVMBuildAnd(builder, lVal, rVal, "");
+            } else if (node.LOR() != null) {
+                cmp = LLVMBuildOr(builder, lVal, rVal, "");
+            } else return;
+            exprStack.push(cmp);
+        }
+        LLVMValueRef resultExpr = exprStack.pop();
+        stack.push(resultExpr);
+    }
+
+
+    @Override
+    public void exitLexpr1(fortran77Parser.Lexpr1Context ctx) {
+        if (ctx.LNOT() == null) return;
+        LLVMValueRef cmp = stack.pop();
+        LLVMValueRef notCmp = LLVMBuildNot(builder, cmp, "");
+        stack.push(notCmp);
+    }
+
+    @Override
+    public void exitLexpr2(fortran77Parser.Lexpr2Context ctx) {
+        int type = 0;
+        if (ctx.EQ() != null) {
+            type = LLVMIntEQ;
+        } else if (ctx.NE() != null) {
+            type = LLVMIntNE;
+        } else if (ctx.LE() != null) {
+            type = LLVMIntSLE;
+        } else if (ctx.GT() != null) {
+            type = LLVMIntSGT;
+        } else if (ctx.GE() != null) {
+            type = LLVMIntSGE;
+        } else if (ctx.LT() != null) {
+            type = LLVMIntSLT;
+        } else return;
+
+        LLVMValueRef rVal = stack.pop();
+        LLVMValueRef lVal = stack.pop();
+
+
+        //TODO jakoś lepiej ogarnąć kiedy jest zmienna i należy ją załadować?
+        if (valueRefs.containsValue(lVal))
+            lVal = LLVMBuildLoad(builder, lVal, "");
+        if (valueRefs.containsValue(rVal))
+            rVal = LLVMBuildLoad(builder, rVal, "");
+
+        LLVMValueRef logic = LLVMBuildICmp(builder, type, lVal, rVal, "");
+        stack.push(logic);
+    }
+
+    @Override
+    public void enterAintegerexpr(fortran77Parser.AintegerexprContext ctx) {
+        long val = Long.valueOf(ctx.getText());
+        LLVMValueRef valRef = LLVMConstInt(LLVMInt32Type(), val, 1);
+        stack.push(valRef);
+    }
+
+    @Override
+    public void enterVarRef(fortran77Parser.VarRefContext ctx) {
+        String name = ctx.getText();
+        LLVMValueRef valRef = valueRefs.get(name);
+        assert valRef != null;
+        stack.push(valRef);
     }
 
     ////////SUBPROGRAM_BODY

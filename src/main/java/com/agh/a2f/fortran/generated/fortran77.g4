@@ -444,9 +444,12 @@ firstIfBlock
 
 /* 37 */
 elseIfStatement
-   : ('elseif' | 'else' 'if') LPAREN logicalExpression RPAREN 'then' seos (wholeStatement)*
-   | ('ELSEIF' | 'ELSE' 'IF') LPAREN logicalExpression RPAREN 'then' seos (wholeStatement)*
+   : ('elseif' | 'else' 'if') LPAREN logicalExpression RPAREN 'then' seos elseIfBlock
+   | ('ELSEIF' | 'ELSE' 'IF') LPAREN logicalExpression RPAREN 'then' seos elseIfBlock
    ;
+elseIfBlock
+    : (wholeStatement)*
+    ;
 
 /* 38 */
 elseStatement
@@ -844,23 +847,19 @@ ncExpr
 
 // concatenation
 lexpr0
-   : lexpr1 ((NEQV | EQV) lexpr1)*
+   : lexpr1 (lexprSpec lexpr1)*
    ;
 
+lexprSpec
+    : (NEQV | EQV | LOR | LAND)
+    ;
+
 lexpr1
-   : lexpr2 (LOR lexpr2)*
+   : LNOT lexpr1
+   | lexpr2
    ;
 
 lexpr2
-   : lexpr3 (LAND lexpr3)*
-   ;
-
-lexpr3
-   : LNOT lexpr3
-   | lexpr4
-   ;
-
-lexpr4
    : aexpr0 ((LT | LE | EQ | NE | GT | GE) aexpr0)?
    ;
 
@@ -899,8 +898,12 @@ astringexpr
     : SCON
     ;
 aintegerexpr
-    : ICON
+    : MYNUM | ICON
     ;
+MYNUM
+    : '0' .. '9';
+MYCHAR
+    : ('a' .. 'z' | 'A' .. 'Z');
 
 /* integer expression */
 iexpr
@@ -990,7 +993,7 @@ subscripts
 
 //holding var and functions?
 varRef
-   : (NAME | 'real') (subscripts (substringApp)?)?
+   :  (NAME | 'real') (subscripts (substringApp)?)?
    ;
 
 varRefCode
@@ -1502,8 +1505,8 @@ ALPHA
 
 // case-insensitive
 
-NUM
-   : ('0' .. '9')
+fragment NUM
+   : '0' .. '9'
    ;
 
 
