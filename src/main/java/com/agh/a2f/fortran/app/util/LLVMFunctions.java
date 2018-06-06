@@ -1,4 +1,4 @@
-package com.agh.a2f.fortran.app;
+package com.agh.a2f.fortran.app.util;
 
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.LLVM;
@@ -10,7 +10,7 @@ import static org.bytedeco.javacpp.LLVM.*;
 public class LLVMFunctions {
 
 
-    static LLVM.LLVMValueRef declareExternalPrintf(LLVM.LLVMModuleRef mod){
+    public static LLVM.LLVMValueRef declareExternalPrintf(LLVM.LLVMModuleRef mod){
         LLVM.LLVMTypeRef printfArgsTyList[] = { LLVMPointerType(LLVMInt8Type(), 0) };
         LLVM.LLVMTypeRef PrintfTy = LLVMFunctionType(LLVMInt32Type(),
                 new PointerPointer<>(printfArgsTyList),
@@ -22,7 +22,7 @@ public class LLVMFunctions {
     }
 
 
-    static void executeCode(LLVMModuleRef mod, LLVMValueRef mainFunc){
+    public static void executeCode(LLVMModuleRef mod, LLVMValueRef mainFunc){
         BytePointer error = new BytePointer((Pointer) null); // Used to retrieve messages from functions
 
         LLVMLinkInMCJIT();

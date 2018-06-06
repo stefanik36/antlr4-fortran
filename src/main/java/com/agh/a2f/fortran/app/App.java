@@ -1,5 +1,6 @@
 package com.agh.a2f.fortran.app;
 
+import com.agh.a2f.fortran.app.translators.AllLLVMTranslator;
 import com.agh.a2f.fortran.generated.fortran77Lexer;
 import com.agh.a2f.fortran.generated.fortran77Parser;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -17,7 +18,7 @@ import static org.bytedeco.javacpp.LLVM.*;
 public class App {
 
     public static void main(String[] args) throws IOException {
-        String path = "code/fortran/doLoops.f";
+        String path = "code/fortran/doLoop.f90";
 //        String path = "code/fortran/addExample.f";
 
 
@@ -50,7 +51,8 @@ public class App {
 
             CommonTokenStream tokens = new CommonTokenStream(lexer);
 
-            LLVMTranslator llvmTranslator = new LLVMTranslator(tokens);
+//            AssignmentAndArithmeticTranslator llvmTranslator = new AssignmentAndArithmeticTranslator(tokens);
+            AllLLVMTranslator llvmTranslator = new AllLLVMTranslator(tokens);
 
             walker.walk(llvmTranslator, tree);
 

@@ -465,8 +465,7 @@ endIfStatement
 
 /* 40 */
 doStatement
-   : 'do' (doWithLabel | doWithEndDo)
-   | 'DO' (doWithLabel | doWithEndDo)
+   : ('do'|'DO') (doWithLabel | doWithEndDo)
    ;
 
 doVarArgs

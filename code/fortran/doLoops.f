@@ -2,13 +2,12 @@
       implicit none
       integer it, sq
       character*(20) kkk
-      do it = 10, 10, 20
-         sq = it + it + 31 - 13
-         sq = 12
-      end do
         sq = 50
+      do it=0, 12
+        print 'JD', it, 1
+      end do
       print *, 'uwaga, test ifa', ' :>'
-      if (sq .EQ. 50.EQV.sq.EQ.50.AND..NOT.sq.EQ.51) then
+      if (sq .EQ.51.EQV.sq.EQ.50.AND..NOT.sq.EQ.51) then
         print *, 'sq == 50', 'piękna sprawa :>'
         sq = 10
       else if (sq .LT. 51) then
@@ -19,6 +18,6 @@
         sq = 6
       end if
        kkk = 'Ov fire and the void'
-       it = 12-32*12
+       it = 12-3*2
       print *, 'Jakieś proste rzeczy to tak', it, sq, kkk, 12
       end
