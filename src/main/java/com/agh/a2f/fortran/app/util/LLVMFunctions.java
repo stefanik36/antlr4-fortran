@@ -1,5 +1,6 @@
 package com.agh.a2f.fortran.app.util;
 
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.LLVM;
 import org.bytedeco.javacpp.Pointer;
@@ -9,6 +10,13 @@ import static org.bytedeco.javacpp.LLVM.*;
 
 public class LLVMFunctions {
 
+    public static ParseTree skipSingleChildNodes(ParseTree node){
+        ParseTree currentNode = node;
+        while (currentNode.getChildCount() == 1){
+            currentNode = currentNode.getChild(0);
+        }
+        return currentNode;
+    }
 
     public static LLVM.LLVMValueRef declareExternalPrintf(LLVM.LLVMModuleRef mod){
         LLVM.LLVMTypeRef printfArgsTyList[] = { LLVMPointerType(LLVMInt8Type(), 0) };
