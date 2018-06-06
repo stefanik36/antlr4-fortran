@@ -29,8 +29,7 @@ abstract class LoopTranslator extends PrintTranslator {
         String loopItrName = ctx.variableName().getText();
         LLVM.LLVMValueRef orgLoopItrRef = valueRefs.get(loopItrName);
         if (orgLoopItrRef == null) throw new RuntimeException("Variable do not initialize");
-        megaStack.put(orgLoopItrRef);
-        megaStack.put(loopItrName);
+        megaStack.push(orgLoopItrRef);
     }// stack: $->orgLoopItrRef->loopItrName
 
 
@@ -38,45 +37,46 @@ abstract class LoopTranslator extends PrintTranslator {
     public void enterDoBody(fortran77Parser.DoBodyContext ctx) {
         // stack: $->orgLoopItrRef->loopItrName
         LLVM.LLVMValueRef function = valueRefs.get(currentFunction);
-        LLVMBasicBlockRef startLoop = LLVMGetInsertBlock(builder);
-        LLVMPositionBuilderAtEnd(builder, startLoop);
+
+        LLVMValueRef itrVal = megaStack.popValue();
+        LLVMValueRef inc = megaStack.getSize() > 2 ? megaStack.popValue() : LLVMConstInt(LLVMInt32Type(), 1, 1);
+        LLVMValueRef limit = megaStack.popValue();
+        LLVMValueRef initVal = megaStack.popValue();
+
+        LLVMBuildStore(builder, initVal, itrVal);
+
         LLVM.LLVMBasicBlockRef forLoop = LLVMAppendBasicBlock(function, "loop");
         LLVMBuildBr(builder, forLoop);
-        LLVMPositionBuilderAtEnd(builder, forLoop);
-        LLVM.LLVMValueRef phi = LLVMBuildPhi(builder, LLVMInt32Type(), "");
-        String varName = (String) megaStack.peek();
-        valueRefs.put(varName, phi);
-        megaStack.put(phi);
-        megaStack.put(startLoop);
-        megaStack.put(forLoop);
 
+        LLVMPositionBuilderAtEnd(builder, forLoop);
+
+
+
+        LLVMValueRef loadedItr = LLVMBuildLoad(builder, itrVal,"");
+        LLVMValueRef incItr = LLVMBuildAdd(builder, loadedItr, inc, "");
+
+        LLVMBuildStore(builder,incItr, itrVal);
+        LLVMValueRef iF = LLVMBuildICmp(builder, LLVMIntSLT, incItr, limit, "");
+
+        LLVMBasicBlockRef bodyForBlock = LLVMAppendBasicBlock(valueRefs.get(currentFunction), "body_loop");
+        LLVMBasicBlockRef endForBlock = LLVMAppendBasicBlock(valueRefs.get(currentFunction), "end_loop");
+        LLVMBuildCondBr(builder, iF, bodyForBlock, endForBlock);
+        LLVMPositionBuilderAtEnd(builder, bodyForBlock);
+
+        megaStack.push(endForBlock);
+        megaStack.push(forLoop);
     }// stack: $->orgLoopItrRef->loopItrName->phi->startLoopBlock->loopBlock
 
     @Override
     public void exitDoBody(fortran77Parser.DoBodyContext ctx) {
         // stack: $->orgLoopItrRef->loopItrName->phi->startLoopBlock->loopBlock
 
-            LLVMBasicBlockRef loopBlock = megaStack.popBlock();
-            LLVMBasicBlockRef previousBlock = megaStack.popBlock();
 
-            LLVMValueRef phi = megaStack.popValue();
-            String varName = megaStack.popString();
-            LLVMValueRef originalItrRef = megaStack.popValue();
+        LLVMBasicBlockRef forLoop = megaStack.popBlock();
+        LLVMBuildBr(builder, forLoop);
 
-            LLVMValueRef inc = megaStack.getSize() > 2 ? megaStack.popValue() : LLVMConstInt(LLVMInt32Type(), 1, 1);
-            LLVMValueRef limit = megaStack.popValue();
-            LLVMValueRef start = megaStack.popValue();
+        LLVMBasicBlockRef endForBlock = megaStack.popBlock();
+        LLVMPositionBuilderAtEnd(builder, endForBlock);
 
-            LLVMValueRef incItr = LLVMBuildAdd(builder, phi, inc, "");
-            LLVMValueRef[] phiValues = {start, incItr};
-            LLVMBasicBlockRef[] phiBlocks = {previousBlock, loopBlock};
-            LLVMAddIncoming(phi, new PointerPointer<>(phiValues), new PointerPointer<>(phiBlocks), 2);
-            LLVMValueRef iF = LLVMBuildICmp(builder, LLVMIntSLT, incItr, limit, "");
-            LLVMBasicBlockRef endForBlock = LLVMAppendBasicBlock(valueRefs.get(currentFunction), "end_loop");
-            LLVMBuildCondBr(builder, iF, loopBlock, endForBlock);
-            LLVMPositionBuilderAtEnd(builder, endForBlock);
-            LLVMBuildStore(builder, phi, originalItrRef);
-
-            valueRefs.put(varName, originalItrRef);
     } // stack: $
 }

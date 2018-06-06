@@ -9,7 +9,6 @@ import static org.bytedeco.javacpp.LLVM.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Stack;
 
 abstract class LLVMBaseTranslator extends fortran77BaseListener {
     private BufferedTokenStream tokens;
@@ -52,7 +51,7 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
         long val = Long.valueOf(ctx.getText());
         LLVMValueRef valRef = LLVMConstInt(LLVMInt32Type(), val, 1);
         if (megaStack.wantData()) {
-            megaStack.put(valRef);
+            megaStack.push(valRef);
         }
     }
 
@@ -61,9 +60,10 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
         String name = ctx.getText();
         LLVMValueRef valRef = valueRefs.get(name);
         if (valRef != null && megaStack.wantData()) {
-            megaStack.put(valRef);
+            megaStack.push(valRef);
         }
     }
+
 
     @Override
     public void enterSubprogramBody(fortran77Parser.SubprogramBodyContext ctx) {
