@@ -26,6 +26,15 @@ public abstract class MemoryAllocationTranslator extends AssignmentAndArithmetic
     }
 
     @Override
+    public void enterIntConstantExpr(fortran77Parser.IntConstantExprContext ctx) {
+        if(megaStack.wantData()){
+            megaStack.push(ctx.getText());
+            ctx.children = null;
+            //pozbycie się wchodzenia głębiej
+        }
+    }
+
+    @Override
     public void enterTypeStatementNameList(fortran77Parser.TypeStatementNameListContext ctx) {
         for (fortran77Parser.TypeStatementNameContext name : ctx.typeStatementName()) {
             LLVMValueRef var = LLVMBuildAlloca(builder, LLVMInt32Type(), name.getText());
@@ -35,7 +44,6 @@ public abstract class MemoryAllocationTranslator extends AssignmentAndArithmetic
 
     @Override
     public void exitTypeStatementNameCharList(fortran77Parser.TypeStatementNameCharListContext ctx) {
-//        System.out.println("\t-(6)exitTypeStatementNameCharList");
         Integer length = Integer.valueOf(megaStack.popString()) + 1; // +1 because it dont work when table has the same length as string (PRINT ISSUE)
 
         for (fortran77Parser.TypeStatementNameCharContext name : ctx.typeStatementNameChar()) {

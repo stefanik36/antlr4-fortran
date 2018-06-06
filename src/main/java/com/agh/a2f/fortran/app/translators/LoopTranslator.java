@@ -29,8 +29,8 @@ abstract class LoopTranslator extends PrintTranslator {
         String loopItrName = ctx.variableName().getText();
         LLVM.LLVMValueRef orgLoopItrRef = valueRefs.get(loopItrName);
         if (orgLoopItrRef == null) throw new RuntimeException("Variable do not initialize");
-        megaStack.put(orgLoopItrRef);
-        megaStack.put(loopItrName);
+        megaStack.push(orgLoopItrRef);
+        megaStack.push(loopItrName);
     }// stack: $->orgLoopItrRef->loopItrName
 
 
@@ -46,9 +46,9 @@ abstract class LoopTranslator extends PrintTranslator {
         LLVM.LLVMValueRef phi = LLVMBuildPhi(builder, LLVMInt32Type(), "");
         String varName = (String) megaStack.peek();
         valueRefs.put(varName, phi);
-        megaStack.put(phi);
-        megaStack.put(startLoop);
-        megaStack.put(forLoop);
+        megaStack.push(phi);
+        megaStack.push(startLoop);
+        megaStack.push(forLoop);
 
     }// stack: $->orgLoopItrRef->loopItrName->phi->startLoopBlock->loopBlock
 

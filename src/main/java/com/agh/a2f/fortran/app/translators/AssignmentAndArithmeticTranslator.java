@@ -22,7 +22,6 @@ abstract class AssignmentAndArithmeticTranslator extends LLVMBaseTranslator {
     //    private static Integer arithmeticStackIterator = 0;//TODO
     private Stack<List<String>> arithmeticComponentsStack = new Stack<>();
     private Map<String, LLVMValueRef> arithmeticMapResults = new HashMap<>();
-    private Stack<LLVMValueRef> stack = new Stack<>();
 
     public AssignmentAndArithmeticTranslator(BufferedTokenStream tokens) {
         super(tokens);
@@ -30,12 +29,11 @@ abstract class AssignmentAndArithmeticTranslator extends LLVMBaseTranslator {
 
     /////////**START** ASSIGNMENT BLOCK
 
-    @Override
-    public void enterIntConstantExpr(fortran77Parser.IntConstantExprContext ctx) {
-        if(megaStack.wantData())
-            megaStack.put(ctx.getText());
-    }
 
+    @Override
+    public void enterAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx) {
+        megaStack.startSection();
+    }
 
     @Override
     public void exitAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx) {
@@ -54,24 +52,24 @@ abstract class AssignmentAndArithmeticTranslator extends LLVMBaseTranslator {
                 llvmValueRef = LLVMBuildLoad(builder, Variable.getFromMap(strVal, valueRefs), "");
                 cod.c().off().i("var: " + llvmValueRef.address());
             }
-            //Something else pushed/will push it to the stack?
+            //Something else pushed/will push it to the megaStack?
 
             if (llvmValueRef != null) {
-                cod.c().off().i("\t[" + stack.size() + "]PUSH ASSIGN: " + llvmValueRef.address());
-                stack.push(llvmValueRef);
+                cod.c().off().i("\t[" + megaStack.size() + "]PUSH ASSIGN: " + llvmValueRef.address());
+                megaStack.push(llvmValueRef);
             }
         }
-        if (ctx.children == null) return;
-        cod.c().off().i("exitAssignmentStatement: " + ctx.getText() + " | REF: " + ctx.varRef().getText());
-        String name = ctx.varRef().getText();
-        Optional.ofNullable(valueRefs.get(name)).ifPresent(var -> {
-            LLVMValueRef value = stack.pop();
-            LLVMBuildStore(builder, value, var);
-            cod.c().off().i("\tX: " + value.address());
-            cod.c().off().i("\t[" + stack.size() + "]POP ASSIGN: " + value.address());
-        });
-
-
+        if (ctx.children != null) {
+            cod.c().off().i("exitAssignmentStatement: " + ctx.getText() + " | REF: " + ctx.varRef().getText());
+            String name = ctx.varRef().getText();
+            Optional.ofNullable(valueRefs.get(name)).ifPresent(var -> {
+                LLVMValueRef value = megaStack.popValue();
+                LLVMBuildStore(builder, value, var);
+                cod.c().off().i("\tX: " + value.address());
+                cod.c().off().i("\t[" + megaStack.size() + "]POP ASSIGN: " + value.address());
+            });
+        }
+        megaStack.endSection();
     }
 
 
@@ -100,10 +98,10 @@ abstract class AssignmentAndArithmeticTranslator extends LLVMBaseTranslator {
                     .collect(Collectors.toList());
 
             LLVMValueRef val = Arithmetic.resolveAddAndSub(components, operators, builder);
-            cod.c().off().i("\t[" + stack.size() + "]PUSH ADD/SUB:  " + val.address());
+            cod.c().off().i("\t[" + megaStack.size() + "]PUSH ADD/SUB:  " + val.address());
 //            LLVMBuildLoad(builder, val, "");
 
-            stack.push(val);
+            megaStack.push(val);
             arithmeticMapResults.put(ctx.getText(), val);
 
         }
@@ -133,9 +131,9 @@ abstract class AssignmentAndArithmeticTranslator extends LLVMBaseTranslator {
                     .collect(Collectors.toList());
 
             LLVMValueRef val = Arithmetic.resolveMulAndDiv(components, operators, builder);
-            cod.c().off().i("\t[" + stack.size() + "]PUSH MUL/DIV: " + val.address());
+            cod.c().off().i("\t[" + megaStack.size() + "]PUSH MUL/DIV: " + val.address());
 
-            stack.push(val);
+            megaStack.push(val);
             arithmeticMapResults.put(ctx.getText(), val);
 
         }
@@ -165,9 +163,9 @@ abstract class AssignmentAndArithmeticTranslator extends LLVMBaseTranslator {
                     .collect(Collectors.toList());
 
             LLVMValueRef val = Arithmetic.resolvePow(components, operators, builder);
-            cod.c().off().i("\t[" + stack.size() + "]PUSH  POWER: " + val.address());
+            cod.c().off().i("\t[" + megaStack.size() + "]PUSH  POWER: " + val.address());
 
-            stack.push(val);
+            megaStack.push(val);
             arithmeticMapResults.put(ctx.getText(), val);
 
         }

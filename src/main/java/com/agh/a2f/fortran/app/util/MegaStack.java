@@ -68,7 +68,7 @@ public class MegaStack {
         }
     }
 
-    public void put(LLVMValueRef valueRef) {
+    public void push(LLVMValueRef valueRef) {
         Section section = sections.peek();
         if (section.useStack) {
             index++;
@@ -77,7 +77,7 @@ public class MegaStack {
         }
     }
 
-    public void put(String val) {
+    public void push(String val) {
         Section section = sections.peek();
         if (section.useStack) {
             index++;
@@ -87,7 +87,7 @@ public class MegaStack {
 
     }
 
-    public void put(LLVMBasicBlockRef basicBlockRef) {
+    public void push(LLVMBasicBlockRef basicBlockRef) {
         Section section = sections.peek();
         if (section.useStack) {
             index++;
@@ -170,6 +170,9 @@ public class MegaStack {
 
     public int getSize(){
         return sections.peek().sequence.size();
+    }
+    public int size(){
+        return getSize();
     }
 
     public boolean wantData(){

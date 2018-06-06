@@ -1,6 +1,6 @@
 program doLoop
     implicit none
-    integer i1, i2
+    integer i1, i2, i3
     print *, 'wejscie do pętli do'
     do i1 = 0, 10, 1
         print *, 'DO', i1, 1, 'KOLUMNA ZYGMUNTA JUZ STOI'
@@ -9,9 +9,10 @@ program doLoop
         print *, 'DO2', i1, i2
     end do
     print *, 'koniec pętli do :>. Ostatnia wartosc iteratora:', i1, i2
+    i3 = i1 * i2 / 3
     if (i1.eq.9) then
-        print *, 'jebac disa'
+        print *, 'jest dobrze', i3
     else
-        print *, 'nie jebac disa'
+        print *, 'nie jest dobrze', i3
     end if
 end

@@ -18,7 +18,7 @@ abstract class ConditionalTranslator extends MemoryAllocationTranslator {
         megaStack.startSection();
         LLVMValueRef fun = valueRefs.get(currentFunction);
         LLVMBasicBlockRef endBlock = LLVMAppendBasicBlock(fun, "end_block");
-        megaStack.put(endBlock);
+        megaStack.push(endBlock);
     }
 
     @Override
@@ -39,8 +39,8 @@ abstract class ConditionalTranslator extends MemoryAllocationTranslator {
     public void exitFirstIfBlock(fortran77Parser.FirstIfBlockContext ctx) {
         LLVMBasicBlockRef falseBlock = megaStack.popBlock();
         LLVMBasicBlockRef endBlock = megaStack.popBlock();
-        megaStack.put(endBlock);
-        megaStack.put(falseBlock);
+        megaStack.push(endBlock);
+        megaStack.push(falseBlock);
         LLVMBuildBr(builder, endBlock);
 
     }
@@ -94,8 +94,8 @@ abstract class ConditionalTranslator extends MemoryAllocationTranslator {
         LLVMBasicBlockRef falseBlock = LLVMAppendBasicBlock(fun, "");
         LLVMValueRef iF = megaStack.popValue();
         LLVMBuildCondBr(builder, iF, trueBlock, falseBlock);
-        megaStack.put(falseBlock);
-        megaStack.put(trueBlock);
+        megaStack.push(falseBlock);
+        megaStack.push(trueBlock);
 
     }
 
@@ -129,7 +129,7 @@ abstract class ConditionalTranslator extends MemoryAllocationTranslator {
             exprStack.push(cmp);
         }
         LLVMValueRef resultExpr = exprStack.pop();
-        megaStack.put(resultExpr);
+        megaStack.push(resultExpr);
     }
 
 
@@ -138,7 +138,7 @@ abstract class ConditionalTranslator extends MemoryAllocationTranslator {
         if (ctx.LNOT() == null) return;
         LLVMValueRef cmp = megaStack.popValue();
         LLVMValueRef notCmp = LLVMBuildNot(builder, cmp, "");
-        megaStack.put(notCmp);
+        megaStack.push(notCmp);
     }
 
     @Override
@@ -169,6 +169,6 @@ abstract class ConditionalTranslator extends MemoryAllocationTranslator {
             rVal = LLVMBuildLoad(builder, rVal, "");
 
         LLVMValueRef logic = LLVMBuildICmp(builder, type, lVal, rVal, "");
-        megaStack.put(logic);
+        megaStack.push(logic);
     }
 }
