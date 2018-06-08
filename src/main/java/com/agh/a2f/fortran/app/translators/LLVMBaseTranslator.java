@@ -4,13 +4,21 @@ import com.agh.a2f.fortran.app.util.LLVMFunctions;
 import com.agh.a2f.fortran.app.util.MegaStack;
 import com.agh.a2f.fortran.generated.fortran77BaseListener;
 import com.agh.a2f.fortran.generated.fortran77Parser;
+import com.stefanik.cod.controller.COD;
+import com.stefanik.cod.controller.CODFactory;
+import com.sun.xml.internal.bind.v2.model.core.TypeRef;
 import org.antlr.v4.runtime.BufferedTokenStream;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
+
 import static org.bytedeco.javacpp.LLVM.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 abstract class LLVMBaseTranslator extends fortran77BaseListener {
+    private static final COD cod = CODFactory.get();
     private BufferedTokenStream tokens;
 
     LLVMBaseTranslator(BufferedTokenStream tokens) {
@@ -19,20 +27,62 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
 
     LLVMModuleRef mod = null;
     LLVMBuilderRef builder = null;
-    String currentFunction = null;
+    String executableUnitName = null;
 
     MegaStack megaStack = new MegaStack();
     Map<String, LLVMValueRef> valueRefs = new HashMap<>();
 
+//    @Override
+//    public void exitExecutableUnit(fortran77Parser.ExecutableUnitContext ctx) {
+//        executableUnitName = null;
+//    }
+
+    @Override
+    public void enterFunctionStatement(fortran77Parser.FunctionStatementContext ctx) {
+        executableUnitName = ctx.NAME().getText();
+        cod.i(ctx.children.stream().map(ParseTree::getText).collect(Collectors.toList()));
+        //TODO type
+        LLVMValueRef function = LLVMAddFunction(
+                mod,
+                executableUnitName,
+                LLVMFunctionType(LLVMInt32Type(), LLVMInt32Type(), 0, 0));
+        LLVMSetFunctionCallConv(function, 1);
+        valueRefs.put(executableUnitName, function);
+    }
+
+
+    @Override
+    public void exitFunctionStatement(fortran77Parser.FunctionStatementContext ctx) {
+//        cod.i("exitFunctionStatement: "+ctx.getText());
+//        currentFunction = null;
+    }
+
+    @Override
+    public void enterFunctionSubprogram(fortran77Parser.FunctionSubprogramContext ctx) {
+//        cod.i("enterFunctionSubprogram: "+ctx.getText()+" | "+ currentFunctionSubprogram);
+//        cod.i("enterFunctionSubprogram: ",ctx.children.stream().map(ParseTree::getText).collect(Collectors.toList()));
+//        currentFunctionSubprogram =
+    }
+
+    @Override
+    public void enterTypeStatementNameList(fortran77Parser.TypeStatementNameListContext ctx) {
+        cod.i(ctx.getText(), ctx.children.stream().map(ParseTree::getText).collect(Collectors.toList()));
+    }
 
     @Override
     public void enterProgramStatement(fortran77Parser.ProgramStatementContext ctx) {
+//        executableUnitName
+        cod.i(ctx.NAME().getSymbol().getText());
         String name = ctx.NAME().getSymbol().getText();
         mod = LLVMModuleCreateWithName(name);
-        LLVMValueRef mainFunc = LLVMAddFunction(mod,
-                "main", LLVMFunctionType(LLVMVoidType(), LLVMVoidType(), 0, 0));
+        LLVMValueRef mainFunc = LLVMAddFunction(
+                mod,
+                "main",
+                LLVMFunctionType(LLVMVoidType(), LLVMVoidType(), 0, 0)
+        );
+
         valueRefs.put("main", mainFunc);
-        currentFunction = "main";
+        executableUnitName = "main";
         LLVMSetFunctionCallConv(mainFunc, LLVMCCallConv);
     }
 
@@ -67,13 +117,21 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
 
     @Override
     public void enterSubprogramBody(fortran77Parser.SubprogramBodyContext ctx) {
-        LLVMBasicBlockRef entry = LLVMAppendBasicBlock(valueRefs.get(currentFunction), "entry_" + currentFunction);
+        cod.i("enterSubprogramBody",
+                "entry_" + executableUnitName,
+                valueRefs.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toList()),
+                valueRefs.get(executableUnitName),
+                ctx.children.stream().map(ParseTree::getText).collect(Collectors.toList())
+        );
+
+        LLVMBasicBlockRef entry = LLVMAppendBasicBlock(valueRefs.get(executableUnitName), "entry_" + executableUnitName);
         builder = LLVMCreateBuilder();
         LLVMPositionBuilderAtEnd(builder, entry);
     }
 
     @Override
     public void exitSubprogramBody(fortran77Parser.SubprogramBodyContext ctx) {
+        cod.i("exitSubprogramBody", "entry_end_" + executableUnitName);
         LLVMBuildRetVoid(builder);
         LLVMDisposeBuilder(builder);
         super.exitSubprogramBody(ctx);

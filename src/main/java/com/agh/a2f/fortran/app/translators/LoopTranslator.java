@@ -3,7 +3,6 @@ package com.agh.a2f.fortran.app.translators;
 import com.agh.a2f.fortran.generated.fortran77Parser;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.bytedeco.javacpp.LLVM;
-import org.bytedeco.javacpp.PointerPointer;
 
 import static org.bytedeco.javacpp.LLVM.*;
 
@@ -36,7 +35,7 @@ abstract class LoopTranslator extends PrintTranslator {
     @Override
     public void enterDoBody(fortran77Parser.DoBodyContext ctx) {
         // stack: $->orgLoopItrRef->loopItrName
-        LLVM.LLVMValueRef function = valueRefs.get(currentFunction);
+        LLVM.LLVMValueRef function = valueRefs.get(executableUnitName);
 
         LLVMValueRef itrVal = megaStack.popValue();
         LLVMValueRef inc = megaStack.getSize() > 2 ? megaStack.popValue() : LLVMConstInt(LLVMInt32Type(), 1, 1);
@@ -58,8 +57,8 @@ abstract class LoopTranslator extends PrintTranslator {
         LLVMBuildStore(builder,incItr, itrVal);
         LLVMValueRef iF = LLVMBuildICmp(builder, LLVMIntSLT, incItr, limit, "");
 
-        LLVMBasicBlockRef bodyForBlock = LLVMAppendBasicBlock(valueRefs.get(currentFunction), "body_loop");
-        LLVMBasicBlockRef endForBlock = LLVMAppendBasicBlock(valueRefs.get(currentFunction), "end_loop");
+        LLVMBasicBlockRef bodyForBlock = LLVMAppendBasicBlock(valueRefs.get(executableUnitName), "body_loop");
+        LLVMBasicBlockRef endForBlock = LLVMAppendBasicBlock(valueRefs.get(executableUnitName), "end_loop");
         LLVMBuildCondBr(builder, iF, bodyForBlock, endForBlock);
         LLVMPositionBuilderAtEnd(builder, bodyForBlock);
 

@@ -16,7 +16,7 @@ abstract class ConditionalTranslator extends MemoryAllocationTranslator {
     @Override
     public void enterIfStatement(fortran77Parser.IfStatementContext ctx) {
         megaStack.startSection();
-        LLVMValueRef fun = valueRefs.get(currentFunction);
+        LLVMValueRef fun = valueRefs.get(executableUnitName);
         LLVMBasicBlockRef endBlock = LLVMAppendBasicBlock(fun, "end_block");
         megaStack.push(endBlock);
     }
@@ -87,7 +87,7 @@ abstract class ConditionalTranslator extends MemoryAllocationTranslator {
 
     @Override
     public void exitLogicalExpression(fortran77Parser.LogicalExpressionContext ctx) {
-        LLVMValueRef fun = valueRefs.get(currentFunction);
+        LLVMValueRef fun = valueRefs.get(executableUnitName);
         assert fun != null;
 
         LLVMBasicBlockRef trueBlock = LLVMAppendBasicBlock(fun, "");

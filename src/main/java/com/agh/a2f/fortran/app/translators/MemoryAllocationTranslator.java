@@ -1,11 +1,18 @@
 package com.agh.a2f.fortran.app.translators;
 
 import com.agh.a2f.fortran.generated.fortran77Parser;
+import com.stefanik.cod.controller.COD;
+import com.stefanik.cod.controller.CODFactory;
 import org.antlr.v4.runtime.BufferedTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+
+import java.util.stream.Collectors;
 
 import static org.bytedeco.javacpp.LLVM.*;
 
 public abstract class MemoryAllocationTranslator extends AssignmentAndArithmeticTranslator {
+    private static final COD cod = CODFactory.get();
+
     public MemoryAllocationTranslator(BufferedTokenStream tokens) {
         super(tokens);
     }
@@ -27,7 +34,7 @@ public abstract class MemoryAllocationTranslator extends AssignmentAndArithmetic
 
     @Override
     public void enterIntConstantExpr(fortran77Parser.IntConstantExprContext ctx) {
-        if(megaStack.wantData()){
+        if (megaStack.wantData()) {
             megaStack.push(ctx.getText());
             ctx.children = null;
             //pozbycie się wchodzenia głębiej
@@ -36,9 +43,12 @@ public abstract class MemoryAllocationTranslator extends AssignmentAndArithmetic
 
     @Override
     public void enterTypeStatementNameList(fortran77Parser.TypeStatementNameListContext ctx) {
+        cod.i("enterTypeStatementNameList", ctx.children.stream().map(ParseTree::getText).collect(Collectors.toList()));
         for (fortran77Parser.TypeStatementNameContext name : ctx.typeStatementName()) {
+
             LLVMValueRef var = LLVMBuildAlloca(builder, LLVMInt32Type(), name.getText());
             valueRefs.put(name.getText(), var);
+
         }
     }
 
