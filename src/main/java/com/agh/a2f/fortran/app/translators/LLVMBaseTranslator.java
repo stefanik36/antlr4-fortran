@@ -6,9 +6,7 @@ import com.agh.a2f.fortran.generated.fortran77BaseListener;
 import com.agh.a2f.fortran.generated.fortran77Parser;
 import com.stefanik.cod.controller.COD;
 import com.stefanik.cod.controller.CODFactory;
-import com.sun.xml.internal.bind.v2.model.core.TypeRef;
 import org.antlr.v4.runtime.BufferedTokenStream;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import static org.bytedeco.javacpp.LLVM.*;
@@ -37,6 +35,12 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
 //        executableUnitName = null;
 //    }
 
+
+    @Override
+    public void enterProgram(fortran77Parser.ProgramContext ctx) {
+        mod = LLVMModuleCreateWithName("TEST");
+    }
+
     @Override
     public void enterFunctionStatement(fortran77Parser.FunctionStatementContext ctx) {
         executableUnitName = ctx.NAME().getText();
@@ -53,12 +57,13 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
 
     @Override
     public void exitFunctionStatement(fortran77Parser.FunctionStatementContext ctx) {
-//        cod.i("exitFunctionStatement: "+ctx.getText());
+        cod.i("exitFunctionStatement: "+ctx.getText());
 //        currentFunction = null;
     }
 
     @Override
     public void enterFunctionSubprogram(fortran77Parser.FunctionSubprogramContext ctx) {
+        System.out.print("");
 //        cod.i("enterFunctionSubprogram: "+ctx.getText()+" | "+ currentFunctionSubprogram);
 //        cod.i("enterFunctionSubprogram: ",ctx.children.stream().map(ParseTree::getText).collect(Collectors.toList()));
 //        currentFunctionSubprogram =
@@ -73,8 +78,7 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
     public void enterProgramStatement(fortran77Parser.ProgramStatementContext ctx) {
 //        executableUnitName
         cod.i(ctx.NAME().getSymbol().getText());
-        String name = ctx.NAME().getSymbol().getText();
-        mod = LLVMModuleCreateWithName(name);
+//        String name = ctx.NAME().getSymbol().getText();
         LLVMValueRef mainFunc = LLVMAddFunction(
                 mod,
                 "main",
