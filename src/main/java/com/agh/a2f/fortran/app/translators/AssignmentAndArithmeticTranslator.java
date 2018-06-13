@@ -1,6 +1,7 @@
 package com.agh.a2f.fortran.app.translators;
 
 import com.agh.a2f.fortran.app.util.Arithmetic;
+import com.agh.a2f.fortran.app.util.Function;
 import com.agh.a2f.fortran.app.util.Variable;
 import com.agh.a2f.fortran.generated.fortran77Parser;
 import com.stefanik.cod.controller.COD;
@@ -8,6 +9,8 @@ import com.stefanik.cod.controller.CODFactory;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.javacpp.PointerPointer;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,7 +19,6 @@ import static org.bytedeco.javacpp.LLVM.*;
 
 abstract class AssignmentAndArithmeticTranslator extends LLVMBaseTranslator {
     private static final COD cod = CODFactory.get();
-
 
 
     //    private static Integer arithmeticStackIterator = 0;//TODO
@@ -51,7 +53,24 @@ abstract class AssignmentAndArithmeticTranslator extends LLVMBaseTranslator {
             } else if (Variable.isInMap(strVal, valueRefs)) {
                 llvmValueRef = LLVMBuildLoad(builder, Variable.getFromMap(strVal, valueRefs), "");
                 cod.c().off().i("var: " + llvmValueRef.address());
+            } else if (Function.isFunction(strVal)) {
+                String functionName = Function.getFunctionName(strVal);
+//                LLVMValueRef val = LLVMGetPersonalityFn(valueRefs.get(functionName));
+
+//                int c = LLVMGetFunctionCallConv(valueRefs.get(functionName));
+                //call i32 @puts(i8* %cast210)
+                 LLVMValueRef loaded = LLVMBuildLoad(builder, valueRefs.get(functionName), "");
+
+//                LLVMValueRef[] args = {LLVMConstInt(LLVMInt32Type(), 1, 0)};
+                LLVMValueRef[] args = {};
+
+
+                LLVMBuildCall(builder, loaded, new PointerPointer<>(args), 0, "fun666");
+
+                cod.c().i("fun: " + functionName + " | ");
             }
+
+
             //Something else pushed/will push it to the megaStack?
 
             if (llvmValueRef != null) {
@@ -64,6 +83,10 @@ abstract class AssignmentAndArithmeticTranslator extends LLVMBaseTranslator {
             String name = ctx.varRef().getText();
             Optional.ofNullable(valueRefs.get(name)).ifPresent(var -> {
                 LLVMValueRef value = megaStack.popValue();
+                if (name.equals(executableUnitName)) {
+                    cod.c().i("\t" + name + " : " + executableUnitName);
+                    valueRefs.put(name, value);
+                }
                 LLVMBuildStore(builder, value, var);
                 cod.c().off().i("\tX: " + value.address());
                 cod.c().off().i("\t[" + megaStack.size() + "]POP ASSIGN: " + value.address());
@@ -71,7 +94,6 @@ abstract class AssignmentAndArithmeticTranslator extends LLVMBaseTranslator {
         }
         megaStack.endSection();
     }
-
 
 
     @Override
@@ -164,7 +186,6 @@ abstract class AssignmentAndArithmeticTranslator extends LLVMBaseTranslator {
 
             LLVMValueRef val = Arithmetic.resolvePow(components, operators, builder);
             cod.c().off().i("\t[" + megaStack.size() + "]PUSH  POWER: " + val.address());
-
             megaStack.push(val);
             arithmeticMapResults.put(ctx.getText(), val);
 

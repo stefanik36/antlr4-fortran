@@ -19,7 +19,7 @@ public abstract class MemoryAllocationTranslator extends AssignmentAndArithmetic
 
     /////////**START** MEMORY ALLOCATING BLOCK
 
-    //TODO alokacja pamięci dla real
+    //TODO alokacja pamięci dla real // XDDDD
 
 
     @Override
@@ -43,7 +43,7 @@ public abstract class MemoryAllocationTranslator extends AssignmentAndArithmetic
 
     @Override
     public void enterTypeStatementNameList(fortran77Parser.TypeStatementNameListContext ctx) {
-        cod.i("enterTypeStatementNameList", ctx.children.stream().map(ParseTree::getText).collect(Collectors.toList()));
+        cod.c().off().i("enterTypeStatementNameList", ctx.children.stream().map(ParseTree::getText).collect(Collectors.toList()));
         for (fortran77Parser.TypeStatementNameContext name : ctx.typeStatementName()) {
 
             LLVMValueRef var = LLVMBuildAlloca(builder, LLVMInt32Type(), name.getText());
