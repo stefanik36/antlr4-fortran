@@ -7,6 +7,6 @@ assign    : 'let' ID 'be' (NUMBER | ID) ;
 print     : 'print' (NUMBER | ID) ;
 add       : 'add' (NUMBER | ID) 'to' ID ;
 
-ID     : [a-z]+ ;
+ID     : [a-z]+ | [A-Z]+ ;
 NUMBER : [0-9]+ ;
 WS     : [ \n\t]+ -> skip;

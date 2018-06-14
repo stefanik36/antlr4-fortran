@@ -232,6 +232,18 @@ public class fortran77BaseListener implements fortran77Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterEmptyStatement(fortran77Parser.EmptyStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEmptyStatement(fortran77Parser.EmptyStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterEndStatement(fortran77Parser.EndStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}

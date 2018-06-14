@@ -188,6 +188,16 @@ public interface fortran77Listener extends ParseTreeListener {
 	 */
 	void exitWholeStatement(fortran77Parser.WholeStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link fortran77Parser#emptyStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterEmptyStatement(fortran77Parser.EmptyStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link fortran77Parser#emptyStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitEmptyStatement(fortran77Parser.EmptyStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link fortran77Parser#endStatement}.
 	 * @param ctx the parse tree
 	 */

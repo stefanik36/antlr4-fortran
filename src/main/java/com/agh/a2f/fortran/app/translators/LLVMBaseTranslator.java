@@ -27,7 +27,7 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
 
     @Override
     public void enterProgramStatement(fortran77Parser.ProgramStatementContext ctx) {
-        String name = ctx.NAME().getSymbol().getText();
+        String name = ctx.identifier().getText();
         mod = LLVMModuleCreateWithName(name);
         LLVMValueRef mainFunc = LLVMAddFunction(mod,
                 "main", LLVMFunctionType(LLVMVoidType(), LLVMVoidType(), 0, 0));
@@ -39,7 +39,8 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
     @Override
     public void exitProgram(fortran77Parser.ProgramContext ctx) {
         LLVMDumpModule(mod);
-        LLVMWriteBitcodeToFile(mod, "f2llvm.bc"); //save to bytecode
+
+//        LLVMWriteBitcodeToFile(mod, "f2llvm.bc"); //save to bytecode
 
         LLVMFunctions.executeCode(mod, valueRefs.get("main"));
 

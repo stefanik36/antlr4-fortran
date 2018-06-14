@@ -29,6 +29,17 @@ public class LLVMFunctions {
         return LLVMAddFunction(mod, "printf", PrintfTy);
     }
 
+    public static LLVM.LLVMValueRef declareExternalScanf(LLVM.LLVMModuleRef mod){
+        LLVM.LLVMTypeRef printfArgsTyList[] = { LLVMPointerType(LLVMInt8Type(), 0) };
+        LLVM.LLVMTypeRef PrintfTy = LLVMFunctionType(LLVMInt32Type(),
+                new PointerPointer<>(printfArgsTyList),
+                0,
+                1// IsVarArg
+        );
+
+        return LLVMAddFunction(mod, "scanf", PrintfTy);
+    }
+
 
     public static void executeCode(LLVMModuleRef mod, LLVMValueRef mainFunc){
         BytePointer error = new BytePointer((Pointer) null); // Used to retrieve messages from functions

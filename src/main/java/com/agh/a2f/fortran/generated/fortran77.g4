@@ -26,7 +26,7 @@ grammar fortran77;
 
 /* Start rule */
 program
-   : executableUnit+ 
+   : executableUnit+
    ;
 
 /* one unit of a fortran program */
@@ -73,36 +73,35 @@ executableStatement
 
 /* 8 */
 programStatement
-   : 'program' NAME seos
-   | 'PROGRAM' NAME seos
+   : 'program' identifier seos
+   | 'PROGRAM' identifier seos
    ;
 
 seos
      /*: EOS*/
      :('\r\n'|'\n')
    ;
-
 /* 9, 11, 13 */
 entryStatement
-   : 'entry' NAME (LPAREN namelist RPAREN)?
-   | 'ENTRY' NAME (LPAREN namelist RPAREN)?
+   : 'entry' identifier (LPAREN namelist RPAREN)?
+   | 'ENTRY' identifier (LPAREN namelist RPAREN)?
    ;
 
 /* 10 */
 functionStatement
-   : (type)? 'function' NAME LPAREN (namelist)? RPAREN seos
-   | (type) ? 'FUNCTION' NAME LPAREN (namelist)? RPAREN seos
+   : (type)? 'function' identifier LPAREN (namelist)? RPAREN seos
+   | (type) ? 'FUNCTION' identifier LPAREN (namelist)? RPAREN seos
    ;
 
 blockdataStatement
-   : 'block' NAME seos
-   | 'BLOCK' NAME seos
+   : 'block' identifier seos
+   | 'BLOCK' identifier seos
    ;
 
 /* 12 */
 subroutineStatement
-   : 'subroutine' NAME (LPAREN (namelist)? RPAREN)? seos
-   | 'SUBROUTINE' NAME (LPAREN (namelist)? RPAREN)? seos
+   : 'subroutine' identifier (LPAREN (namelist)? RPAREN)? seos
+   | 'SUBROUTINE' identifier (LPAREN (namelist)? RPAREN)? seos
    ;
 
 namelist
@@ -126,12 +125,22 @@ statement
 
 /* 2,3,4,5 body of a subprogram (after program/subroutine/function line) */
 subprogramBody
-   : (wholeStatement)* endStatement
+   : (emptyStatement | COMMET | wholeStatement)* endStatement
    ;
 
 wholeStatement
-   : COMMENT
-   | (LABEL)? statement seos
+   : (LABEL)? statement seos
+   ;
+
+
+COMMENT
+   : ('c' | '!') ' ' (' ' | ALPHA | ICON)* -> skip
+   ;
+
+
+
+emptyStatement
+   : seos
    ;
 
 endStatement
@@ -147,8 +156,8 @@ dimensionStatement
 
 /* 16 */
 arrayDeclarator
-   : (NAME | 'real') LPAREN arrayDeclaratorExtents RPAREN
-   |  (NAME | 'REAL') LPAREN arrayDeclaratorExtents RPAREN
+   : (identifier | 'real') LPAREN arrayDeclaratorExtents RPAREN
+   |  (identifier | 'REAL') LPAREN arrayDeclaratorExtents RPAREN
    ;
 
 arrayDeclarators
@@ -186,11 +195,11 @@ commonStatement
    ;
 
 commonName
-   : DIV (NAME DIV | DIV)
+   : DIV (identifier DIV | DIV)
    ;
 
 commonItem
-   : NAME
+   : identifier
    | arrayDeclarator
    ;
 
@@ -214,7 +223,7 @@ typeStatementNameList
    ;
 
 typeStatementName
-   : NAME
+   : identifier
    | arrayDeclarator
    ;
 
@@ -250,7 +259,7 @@ pointerStatement
    ;
 
 pointerDecl
-   : LPAREN NAME COMMA NAME RPAREN
+   : LPAREN identifier COMMA identifier RPAREN
    ;
 
 /* 21 */
@@ -273,7 +282,7 @@ implicitNone
    ;
 
 implicitLetter
-   : NAME
+   : identifier
    ;
 
 implicitRange
@@ -311,7 +320,7 @@ paramlist
    ;
 
 paramassign
-   : NAME ASSIGN constantExpr
+   : identifier ASSIGN constantExpr
    ;
 
 /* 24 */
@@ -333,7 +342,7 @@ saveStatement
    ;
 
 saveEntity
-   : (NAME | DIV NAME DIV)
+   : (identifier | DIV identifier DIV)
    ;
 
 /* 27 */
@@ -348,7 +357,7 @@ dataStatementItem
    ;
 
 dataStatementMultiple
-   : ((ICON | NAME) STAR)? (constant | NAME)
+   : ((ICON | identifier) STAR)? (constant | identifier)
    ;
 
 dataStatementEntity
@@ -369,7 +378,7 @@ dataImpliedDo
    ;
 
 dataImpliedDoRange
-   : NAME ASSIGN intConstantExpr COMMA intConstantExpr (COMMA intConstantExpr)?
+   : identifier ASSIGN intConstantExpr COMMA intConstantExpr (COMMA intConstantExpr)?
    ;
 
 dataImpliedDoList
@@ -414,7 +423,7 @@ labelList
 
 /* 33 */
 assignedGoto
-   : NAME ((COMMA)? LPAREN labelList RPAREN)?
+   : identifier ((COMMA)? LPAREN labelList RPAREN)?
    ;
 
 /* 34 */
@@ -538,7 +547,7 @@ controlInfoList
    ;
 
 controlErrSpec
-   : controlErr ASSIGN (lblRef | NAME)
+   : controlErr ASSIGN (lblRef | identifier)
    ;
 
 controlInfoListItem
@@ -554,20 +563,21 @@ controlInfoListItem
 
 /* 48 */
 /* ioList : (ioListItem COMMA ioList) | ioListItem ; */
+/*TODO po co to jest takie rozbudowane to nie wiem ;O*/
 ioList
-   : (ioListItem COMMA NAME ASSIGN) ioListItem
+   : (ioListItem COMMA identifier ASSIGN) ioListItem
    | (ioListItem COMMA ioListItem) ioListItem COMMA ioList
    | ioListItem
    ;
 
 ioListItem
-   : (LPAREN ioList COMMA NAME ASSIGN) ioImpliedDoList
+   : (LPAREN ioList COMMA identifier ASSIGN) ioImpliedDoList
    | expression
    ;
 
 /* 49 */
 ioImpliedDoList
-   : LPAREN ioList COMMA NAME ASSIGN intRealDpExpr COMMA intRealDpExpr (COMMA intRealDpExpr)? RPAREN
+   : LPAREN ioList COMMA identifier ASSIGN intRealDpExpr COMMA intRealDpExpr (COMMA intRealDpExpr)? RPAREN
    ;
 
 /* 50 */
@@ -600,7 +610,7 @@ controlUnit
    ;
 
 controlRec
-   : NAME
+   : identifier
    ;
 
 controlEnd
@@ -683,7 +693,7 @@ controlSequential
    ;
 
 controlDirect
-   : NAME
+   : identifier
    ;
 
 controlFormatted
@@ -748,7 +758,7 @@ rewindStatement
    ;
 
 berFinish
-   : ((unitIdentifier EOS) (unitIdentifier) | LPAREN berFinishItem (COMMA berFinishItem)* RPAREN)
+   : ((unitIdentifier seos) (unitIdentifier) | LPAREN berFinishItem (COMMA berFinishItem)* RPAREN)
    ;
 
 berFinishItem
@@ -760,8 +770,8 @@ berFinishItem
 
 /* 56 */
 unitIdentifier
-   : iexpr
-   | STAR
+   : STAR
+   | iexpr
    ;
 
 /* 57 */
@@ -796,7 +806,7 @@ formatedit
    ;
 
 editElement
-   : (FCON | SCON | HOLLERITH | NAME)
+   : (FCON | SCON | HOLLERITH | identifier)
    | LPAREN fmtSpec RPAREN
    ;
 
@@ -807,7 +817,7 @@ statementFunctionStatement
    ;
 
 sfArgs
-   : NAME LPAREN namelist RPAREN
+   : identifier LPAREN namelist RPAREN
    ;
 
 /* 71 */
@@ -817,7 +827,7 @@ callStatement
    ;
 
 subroutineCall
-   : NAME (LPAREN (callArgumentList)? RPAREN)?
+   : identifier (LPAREN (callArgumentList)? RPAREN)?
    ;
 
 callArgumentList
@@ -983,7 +993,7 @@ logicalConstExpr
 
 /* 88 */
 arrayElementName
-   : NAME LPAREN integerExpr (COMMA integerExpr)* RPAREN
+   : identifier LPAREN integerExpr (COMMA integerExpr)* RPAREN
    ;
 
 subscripts
@@ -992,11 +1002,11 @@ subscripts
 
 //holding var and functions?
 varRef
-   :  (NAME | 'real') (subscripts (substringApp)?)?
+   :  identifier (subscripts (substringApp)?)?
    ;
 
 varRefCode
-   : NAME (subscripts (substringApp)?)?
+   : identifier (subscripts (substringApp)?)?
    ;
 
 substringApp
@@ -1005,22 +1015,22 @@ substringApp
 
 /* 91 */
 variableName
-   : NAME
+   : identifier
    ;
 
 /* 92 */
 arrayName
-   : NAME
+   : identifier
    ;
 
 /* 97 */
 subroutineName
-   : NAME
+   : identifier
    ;
 
 /* 98 */
 functionName
-   : NAME
+   : identifier
    ;
 
 /* 100 */
@@ -1051,12 +1061,13 @@ logicalConstant
 // non-determinisms
 identifier
    : NAME
+   | MYCHAR
    | ('real')
    | ('REAL')
    ;
 
 to
-   : NAME
+   : identifier
    ;
 
 // keyword contains all of the FORTRAN keywords.
@@ -1439,11 +1450,11 @@ CONTINUATION
    ;
 
 
-EOS
-   : (('\r')?'\n')
+//EOS
+//     :('\r\n'|'\n')
 
 //(('\n' | '\r' ('\n')?))+  (('     ' CONTINUATION) '     ' CONTINUATION |)
-   ;
+//   ;
 
 // Fortran 77 doesn't allow for empty lines. Therefore EOS (newline) is NOT
 // part of ignored white spaces. It is only ignored for line continuations.
@@ -1456,9 +1467,11 @@ WS
 // we keep the comments inside the AST. See parser rules "wholeStatement".
 // We however trim empty comment lines.
 
-COMMENT
-   : ('c'|'*'| '!') //->skip (('%' '&' (NOTNL)* |) | (NOTNL) +) (('\n' | '\r' ('\n')?)) +
-   ;
+//COMMENT
+
+//   : ('c' | '*') (('%' '&' (NOTNL)* |) | (NOTNL) +) (('\n' | '\r' ('\n')?)) +
+//   : ('c'|'*'| '!') -> skip//\\->skip (('%' '&' (NOTNL)* |) | (NOTNL) +) (('\n' | '\r' ('\n')?)) +
+//   ;
 
 // '' is used to drop the charater when forming the lexical token
 // Strings are assumed to start with a single quote (') and two
@@ -1487,18 +1500,19 @@ ZCON
 
 // identifier (keyword or variable)
 
+
 NAME
-   : (('i' | 'f' | 'd' | 'g' | 'e') (NUM) + '.') FDESC
-   | (ALNUM+)(ALNUM)*
+//   : (('i' | 'f' | 'd' | 'g' | 'e') (NUM) + '.') FDESC
+   : (ALNUM) +
+   | 'i'
    ;
 
-
-WHITE
+fragment WHITE
    : (' ' | '\t')
    ;
 
 
-ALPHA
+fragment ALPHA
    : ('a' .. 'z')|('A' .. 'Z')
    ;
 
@@ -1509,24 +1523,24 @@ fragment NUM
    ;
 
 
-ALNUM
-   : (ALPHA | NUM)
+fragment ALNUM
+   : ALPHA | NUM
    ;
 
 
-HEX
+fragment HEX
    : (NUM | 'a' .. 'f')
    ;
 
 
-SIGN
+fragment SIGN
    : ('+' | '-')
    ;
 
 
-NOTNL
-   : ~ ('\n' | '\r')
-   ;
+//NOTNL
+//   : ~ ('\n' | '\r')
+//   ;
 
 
 fragment INTVAL
@@ -1534,11 +1548,12 @@ fragment INTVAL
    ;
 
 
-FDESC
+fragment FDESC
    : ('i' | 'f' | 'd') (NUM) + '.' (NUM) + | ('e' | 'g') (NUM) + '.' (NUM) + ('e' (NUM) +)?
    ;
 
 
-EXPON
+fragment EXPON
    : ('e' | 'd') (SIGN)? (NUM) +
    ;
+
