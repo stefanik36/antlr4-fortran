@@ -1,16 +1,14 @@
-function ff(arg, arg2)
-    integer ff, arg, arg2
-    print *, 'INSIDE FUNCTION'
-    ff = 666 + arg
+function ff()
+    integer ff
+    print *, 'INSIE FUNCTION'
+    ff = 666
 end
-
 program xfunc
     implicit none
     integer arg, vv, abc
     integer func2
     arg = 3
     abc = 222
-    vv = ff(arg, abc)
+    vv = ff()
     print *, 'FUNCTION VALUE', arg, 'V: ', vv
 end
-

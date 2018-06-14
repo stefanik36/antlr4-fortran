@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import static org.bytedeco.javacpp.LLVM.*;
 import static org.bytedeco.javacpp.LLVM.LLVMInt32Type;
 
-public abstract class FunctionTranslator extends LoopTranslator {
+public abstract class FunctionTranslator extends ReadTranslator {
     private static final COD cod = CODFactory.get();
 
     FunctionTranslator(BufferedTokenStream tokens) {
@@ -28,9 +28,11 @@ public abstract class FunctionTranslator extends LoopTranslator {
 
     @Override
     public void enterFunctionStatement(fortran77Parser.FunctionStatementContext ctx) {
-        executableUnitName = ctx.NAME().getText();
+        executableUnitName = ctx.identifier().getText();
+        LLVMTypeRef[] args = new LLVMTypeRef[0];
+        if(ctx.namelist() != null)
+            args = new LLVMTypeRef[ctx.namelist().identifier().size()];
 
-        LLVMTypeRef[] args = new LLVMTypeRef[ctx.namelist().identifier().size()];
         for (int i =0;i<args.length;i++){
             args[i] = LLVMInt32Type();
         }
@@ -52,7 +54,8 @@ public abstract class FunctionTranslator extends LoopTranslator {
 //            valueRefs.put(sName, var);
 //
 //        }
-
+        if(ctx.namelist() == null)
+            return;
         for (String name : ctx.namelist().identifier().stream().map(ParseTree::getText).collect(Collectors.toList())) {
 
 //            if (",".equals(name)) {

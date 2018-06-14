@@ -18,11 +18,12 @@ abstract class PrintTranslator extends ConditionalTranslator {
         super(tokens);
     }
 
+    //PRINT
     private List<LLVMValueRef> printfArgs = null;
     private StringBuilder formatJoiner = null;
     private List<fortran77Parser.IoListContext> ioListContexts = null;
 
-    private LLVMValueRef initialize(){
+    private LLVMValueRef initialize() {
         final String printfStr = "printf";
         LLVMValueRef printf = valueRefs.get(printfStr);
         if (printf == null) {
@@ -32,6 +33,40 @@ abstract class PrintTranslator extends ConditionalTranslator {
         return printf;
     }
 
+    //WRITE
+    private boolean isOnlyPrint;
+
+
+
+    @Override
+    public void enterWriteStatement(fortran77Parser.WriteStatementContext ctx) {
+        megaStack.startSection();
+        isOnlyPrint = false;
+
+        if (checkIfItIsPrintStatement(ctx)) {
+            ioListContexts = ctx.ioList();
+            ctx.children.removeIf(node -> !fortran77Parser.Aexpr0Context.class.isInstance(skipSingleChildNodes(node)));
+            exitPrintStatement(null);
+            isOnlyPrint = true;
+        }
+
+    }
+
+    private boolean checkIfItIsPrintStatement(fortran77Parser.WriteStatementContext ctx) {
+        try {
+            return ctx.controlInfoList().controlInfoListItem(0).unitIdentifier().STAR() != null;
+        } catch (NullPointerException ex) {
+            return false;
+        }
+    }
+
+
+    @Override
+    public void exitWriteStatement(fortran77Parser.WriteStatementContext ctx) {
+        if(isOnlyPrint) return;
+
+        megaStack.endSection();
+    }
 
 
     @Override
@@ -52,7 +87,7 @@ abstract class PrintTranslator extends ConditionalTranslator {
             switch (l.getStop().getType()) {
                 case fortran77Lexer.ICON: //number (?integer)
                 case fortran77Lexer.MYNUM:
-                    if(!prepareNumber(txt)){
+                    if (!prepareNumber(txt)) {
                         prepareMathExpr(txt);
                     }
                     break;
@@ -62,6 +97,7 @@ abstract class PrintTranslator extends ConditionalTranslator {
                     break;
 
                 case fortran77Lexer.NAME: //variables (? and others i think xd)
+                case fortran77Lexer.MYCHAR:
                     prepareVariable(txt);
                     break;
             }
@@ -77,12 +113,11 @@ abstract class PrintTranslator extends ConditionalTranslator {
     }
 
     private boolean prepareNumber(String txt) {
-        try{
+        try {
             printfArgs.add(LLVMConstInt(LLVMInt32Type(), Long.valueOf(txt), 1));
             formatJoiner.append("          %d ");
             return true;
-        }
-        catch (NumberFormatException exc){
+        } catch (NumberFormatException exc) {
             return false;
         }
     }
@@ -114,9 +149,9 @@ abstract class PrintTranslator extends ConditionalTranslator {
 
     private void prepareMathExpr(String txt) {
         //TODO coś stack się nie czyści
-        LLVMValueRef result = megaStack.popValue();
-        printfArgs.add(result);
-        formatJoiner.append("          %d ");
+//        LLVMValueRef result = megaStack.popValue();
+//        printfArgs.add(result);
+//        formatJoiner.append("          %d ");
     }
 
 }

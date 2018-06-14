@@ -4,7 +4,10 @@ import com.agh.a2f.fortran.app.translators.AllLLVMTranslator;
 import com.agh.a2f.fortran.generated.fortran77Lexer;
 import com.agh.a2f.fortran.generated.fortran77Parser;
 import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
@@ -22,24 +25,26 @@ public class App {
 //        String path = "code/fortran/addExample.f";
 
 
-        ArrayList<String> lines = Preprocessor.run(path);
-        StringBuilder program = new StringBuilder();
-        lines.forEach(l -> program.append(l).append("\n"));
+        System.out.println("===================== FORTRAN FILE ======================");
+        CharStream i = CharStreams.fromFileName(path);
+        System.out.print(i.getText(new Interval(0, i.size())));
 
-        InputStream is = new ByteArrayInputStream(program.toString().getBytes());
         App app = new App();
-        app.start(is);
+        app.start(i);
 
 //        IrBuilderExample.executeExample();
 
     }
 
-    private void start(InputStream is) {
+    private String start(String fortranCode){
+        CharStream i = CharStreams.fromString(fortranCode);
+        return start(i);
+    }
+
+    private String start(CharStream is) {
         try {
             System.out.println("===================== TRANSLATE ======================");
-            ANTLRInputStream input = new ANTLRInputStream(is);
-
-            fortran77Lexer lexer = new fortran77Lexer(input);
+            fortran77Lexer lexer = new fortran77Lexer(is);
 
             fortran77Parser parser = new fortran77Parser(new CommonTokenStream(lexer));
 
@@ -56,18 +61,11 @@ public class App {
 
             walker.walk(llvmTranslator, tree);
 
+            return llvmTranslator.getResult();
 
-
-
-
-//            f_to_py translator = new f_to_py(tokens);
-//            walker.walk(translator, tree);
-            System.out.println(); // print a \n after translation
-
-
-//            System.out.println("===================== END 2  ======================");
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
     }
 
