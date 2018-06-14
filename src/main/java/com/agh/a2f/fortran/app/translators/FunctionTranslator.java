@@ -23,36 +23,12 @@ public abstract class FunctionTranslator extends LoopTranslator {
     public void enterFunctionStatement(fortran77Parser.FunctionStatementContext ctx) {
         executableUnitName = ctx.NAME().getText();
 
-
-
-
-
-
-
         LLVMValueRef myFunc = LLVMAddFunction(
                 mod,
                 executableUnitName,
                 LLVMFunctionType(LLVMInt32Type(), LLVMInt32Type(), 0,0)
         );
-        LLVMBuilderRef myBuilder = LLVMCreateBuilder();
-        LLVMBasicBlockRef myEntry = LLVMAppendBasicBlock(myFunc, "myFunc_entry");
-        LLVMPositionBuilderAtEnd(myBuilder, myEntry);
-        LLVMBuildRetVoid(myBuilder);
         LLVMSetFunctionCallConv(myFunc, LLVMCCallConv);
-        LLVMDisposeBuilder(myBuilder);
-        builder = myBuilder;
-//
-//        //TODO type
-//        LLVM.LLVMValueRef function = LLVMAddFunction(
-//                mod,
-//                executableUnitName,
-//                LLVMFunctionType(LLVMInt32Type(), LLVMInt32Type(), 0, 0));
-//
-//        LLVMBasicBlockRef myEntry = LLVMAppendBasicBlock(function, executableUnitName+"_entry");
-//        LLVMPositionBuilderAtEnd(builder, myEntry);
-//
-//        LLVMSetFunctionCallConv(function, 0);
-//        LLVMDisposeBuilder(builder);
         valueRefs.put(executableUnitName, myFunc);
     }
 

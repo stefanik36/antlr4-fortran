@@ -1,12 +1,12 @@
 function ff(arg)
-    integer arg
+    integer ff, arg
     print *, 'INSIDE FUNCTION'
-    ff = 0
+    arg = 13
+    ff = 666 + arg
 end
 program xfunc
     implicit none
-    integer i1
-    character*(20) vv
+    integer i1, vv
     integer func2
     i1 = 3
     vv = ff(i1)

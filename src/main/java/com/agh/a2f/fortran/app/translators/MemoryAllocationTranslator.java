@@ -45,9 +45,10 @@ public abstract class MemoryAllocationTranslator extends AssignmentAndArithmetic
     public void enterTypeStatementNameList(fortran77Parser.TypeStatementNameListContext ctx) {
         cod.c().off().i("enterTypeStatementNameList", ctx.children.stream().map(ParseTree::getText).collect(Collectors.toList()));
         for (fortran77Parser.TypeStatementNameContext name : ctx.typeStatementName()) {
+            String sName = preventFuncName(name.getText());
 
-            LLVMValueRef var = LLVMBuildAlloca(builder, LLVMInt32Type(), name.getText());
-            valueRefs.put(name.getText(), var);
+            LLVMValueRef var = LLVMBuildAlloca(builder, LLVMInt32Type(), sName);
+            valueRefs.put(sName, var);
 
         }
     }
