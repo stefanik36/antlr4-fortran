@@ -1,13 +1,16 @@
-package com.compilers.antlr4_fortran.util.app.translators;
+package com.agh.a2f.fortran.app.translators;
 
-import com.compilers.antlr4_fortran.util.app.util.Arithmetic;
-import com.compilers.antlr4_fortran.util.app.util.Variable;
-import com.compilers.antlr4_fortran.util.generated.fortran77Parser;
+import com.agh.a2f.fortran.app.util.Arithmetic;
+import com.agh.a2f.fortran.app.util.Function;
+import com.agh.a2f.fortran.app.util.Variable;
+import com.agh.a2f.fortran.generated.fortran77Parser;
 import com.stefanik.cod.controller.COD;
 import com.stefanik.cod.controller.CODFactory;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.javacpp.PointerPointer;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -51,9 +54,6 @@ abstract class AssignmentAndArithmeticTranslator extends LLVMBaseTranslator {
                 llvmValueRef = LLVMBuildLoad(builder, Variable.getFromMap(strVal, valueRefs), "");
                 cod.c().off().i("var: " + llvmValueRef.address());
             }
-
-
-
             //Something else pushed/will push it to the megaStack?
 
             if (llvmValueRef != null) {

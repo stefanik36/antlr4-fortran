@@ -1,5 +1,5 @@
 // Generated from /home/prw/IdeaProjects/antlr4-fortran/src/main/java/com/agh/a2f/fortran/generated/fortran77.g4 by ANTLR 4.7
-package com.compilers.antlr4_fortran.util.generated;
+package com.agh.a2f.fortran.generated;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -187,6 +187,16 @@ public interface fortran77Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitWholeStatement(fortran77Parser.WholeStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link fortran77Parser#emptyStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterEmptyStatement(fortran77Parser.EmptyStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link fortran77Parser#emptyStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitEmptyStatement(fortran77Parser.EmptyStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link fortran77Parser#endStatement}.
 	 * @param ctx the parse tree

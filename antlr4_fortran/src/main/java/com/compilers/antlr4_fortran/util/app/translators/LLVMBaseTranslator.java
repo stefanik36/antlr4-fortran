@@ -1,9 +1,9 @@
-package com.compilers.antlr4_fortran.util.app.translators;
+package com.agh.a2f.fortran.app.translators;
 
-import com.compilers.antlr4_fortran.util.app.util.LLVMFunctions;
-import com.compilers.antlr4_fortran.util.app.util.MegaStack;
-import com.compilers.antlr4_fortran.util.generated.fortran77BaseListener;
-import com.compilers.antlr4_fortran.util.generated.fortran77Parser;
+import com.agh.a2f.fortran.app.util.LLVMFunctions;
+import com.agh.a2f.fortran.app.util.MegaStack;
+import com.agh.a2f.fortran.generated.fortran77BaseListener;
+import com.agh.a2f.fortran.generated.fortran77Parser;
 import com.stefanik.cod.controller.COD;
 import com.stefanik.cod.controller.CODFactory;
 import org.antlr.v4.runtime.BufferedTokenStream;
@@ -12,7 +12,9 @@ import org.bytedeco.javacpp.PointerPointer;
 
 import static org.bytedeco.javacpp.LLVM.*;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 abstract class LLVMBaseTranslator extends fortran77BaseListener {
@@ -30,9 +32,6 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
     MegaStack megaStack = new MegaStack();
     Map<String, LLVMValueRef> valueRefs = new HashMap<>();
 
-    List<String> functionArguments = new ArrayList<>();
-    List<LLVMValueRef> functionArgumentsRef = new ArrayList<>();
-
     @Override
     public void enterProgram(fortran77Parser.ProgramContext ctx) {
         mod = LLVMModuleCreateWithName("TEST");
@@ -41,7 +40,7 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
     @Override
     public void enterProgramStatement(fortran77Parser.ProgramStatementContext ctx) {
 //        executableUnitName
-        cod.c().off().i(ctx.NAME().getSymbol().getText());
+        cod.c().off().i(ctx.identifier().getText());
 //        String name = ctx.NAME().getSymbol().getText();
         LLVMValueRef mainFunc = LLVMAddFunction(
                 mod,
@@ -54,15 +53,7 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
         LLVMSetFunctionCallConv(mainFunc, LLVMCCallConv);
     }
 
-    @Override
-    public void exitProgram(fortran77Parser.ProgramContext ctx) {
-        LLVMDumpModule(mod);
-        LLVMWriteBitcodeToFile(mod, "f2llvm.bc"); //save to bytecode
 
-        LLVMFunctions.executeCode(mod, valueRefs.get("main"));
-
-//        LLVMDisposeModule(mod);
-    }
 
     @Override
     public void enterAintegerexpr(fortran77Parser.AintegerexprContext ctx) {
@@ -75,7 +66,7 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
 
     @Override
     public void enterVarRef(fortran77Parser.VarRefContext ctx) {
-        String sName = preventFuncName(ctx.NAME().toString());
+        String sName = preventFuncName(ctx.identifier().getText());
         LLVMValueRef valRef = valueRefs.get(sName);
         if (isFunctionCall(ctx)) {
             megaStack.startSection();
@@ -100,6 +91,7 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
     public void exitVarRef(fortran77Parser.VarRefContext ctx) {
         if (isFunctionCall(ctx)) {
             Stack<LLVMValueRef> args = new Stack<>();
+            cod.i("MS" + megaStack.size());
             while (megaStack.size() > 0){
                 args.push(megaStack.popValue());
             }
@@ -108,9 +100,7 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
             LLVMValueRef func = args.pop();
             LLVMValueRef argsL[] = new LLVMValueRef[args.size()];
             args.toArray(argsL);
-            functionArgumentsRef.addAll(args);
-
-            LLVMValueRef result = LLVMBuildCall(builder, func, new PointerPointer<>(argsL), 1, "");
+            LLVMValueRef result = LLVMBuildCall(builder, func, new PointerPointer<>(argsL), argsL.length, "");
             megaStack.endSection();
             megaStack.push(result);
         }

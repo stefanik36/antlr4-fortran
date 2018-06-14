@@ -1,4 +1,4 @@
-package com.compilers.antlr4_fortran.util.app.util;
+package com.agh.a2f.fortran.app.util;
 
 public class Function {
     public static boolean isFunction(String expression) {

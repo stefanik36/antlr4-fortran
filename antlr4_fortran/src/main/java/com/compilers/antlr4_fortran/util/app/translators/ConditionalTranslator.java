@@ -1,6 +1,6 @@
-package com.compilers.antlr4_fortran.util.app.translators;
+package com.agh.a2f.fortran.app.translators;
 
-import com.compilers.antlr4_fortran.util.generated.fortran77Parser;
+import com.agh.a2f.fortran.generated.fortran77Parser;
 import org.antlr.v4.runtime.BufferedTokenStream;
 
 import java.util.List;

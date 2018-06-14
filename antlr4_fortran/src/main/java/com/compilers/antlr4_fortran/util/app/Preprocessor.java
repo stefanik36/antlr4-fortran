@@ -1,4 +1,4 @@
-package com.compilers.antlr4_fortran.util.app;
+package com.agh.a2f.fortran.app;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -14,7 +14,28 @@ public class Preprocessor {
         ArrayList<String> lineArray = new ArrayList<String>();
 
         for (; ; ) {
-            if (doPreprocessor(lineArray, str)) break;
+            if (str == null) break;
+
+            String tokens[] = str.split(" ");
+            if (str.isEmpty() || tokens.length==0 || tokens[0].equals("c")) {
+                // do nothing for blank line or comment line
+            } else {
+                String sections[] = str.split("\'");
+                StringBuilder temp = new StringBuilder(sections[0].toLowerCase());
+                //System.out.println("Section 0: " + sections[0]);
+                for (int i = 1; i < sections.length; i++) {
+                    //System.out.println("Section " + i + ": " + sections[i]);
+                    if (i % 2 == 1) { //do not change case of statements in quotes
+                        temp.append("\'");
+                        temp.append(sections[i]);
+                        temp.append("\'");
+                    } else {
+                        temp.append(sections[i].toLowerCase());
+                    }
+                }
+                lineArray.add(temp.toString());
+            }
+
             str = reader.readLine();
         }
 
@@ -23,42 +44,5 @@ public class Preprocessor {
         }
         reader.close();
         return lineArray;
-    }
-
-
-    public static ArrayList<String> runString(String string) {
-        ArrayList<String> lineArray = new ArrayList<String>();
-        for(String s : string.split("\n")){
-            if (doPreprocessor(lineArray, s)) break;
-        }
-        for (String i : lineArray) {
-            System.out.println(i);
-        }
-        return lineArray;
-    }
-
-    private static boolean doPreprocessor(ArrayList<String> lineArray, String s) {
-        if (s == null) return true;
-
-        String tokens[] = s.split(" ");
-        if (s.isEmpty() || tokens.length==0 || tokens[0].equals("c")) {
-            // do nothing for blank line or comment line
-        } else {
-            String sections[] = s.split("\'");
-            StringBuilder temp = new StringBuilder(sections[0].toLowerCase());
-            //System.out.println("Section 0: " + sections[0]);
-            for (int i = 1; i < sections.length; i++) {
-                //System.out.println("Section " + i + ": " + sections[i]);
-                if (i % 2 == 1) { //do not change case of statements in quotes
-                    temp.append("\'");
-                    temp.append(sections[i]);
-                    temp.append("\'");
-                } else {
-                    temp.append(sections[i].toLowerCase());
-                }
-            }
-            lineArray.add(temp.toString());
-        }
-        return false;
     }
 }
