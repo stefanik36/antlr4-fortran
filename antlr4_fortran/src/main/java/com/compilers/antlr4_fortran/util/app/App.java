@@ -1,8 +1,8 @@
-package com.agh.a2f.fortran.app;
+package com.compilers.antlr4_fortran.util.app;
 
-import com.agh.a2f.fortran.app.translators.AllLLVMTranslator;
-import com.agh.a2f.fortran.generated.fortran77Lexer;
-import com.agh.a2f.fortran.generated.fortran77Parser;
+import com.compilers.antlr4_fortran.util.app.translators.AllLLVMTranslator;
+import com.compilers.antlr4_fortran.util.generated.fortran77Lexer;
+import com.compilers.antlr4_fortran.util.generated.fortran77Parser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -34,7 +34,7 @@ public class App {
 
     }
 
-    private void start(InputStream is) {
+    public void start(InputStream is) {
         try {
             System.out.println("===================== TRANSLATE ======================");
             ANTLRInputStream input = new ANTLRInputStream(is);

@@ -1,9 +1,9 @@
-package com.agh.a2f.fortran.app.translators;
+package com.compilers.antlr4_fortran.util.app.translators;
 
-import com.agh.a2f.fortran.app.util.LLVMFunctions;
-import com.agh.a2f.fortran.app.util.MegaStack;
-import com.agh.a2f.fortran.generated.fortran77BaseListener;
-import com.agh.a2f.fortran.generated.fortran77Parser;
+import com.compilers.antlr4_fortran.util.app.util.LLVMFunctions;
+import com.compilers.antlr4_fortran.util.app.util.MegaStack;
+import com.compilers.antlr4_fortran.util.generated.fortran77BaseListener;
+import com.compilers.antlr4_fortran.util.generated.fortran77Parser;
 import com.stefanik.cod.controller.COD;
 import com.stefanik.cod.controller.CODFactory;
 import org.antlr.v4.runtime.BufferedTokenStream;
@@ -12,9 +12,7 @@ import org.bytedeco.javacpp.PointerPointer;
 
 import static org.bytedeco.javacpp.LLVM.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 import java.util.stream.Collectors;
 
 abstract class LLVMBaseTranslator extends fortran77BaseListener {
@@ -31,6 +29,9 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
 
     MegaStack megaStack = new MegaStack();
     Map<String, LLVMValueRef> valueRefs = new HashMap<>();
+
+    List<String> functionArguments = new ArrayList<>();
+    List<LLVMValueRef> functionArgumentsRef = new ArrayList<>();
 
     @Override
     public void enterProgram(fortran77Parser.ProgramContext ctx) {
@@ -99,7 +100,6 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
     public void exitVarRef(fortran77Parser.VarRefContext ctx) {
         if (isFunctionCall(ctx)) {
             Stack<LLVMValueRef> args = new Stack<>();
-            cod.i("MS" + megaStack.size());
             while (megaStack.size() > 0){
                 args.push(megaStack.popValue());
             }
@@ -108,6 +108,8 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
             LLVMValueRef func = args.pop();
             LLVMValueRef argsL[] = new LLVMValueRef[args.size()];
             args.toArray(argsL);
+            functionArgumentsRef.addAll(args);
+
             LLVMValueRef result = LLVMBuildCall(builder, func, new PointerPointer<>(argsL), 1, "");
             megaStack.endSection();
             megaStack.push(result);
