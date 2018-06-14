@@ -38,11 +38,6 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
     }
 
     @Override
-    public void enterTypeStatementNameList(fortran77Parser.TypeStatementNameListContext ctx) {
-        cod.c().off().i(ctx.getText(), ctx.children.stream().map(ParseTree::getText).collect(Collectors.toList()));
-    }
-
-    @Override
     public void enterProgramStatement(fortran77Parser.ProgramStatementContext ctx) {
 //        executableUnitName
         cod.c().off().i(ctx.NAME().getSymbol().getText());
@@ -81,7 +76,7 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
     public void enterVarRef(fortran77Parser.VarRefContext ctx) {
         String sName = preventFuncName(ctx.NAME().toString());
         LLVMValueRef valRef = valueRefs.get(sName);
-        if(isFunctionCall(ctx)){
+        if (isFunctionCall(ctx)) {
             megaStack.startSection();
         }
         if (valRef != null && megaStack.wantData()) {
@@ -89,12 +84,12 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
         }
     }
 
-    private boolean isFunctionCall(fortran77Parser.VarRefContext ctx){
+    private boolean isFunctionCall(fortran77Parser.VarRefContext ctx) {
         return ctx.subscripts() != null;
     }
 
-    protected String preventFuncName(String name){
-        if(name.equals(executableUnitName)){
+    protected String preventFuncName(String name) {
+        if (name.equals(executableUnitName)) {
             return name + "Var";
         }
         return name;
@@ -102,10 +97,14 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
 
     @Override
     public void exitVarRef(fortran77Parser.VarRefContext ctx) {
-        if(isFunctionCall(ctx)){
+        if (isFunctionCall(ctx)) {
             Stack<LLVMValueRef> args = new Stack<>();
-            while (megaStack.size() > 0)
+            cod.i("MS" + megaStack.size());
+            while (megaStack.size() > 0){
                 args.push(megaStack.popValue());
+            }
+
+
             LLVMValueRef func = args.pop();
             LLVMValueRef argsL[] = new LLVMValueRef[args.size()];
             args.toArray(argsL);
@@ -133,12 +132,11 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
     public void exitSubprogramBody(fortran77Parser.SubprogramBodyContext ctx) {
         cod.c().off().i("exitSubprogramBody", "entry_end_" + executableUnitName, executableUnitName, valueRefs.get(executableUnitName));
         String sName = preventFuncName(executableUnitName);
-        if(executableUnitName.equals("main")){
-        LLVMBuildRet(builder, LLVMConstInt(LLVMInt32Type(), 0, 1));
-        }
-        else {
-        LLVMValueRef vLoad = LLVMBuildLoad(builder, valueRefs.get(sName), "");
-        LLVMBuildRet(builder, vLoad);
+        if (executableUnitName.equals("main")) {
+            LLVMBuildRet(builder, LLVMConstInt(LLVMInt32Type(), 0, 1));
+        } else {
+            LLVMValueRef vLoad = LLVMBuildLoad(builder, valueRefs.get(sName), "");
+            LLVMBuildRet(builder, vLoad);
         }
         LLVMDisposeBuilder(builder);
         super.exitSubprogramBody(ctx);
