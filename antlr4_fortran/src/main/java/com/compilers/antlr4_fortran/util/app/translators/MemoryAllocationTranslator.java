@@ -5,6 +5,7 @@ import com.stefanik.cod.controller.COD;
 import com.stefanik.cod.controller.CODFactory;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.bytedeco.javacpp.PointerPointer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,19 +51,21 @@ public abstract class MemoryAllocationTranslator extends AssignmentAndArithmetic
         for (fortran77Parser.TypeStatementNameContext name : ctx.typeStatementName()) {
             String sName = preventFuncName(name.getText());
 
-            cod.i(executableUnitName + "FUNCTION: " + sName + " _ " + functionArguments.size());
-
-
-            List<String> copy = new ArrayList<>(functionArguments);
-            for (int i = 0; i < copy.size(); i++) {
-                if (copy.get(i).equals(sName)) {
-                    String argName = copy.get(i);
-                    functionArguments.remove(i);
-
-
-
-                }
-            }
+//            cod.i(executableUnitName + "FUNCTION: " + sName + " _ " + functionArguments.size()+ " _ " + functionArgumentsRef.size());
+//            LLVMValueRef[] arguments = new LLVMValueRef[LLVMCountParams(valueRefs.get(executableUnitName))];
+//
+//            LLVMGetParam(valueRefs.get(executableUnitName),0);
+//
+//            cod.i( LLVMGetParam(valueRefs.get(executableUnitName),0));
+//
+//            List<String> copy = new ArrayList<>(functionArguments);
+//            for (int i = 0; i < copy.size(); i++) {
+//                if (copy.get(i).equals(sName)) {
+//                    String argName = copy.get(i);
+//                    functionArguments.remove(i);
+//
+//                }
+//            }
 
             LLVMValueRef var = LLVMBuildAlloca(builder, LLVMInt32Type(), sName);
             valueRefs.put(sName, var);

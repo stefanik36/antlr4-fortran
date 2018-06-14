@@ -31,7 +31,6 @@ public abstract class FunctionTranslator extends LoopTranslator {
             args[i] = LLVMInt32Type();
         }
 
-
         LLVMValueRef myFunc = LLVMAddFunction(
                 mod,
                 executableUnitName,
@@ -39,6 +38,7 @@ public abstract class FunctionTranslator extends LoopTranslator {
         );
         LLVMSetFunctionCallConv(myFunc, LLVMCCallConv);
         valueRefs.put(executableUnitName, myFunc);
+
 
 
         functionArguments.addAll(

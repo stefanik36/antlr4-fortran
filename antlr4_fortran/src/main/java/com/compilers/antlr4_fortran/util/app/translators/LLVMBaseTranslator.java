@@ -31,6 +31,7 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
     Map<String, LLVMValueRef> valueRefs = new HashMap<>();
 
     List<String> functionArguments = new ArrayList<>();
+    List<LLVMValueRef> functionArgumentsRef = new ArrayList<>();
 
     @Override
     public void enterProgram(fortran77Parser.ProgramContext ctx) {
@@ -107,6 +108,8 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
             LLVMValueRef func = args.pop();
             LLVMValueRef argsL[] = new LLVMValueRef[args.size()];
             args.toArray(argsL);
+            functionArgumentsRef.addAll(args);
+
             LLVMValueRef result = LLVMBuildCall(builder, func, new PointerPointer<>(argsL), 1, "");
             megaStack.endSection();
             megaStack.push(result);
