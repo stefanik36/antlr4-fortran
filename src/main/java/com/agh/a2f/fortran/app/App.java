@@ -37,7 +37,12 @@ public class App {
 
     }
 
-    private void start(CharStream is) {
+    private String start(String fortranCode){
+        CharStream i = CharStreams.fromString(fortranCode);
+        return start(i);
+    }
+
+    private String start(CharStream is) {
         try {
             System.out.println("===================== TRANSLATE ======================");
             fortran77Lexer lexer = new fortran77Lexer(is);
@@ -57,18 +62,11 @@ public class App {
 
             walker.walk(llvmTranslator, tree);
 
+            return llvmTranslator.getResult();
 
-
-
-
-//            f_to_py translator = new f_to_py(tokens);
-//            walker.walk(translator, tree);
-            System.out.println(); // print a \n after translation
-
-
-//            System.out.println("===================== END 2  ======================");
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
     }
 

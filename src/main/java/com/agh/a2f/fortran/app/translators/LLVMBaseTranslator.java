@@ -7,6 +7,7 @@ import com.agh.a2f.fortran.generated.fortran77Parser;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import static org.bytedeco.javacpp.LLVM.*;
 
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,7 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
     LLVMModuleRef mod = null;
     LLVMBuilderRef builder = null;
     String currentFunction = null;
+
 
     MegaStack megaStack = new MegaStack();
     Map<String, LLVMValueRef> valueRefs = new HashMap<>();
@@ -36,16 +38,7 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
         LLVMSetFunctionCallConv(mainFunc, LLVMCCallConv);
     }
 
-    @Override
-    public void exitProgram(fortran77Parser.ProgramContext ctx) {
-        LLVMDumpModule(mod);
 
-//        LLVMWriteBitcodeToFile(mod, "f2llvm.bc"); //save to bytecode
-
-        LLVMFunctions.executeCode(mod, valueRefs.get("main"));
-
-//        LLVMDisposeModule(mod);
-    }
 
     @Override
     public void enterAintegerexpr(fortran77Parser.AintegerexprContext ctx) {
