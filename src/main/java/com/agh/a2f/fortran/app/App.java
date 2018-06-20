@@ -3,7 +3,6 @@ package com.agh.a2f.fortran.app;
 import com.agh.a2f.fortran.app.translators.AllLLVMTranslator;
 import com.agh.a2f.fortran.generated.fortran77Lexer;
 import com.agh.a2f.fortran.generated.fortran77Parser;
-import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -11,17 +10,17 @@ import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 
 import static org.bytedeco.javacpp.LLVM.*;
 
 public class App {
 
     public static void main(String[] args) throws IOException {
-        String path = "code/fortran/xfunc.f90";
+//        String path = "code/fortran/xfunc.f90";
+//        String path = "code/fortran/doLoop.f90";
+        String path = "code/fortran/doLoops.f";
+//        String path = "code/fortran/write.f90";
 //        String path = "code/fortran/addExample.f";
 
 
@@ -32,7 +31,6 @@ public class App {
         App app = new App();
         app.start(i);
 
-//        IrBuilderExample.executeExample();
 
     }
 

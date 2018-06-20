@@ -45,7 +45,7 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
         LLVMValueRef mainFunc = LLVMAddFunction(
                 mod,
                 "main",
-                LLVMFunctionType(LLVMVoidType(), LLVMVoidType(), 0, 0)
+                LLVMFunctionType(LLVMInt32Type(), LLVMVoidType(), 0, 0)
         );
 
         valueRefs.put("main", mainFunc);

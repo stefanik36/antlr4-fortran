@@ -13,6 +13,16 @@
       else if (sq .LT. 51) then
         print *, 'sq == 51', 'piękna sprawa :>'
         sq = 1
+             if (sq .EQ.51.EQV.sq.EQ.50.AND..NOT.sq.EQ.51) then
+        print *, 'sq == 52', 'piękna sprawa :>'
+        sq = 10
+      else if (sq .LT. 51) then
+        print *, 'sq == 53', 'piękna sprawa :>'
+        sq = 1
+      else
+        print *, 'ELSE', 'piękna sprawa :>'
+        sq = 6
+      end if
       else
         print *, 'ELSE', 'piękna sprawa :>'
         sq = 6

@@ -1,9 +1,8 @@
-package com.agh.a2f.fortran.app.translators;
+package com.compilers.antlr4_fortran.util.app.translators;
 
-import com.agh.a2f.fortran.app.util.LLVMFunctions;
-import com.agh.a2f.fortran.app.util.MegaStack;
-import com.agh.a2f.fortran.generated.fortran77BaseListener;
-import com.agh.a2f.fortran.generated.fortran77Parser;
+import com.compilers.antlr4_fortran.util.app.util.MegaStack;
+import com.compilers.antlr4_fortran.util.generated.fortran77BaseListener;
+import com.compilers.antlr4_fortran.util.generated.fortran77Parser;
 import com.stefanik.cod.controller.COD;
 import com.stefanik.cod.controller.CODFactory;
 import org.antlr.v4.runtime.BufferedTokenStream;
@@ -45,7 +44,7 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
         LLVMValueRef mainFunc = LLVMAddFunction(
                 mod,
                 "main",
-                LLVMFunctionType(LLVMVoidType(), LLVMVoidType(), 0, 0)
+                LLVMFunctionType(LLVMInt32Type(), LLVMVoidType(), 0, 0)
         );
 
         valueRefs.put("main", mainFunc);

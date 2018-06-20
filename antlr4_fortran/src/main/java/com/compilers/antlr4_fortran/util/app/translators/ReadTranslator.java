@@ -1,7 +1,7 @@
-package com.agh.a2f.fortran.app.translators;
+package com.compilers.antlr4_fortran.util.app.translators;
 
-import com.agh.a2f.fortran.app.util.LLVMFunctions;
-import com.agh.a2f.fortran.generated.fortran77Parser;
+import com.compilers.antlr4_fortran.util.app.util.LLVMFunctions;
+import com.compilers.antlr4_fortran.util.generated.fortran77Parser;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.bytedeco.javacpp.PointerPointer;
 

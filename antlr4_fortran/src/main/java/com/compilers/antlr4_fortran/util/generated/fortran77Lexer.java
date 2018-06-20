@@ -1,5 +1,5 @@
 // Generated from /home/prw/IdeaProjects/antlr4-fortran/src/main/java/com/agh/a2f/fortran/generated/fortran77.g4 by ANTLR 4.7
-package com.agh.a2f.fortran.generated;
+package com.compilers.antlr4_fortran.util.generated;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;

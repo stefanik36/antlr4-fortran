@@ -1,6 +1,5 @@
-package com.agh.a2f.fortran.app.util;
+package com.compilers.antlr4_fortran.util.app.util;
 
-import com.agh.a2f.fortran.generated.fortran77Parser;
 import org.bytedeco.javacpp.LLVM;
 
 import java.util.Map;

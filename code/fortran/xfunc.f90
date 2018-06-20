@@ -1,14 +1,13 @@
-function ff()
-    integer ff
+function f()
+    integer f
     print *, 'INSIE FUNCTION'
-    ff = 666
+    f = 666 + 12
 end
 program xfunc
     implicit none
-    integer arg, vv, abc
+    integer arg, fReturn
     integer func2
     arg = 3
-    abc = 222
-    vv = ff()
-    print *, 'FUNCTION VALUE', arg, 'V: ', vv
+    fReturn = f()
+    print *, 'FUNCTION VALUE', arg, 'V: ', fReturn
 end

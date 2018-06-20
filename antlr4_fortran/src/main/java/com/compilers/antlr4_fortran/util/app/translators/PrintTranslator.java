@@ -1,15 +1,15 @@
-package com.agh.a2f.fortran.app.translators;
+package com.compilers.antlr4_fortran.util.app.translators;
 
-import com.agh.a2f.fortran.app.util.LLVMFunctions;
-import com.agh.a2f.fortran.generated.fortran77Lexer;
-import com.agh.a2f.fortran.generated.fortran77Parser;
+import com.compilers.antlr4_fortran.util.app.util.LLVMFunctions;
+import com.compilers.antlr4_fortran.util.generated.fortran77Lexer;
+import com.compilers.antlr4_fortran.util.generated.fortran77Parser;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.bytedeco.javacpp.LLVM;
 import org.bytedeco.javacpp.PointerPointer;
 
 import java.util.*;
 
-import static com.agh.a2f.fortran.app.util.LLVMFunctions.skipSingleChildNodes;
+import static com.compilers.antlr4_fortran.util.app.util.LLVMFunctions.skipSingleChildNodes;
 import static org.bytedeco.javacpp.LLVM.*;
 
 abstract class PrintTranslator extends ConditionalTranslator {

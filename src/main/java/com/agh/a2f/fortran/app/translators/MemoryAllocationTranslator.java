@@ -55,7 +55,7 @@ public abstract class MemoryAllocationTranslator extends AssignmentAndArithmetic
 
     @Override
     public void exitTypeStatementNameCharList(fortran77Parser.TypeStatementNameCharListContext ctx) {
-        Integer length = Integer.valueOf(megaStack.popString()) + 1; // +1 because it dont work when table has the same length as string (PRINT ISSUE)
+        Integer length = Integer.valueOf(megaStack.popString());
 
         for (fortran77Parser.TypeStatementNameCharContext name : ctx.typeStatementNameChar()) {
             LLVMValueRef var = LLVMBuildAlloca(builder, LLVMArrayType(LLVMInt8Type(), length), name.getText());

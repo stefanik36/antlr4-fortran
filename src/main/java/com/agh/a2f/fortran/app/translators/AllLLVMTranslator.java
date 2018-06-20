@@ -4,8 +4,7 @@ import com.agh.a2f.fortran.app.util.LLVMFunctions;
 import com.agh.a2f.fortran.generated.fortran77Parser;
 import org.antlr.v4.runtime.BufferedTokenStream;
 
-import static org.bytedeco.javacpp.LLVM.LLVMDumpModule;
-import static org.bytedeco.javacpp.LLVM.LLVMPrintModuleToString;
+import static org.bytedeco.javacpp.LLVM.*;
 
 public class AllLLVMTranslator extends FunctionTranslator {
     public AllLLVMTranslator(BufferedTokenStream tokens) {
@@ -18,7 +17,9 @@ public class AllLLVMTranslator extends FunctionTranslator {
     public void exitProgram(fortran77Parser.ProgramContext ctx) {
         LLVMDumpModule(mod);
         result = LLVMPrintModuleToString(mod).getString();
-//        LLVMWriteBitcodeToFile(mod, "f2llvm.bc");
+        byte error [] = new byte[255];
+        LLVMPrintModuleToFile(mod, "f2llvm.ll", error);
+        LLVMWriteBitcodeToFile(mod, "f2llvm.bc");
         LLVMFunctions.executeCode(mod, valueRefs.get("main"));
     }
 

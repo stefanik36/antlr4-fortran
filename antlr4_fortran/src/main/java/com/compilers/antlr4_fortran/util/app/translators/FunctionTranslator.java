@@ -1,7 +1,7 @@
-package com.agh.a2f.fortran.app.translators;
+package com.compilers.antlr4_fortran.util.app.translators;
 
-import com.agh.a2f.fortran.app.util.Variable;
-import com.agh.a2f.fortran.generated.fortran77Parser;
+import com.compilers.antlr4_fortran.util.app.util.Variable;
+import com.compilers.antlr4_fortran.util.generated.fortran77Parser;
 import com.stefanik.cod.controller.COD;
 import com.stefanik.cod.controller.CODFactory;
 import com.stefanik.cod.service.creator.visualization.ObjectsVisualizer;

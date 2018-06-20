@@ -1,4 +1,4 @@
-package com.agh.a2f.fortran.app.util;
+package com.compilers.antlr4_fortran.util.app.util;
 
 
 import static org.bytedeco.javacpp.LLVM.*;

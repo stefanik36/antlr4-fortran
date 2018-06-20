@@ -8,7 +8,7 @@
 @7 = private unnamed_addr constant [6 x i8] c"DO_xD\00"
 @8 = private unnamed_addr constant [17 x i8] c"%s          %d \0A\00"
 
-define void @main() {
+define i32 @main() {
 entry_main:
   %i = alloca i32
   %i2 = alloca i32
@@ -31,7 +31,7 @@ body_loop:                                        ; preds = %loop
   br label %loop1
 
 end_loop:                                         ; preds = %loop
-  ret void
+  ret i32 0
 
 loop1:                                            ; preds = %end_loop6, %body_loop
   %6 = load i32, i32* %i2
