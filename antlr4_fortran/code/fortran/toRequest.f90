@@ -1,1 +1,0 @@
-function ff(arg, arg2)\n    integer ff, arg, arg2\n    print *, 'INSIDE FUNCTION'\n    ff = 666 + arg\nend\n\nprogram xfunc\n    implicit none\n    integer arg, vv, abc\n    integer func2\n    arg = 3\n    abc = 222\n    vv = ff(arg, abc)\n    print *, 'FUNCTION VALUE', arg, 'V: ', vv\nend

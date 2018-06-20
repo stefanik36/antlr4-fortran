@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: com.agh.a2f.fortran.app.App
+
