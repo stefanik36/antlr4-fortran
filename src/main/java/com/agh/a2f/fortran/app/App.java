@@ -17,9 +17,9 @@ import static org.bytedeco.javacpp.LLVM.*;
 public class App {
 
     public static void main(String[] args) throws IOException {
-//        String path = "code/fortran/xfunc.f90";
+        String path = "code/fortran/xfunc.f90";
 //        String path = "code/fortran/doLoop.f90";
-        String path = "code/fortran/doLoops.f";
+//        String path = "code/fortran/doLoops.f";
 //        String path = "code/fortran/write.f90";
 //        String path = "code/fortran/addExample.f";
 

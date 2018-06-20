@@ -12,9 +12,7 @@ import org.bytedeco.javacpp.PointerPointer;
 
 import static org.bytedeco.javacpp.LLVM.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 import java.util.stream.Collectors;
 
 abstract class LLVMBaseTranslator extends fortran77BaseListener {
@@ -31,6 +29,9 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
 
     MegaStack megaStack = new MegaStack();
     Map<String, LLVMValueRef> valueRefs = new HashMap<>();
+
+    Map<String, Integer> functionArguments = new HashMap<>();
+    List<LLVMValueRef> functionArgumentsRef = new ArrayList<>();
 
     @Override
     public void enterProgram(fortran77Parser.ProgramContext ctx) {
@@ -76,6 +77,7 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
         }
     }
 
+
     private boolean isFunctionCall(fortran77Parser.VarRefContext ctx) {
         return ctx.subscripts() != null;
     }
@@ -100,11 +102,14 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
             LLVMValueRef func = args.pop();
             LLVMValueRef argsL[] = new LLVMValueRef[args.size()];
             args.toArray(argsL);
+            functionArgumentsRef.addAll(args);
+
             LLVMValueRef result = LLVMBuildCall(builder, func, new PointerPointer<>(argsL), argsL.length, "");
             megaStack.endSection();
             megaStack.push(result);
         }
     }
+
 
     @Override
     public void enterSubprogramBody(fortran77Parser.SubprogramBodyContext ctx) {

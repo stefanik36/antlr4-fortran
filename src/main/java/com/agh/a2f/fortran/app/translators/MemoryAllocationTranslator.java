@@ -6,6 +6,8 @@ import com.stefanik.cod.controller.CODFactory;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.bytedeco.javacpp.LLVM.*;
@@ -41,6 +43,23 @@ public abstract class MemoryAllocationTranslator extends AssignmentAndArithmetic
         }
     }
 
+
+    private LLVMValueRef assignFunctionArguments(String sName, LLVMValueRef var) {
+        Map<String, Integer> copy = new HashMap<>(functionArguments);
+        LLVMValueRef llvmValueRef = var;
+
+        for(Map.Entry<String, Integer> e :copy.entrySet()){
+            if (e.getKey().equals(sName)) {
+                functionArguments.remove(e.getKey());
+
+
+                LLVMValueRef param = LLVMGetParam(valueRefs.get(executableUnitName), e.getValue());
+                LLVMBuildStore(builder, param, var);
+            }
+        }
+        return llvmValueRef;
+    }
+
     @Override
     public void enterTypeStatementNameList(fortran77Parser.TypeStatementNameListContext ctx) {
         cod.c().off().i("enterTypeStatementNameList", ctx.children.stream().map(ParseTree::getText).collect(Collectors.toList()));
@@ -48,6 +67,7 @@ public abstract class MemoryAllocationTranslator extends AssignmentAndArithmetic
             String sName = preventFuncName(name.getText());
 
             LLVMValueRef var = LLVMBuildAlloca(builder, LLVMInt32Type(), sName);
+            var = assignFunctionArguments(sName, var);
             valueRefs.put(sName, var);
 
         }

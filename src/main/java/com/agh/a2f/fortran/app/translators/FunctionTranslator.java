@@ -6,6 +6,7 @@ import com.stefanik.cod.controller.COD;
 import com.stefanik.cod.controller.CODFactory;
 import com.stefanik.cod.service.creator.visualization.ObjectsVisualizer;
 import org.antlr.v4.runtime.BufferedTokenStream;
+import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.bytedeco.javacpp.LLVM;
 import org.bytedeco.javacpp.PointerPointer;
@@ -23,8 +24,6 @@ public abstract class FunctionTranslator extends ReadTranslator {
     FunctionTranslator(BufferedTokenStream tokens) {
         super(tokens);
     }
-
-    private Stack<LLVMValueRef> functionStack = new Stack<>();
 
     @Override
     public void enterFunctionStatement(fortran77Parser.FunctionStatementContext ctx) {
@@ -45,23 +44,19 @@ public abstract class FunctionTranslator extends ReadTranslator {
         LLVMSetFunctionCallConv(myFunc, LLVMCCallConv);
         valueRefs.put(executableUnitName, myFunc);
 
+        int i = 0;
+        for (String s : ctx.namelist().identifier().stream()
+                .map(RuleContext::getText)
+                .collect(Collectors.toList())
+                ) {
+            functionArguments.put(s, i);
+            i++;
+        }
 
-//        cod.c().i("enterFunctionStatement", ctx.children.stream().map(ParseTree::getText).collect(Collectors.toList()));
-//        for (fortran77Parser.TypeStatementNameContext name : ctx.typeStatementName()) {
-//            String sName = preventFuncName(name.getText());
-//
-//            LLVMValueRef var = LLVMBuildAlloca(builder, LLVMInt32Type(), sName);
-//            valueRefs.put(sName, var);
-//
-//        }
         if(ctx.namelist() == null)
             return;
         for (String name : ctx.namelist().identifier().stream().map(ParseTree::getText).collect(Collectors.toList())) {
 
-//            if (",".equals(name)) {
-//                argsFlag = false;
-//            }
-//            if (argsFlag) {
             LLVMValueRef llvmValueRef = null;
             if (Variable.isString(name)) {
                 String val = Variable.getStringValue(name);
@@ -80,17 +75,6 @@ public abstract class FunctionTranslator extends ReadTranslator {
                 cod.c().i("\t[" + megaStack.size() + "]PUSH ASSIGN: " + llvmValueRef.address());
                 megaStack.push(llvmValueRef);
             }
-
-
-            cod.c().i("NULL: " + name);
-
-//                LLVMValueRef var = LLVMBuildAlloca(builder, LLVMInt32Type(), name);
-//                functionStack.put(name, var);
-//            }
-//
-//            if ("(".equals(name)) {
-//                argsFlag = true;
-//            }
         }
     }
 
