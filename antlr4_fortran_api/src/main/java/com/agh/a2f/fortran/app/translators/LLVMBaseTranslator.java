@@ -1,16 +1,19 @@
 package com.agh.a2f.fortran.app.translators;
 
+import com.agh.a2f.fortran.app.util.LLVMFunctions;
 import com.agh.a2f.fortran.app.util.MegaStack;
 import com.agh.a2f.fortran.generated.fortran77BaseListener;
 import com.agh.a2f.fortran.generated.fortran77Parser;
 import com.stefanik.cod.controller.COD;
 import com.stefanik.cod.controller.CODFactory;
 import org.antlr.v4.runtime.BufferedTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.bytedeco.javacpp.PointerPointer;
 
 import static org.bytedeco.javacpp.LLVM.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 abstract class LLVMBaseTranslator extends fortran77BaseListener {
     private static final COD cod = CODFactory.get();
@@ -30,16 +33,6 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
     Map<String, Integer> functionArguments = new HashMap<>();
     List<LLVMValueRef> functionArgumentsRef = new ArrayList<>();
 
-    FunctionType functionType = null;
-    Map<String, LLVMTypeRef> argsType = null;
-    List<fortran77Parser.IdentifierContext> args = null;
-
-
-    enum FunctionType {
-        MAIN, FUNCTION, SUBROUTINE
-    }
-
-
     @Override
     public void enterProgram(fortran77Parser.ProgramContext ctx) {
         mod = LLVMModuleCreateWithName("TEST");
@@ -58,9 +51,9 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
 
         valueRefs.put("main", mainFunc);
         executableUnitName = "main";
-        functionType = FunctionType.MAIN;
         LLVMSetFunctionCallConv(mainFunc, LLVMCCallConv);
     }
+
 
 
     @Override
@@ -101,7 +94,7 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
         if (isFunctionCall(ctx)) {
             Stack<LLVMValueRef> args = new Stack<>();
             cod.c().off().i("MS" + megaStack.size());
-            while (megaStack.size() > 0) {
+            while (megaStack.size() > 0){
                 args.push(megaStack.popValue());
             }
 
@@ -120,43 +113,27 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
 
     @Override
     public void enterSubprogramBody(fortran77Parser.SubprogramBodyContext ctx) {
+        cod.c().off().i("enterSubprogramBody",
+                "entry_" + executableUnitName,
+                valueRefs.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toList()),
+                valueRefs.get(executableUnitName),
+                ctx.children.stream().map(ParseTree::getText).collect(Collectors.toList())
+        );
 
         LLVMBasicBlockRef entry = LLVMAppendBasicBlock(valueRefs.get(executableUnitName), "entry_" + executableUnitName);
         builder = LLVMCreateBuilder();
         LLVMPositionBuilderAtEnd(builder, entry);
-        allocateMemoryForFunctionArgs();
-
-    }
-
-    private void allocateMemoryForFunctionArgs() {
-        if (args != null) {
-            int i = 0;
-            LLVMValueRef fun = valueRefs.get(executableUnitName);
-            for (fortran77Parser.IdentifierContext arg : args) {
-                String name = arg.getText();
-                LLVMTypeRef type = argsType.get(name);
-                LLVMValueRef allocated = LLVMBuildAlloca(builder, type, name);
-                valueRefs.put(name, allocated);
-                LLVMBuildStore(builder, LLVMGetParam(fun, i), allocated);
-                i++;
-            }
-        }
     }
 
     @Override
     public void exitSubprogramBody(fortran77Parser.SubprogramBodyContext ctx) {
-        switch (functionType) {
-            case MAIN:
-                LLVMBuildRet(builder, LLVMConstInt(LLVMInt32Type(), 0, 1));
-                break;
-            case FUNCTION:
-                String sName = preventFuncName(executableUnitName);
-                LLVMValueRef vLoad = LLVMBuildLoad(builder, valueRefs.get(sName), "");
-                LLVMBuildRet(builder, vLoad);
-                break;
-            case SUBROUTINE:
-                LLVMBuildRetVoid(builder);
-                break;
+        cod.c().off().i("exitSubprogramBody", "entry_end_" + executableUnitName, executableUnitName, valueRefs.get(executableUnitName));
+        String sName = preventFuncName(executableUnitName);
+        if (executableUnitName.equals("main")) {
+            LLVMBuildRet(builder, LLVMConstInt(LLVMInt32Type(), 0, 1));
+        } else {
+            LLVMValueRef vLoad = LLVMBuildLoad(builder, valueRefs.get(sName), "");
+            LLVMBuildRet(builder, vLoad);
         }
         LLVMDisposeBuilder(builder);
         super.exitSubprogramBody(ctx);
