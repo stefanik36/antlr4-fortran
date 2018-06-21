@@ -8,11 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/api/main")
 public class MainController {
     private final MainService service;
@@ -21,7 +19,7 @@ public class MainController {
     public MainController(MainService service) {
         this.service = service;
     }
-
+    @CrossOrigin(origins = "http://localhost:8000")
     @RequestMapping(value = "/run", method = RequestMethod.POST)
     public ResponseEntity<?> search(
             @RequestBody Request fortran
