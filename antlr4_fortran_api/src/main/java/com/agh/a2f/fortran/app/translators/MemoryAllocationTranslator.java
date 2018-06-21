@@ -67,7 +67,7 @@ public abstract class MemoryAllocationTranslator extends AssignmentAndArithmetic
             String sName = preventFuncName(name.getText());
 
             LLVMValueRef var = LLVMBuildAlloca(builder, LLVMInt32Type(), sName);
-            var = assignFunctionArguments(sName, var);
+//            var = assignFunctionArguments(sName, var);
             valueRefs.put(sName, var);
 
         }

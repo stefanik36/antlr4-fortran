@@ -28,6 +28,7 @@ public abstract class FunctionTranslator extends ReadTranslator {
     @Override
     public void enterFunctionStatement(fortran77Parser.FunctionStatementContext ctx) {
         executableUnitName = ctx.identifier().getText();
+        functionType = FunctionType.FUNCTION;
         LLVMTypeRef[] args = new LLVMTypeRef[0];
         if(ctx.namelist() != null)
             args = new LLVMTypeRef[ctx.namelist().identifier().size()];

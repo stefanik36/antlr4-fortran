@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.BufferedTokenStream;
 
 import static org.bytedeco.javacpp.LLVM.*;
 
-public class AllLLVMTranslator extends FunctionTranslator {
+public class AllLLVMTranslator extends SubroutineTranslator {
     public AllLLVMTranslator(BufferedTokenStream tokens) {
         super(tokens);
     }

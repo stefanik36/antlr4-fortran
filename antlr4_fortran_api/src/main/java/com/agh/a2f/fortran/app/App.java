@@ -17,11 +17,12 @@ import static org.bytedeco.javacpp.LLVM.*;
 public class App {
 
     public static void main(String[] args) throws IOException {
-        String path = "src/main/resources/code/fortran/xfunc.f90";
+//        String path = "src/main/resources/code/fortran/xfunc.f90";
 //        String path = "src/main/resources/code/fortran/doLoop.f90";
 //        String path = "src/main/resources/code/fortran/doLoops.f";
 //        String path = "src/main/resources/code/fortran/write.f90";
 //        String path = "src/main/resources/code/fortran/addExample.f";
+        String path = "src/main/resources/code/fortran/subroutine.f90";
 
 
         System.out.println("===================== FORTRAN FILE ======================");
@@ -41,12 +42,9 @@ public class App {
 
     private String start(CharStream is) {
         try {
-            System.out.println("===================== TRANSLATE ======================");
             fortran77Lexer lexer = new fortran77Lexer(is);
 
             fortran77Parser parser = new fortran77Parser(new CommonTokenStream(lexer));
-
-//            parser.addParseListener(new Listener());
 
             ParseTree tree = parser.program();
 
@@ -54,7 +52,6 @@ public class App {
 
             CommonTokenStream tokens = new CommonTokenStream(lexer);
 
-//            AssignmentAndArithmeticTranslator llvmTranslator = new AssignmentAndArithmeticTranslator(tokens);
             AllLLVMTranslator llvmTranslator = new AllLLVMTranslator(tokens);
 
             walker.walk(llvmTranslator, tree);
