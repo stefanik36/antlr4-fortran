@@ -44,20 +44,15 @@ public abstract class MemoryAllocationTranslator extends AssignmentAndArithmetic
     }
 
 
-    private LLVMValueRef assignFunctionArguments(String sName, LLVMValueRef var) {
-        Map<String, Integer> copy = new HashMap<>(functionArguments);
-        LLVMValueRef llvmValueRef = var;
-
-        for(Map.Entry<String, Integer> e :copy.entrySet()){
-            if (e.getKey().equals(sName)) {
-                functionArguments.remove(e.getKey());
-
-
-                LLVMValueRef param = LLVMGetParam(valueRefs.get(executableUnitName), e.getValue());
+    private void assignFunctionSingleArguments(String sName, LLVMValueRef var) {
+        if(args == null) return;
+        for (int i = 0; i < this.args.size(); i++) {
+            String arg = this.args.get(i);
+            if (arg.equals(sName)) {
+                LLVMValueRef param = LLVMGetParam(valueRefs.get(executableUnitName), i);
                 LLVMBuildStore(builder, param, var);
             }
         }
-        return llvmValueRef;
     }
 
     @Override
@@ -67,7 +62,7 @@ public abstract class MemoryAllocationTranslator extends AssignmentAndArithmetic
             String sName = preventFuncName(name.getText());
 
             LLVMValueRef var = LLVMBuildAlloca(builder, LLVMInt32Type(), sName);
-//            var = assignFunctionArguments(sName, var);
+            assignFunctionSingleArguments(sName, var);
             valueRefs.put(sName, var);
 
         }

@@ -1,5 +1,6 @@
 package com.agh.a2f.fortran.app.translators;
 
+import com.agh.a2f.fortran.app.util.FunctionArgManager;
 import com.agh.a2f.fortran.app.util.Variable;
 import com.agh.a2f.fortran.generated.fortran77Parser;
 import com.stefanik.cod.controller.COD;
@@ -25,67 +26,28 @@ public abstract class FunctionTranslator extends ReadTranslator {
         super(tokens);
     }
 
+
     @Override
-    public void enterFunctionStatement(fortran77Parser.FunctionStatementContext ctx) {
-        executableUnitName = ctx.identifier().getText();
+    public void enterFunctionSubprogram(fortran77Parser.FunctionSubprogramContext ctx) {
+        megaStack.startSection();
+        this.args = ctx.functionStatement().namelist().identifier().stream().map(RuleContext::getText).collect(Collectors.toList());
+        String funName = ctx.functionStatement().identifier().getText();
+
+        FunctionArgManager manager = new FunctionArgManager(ctx.subprogramBody(), this.args);
+
+        LLVMTypeRef[] args = manager.getArgsTypeArray();
+
+        LLVMValueRef fun = LLVMAddFunction(mod, funName, LLVMFunctionType(LLVMInt32Type(), new PointerPointer<>(args), args.length, 0));
+        LLVMSetFunctionCallConv(fun, LLVMCCallConv);
+
+        executableUnitName = funName;
         functionType = FunctionType.FUNCTION;
-        LLVMTypeRef[] args = new LLVMTypeRef[0];
-        if(ctx.namelist() != null)
-            args = new LLVMTypeRef[ctx.namelist().identifier().size()];
-
-        for (int i =0;i<args.length;i++){
-            args[i] = LLVMInt32Type();
-        }
-
-        LLVMValueRef myFunc = LLVMAddFunction(
-                mod,
-                executableUnitName,
-                LLVMFunctionType(LLVMInt32Type(), new PointerPointer<>(args), args.length, 0)
-        );
-        LLVMSetFunctionCallConv(myFunc, LLVMCCallConv);
-        valueRefs.put(executableUnitName, myFunc);
-
-        int i = 0;
-        for (String s : ctx.namelist().identifier().stream()
-                .map(RuleContext::getText)
-                .collect(Collectors.toList())
-                ) {
-            functionArguments.put(s, i);
-            i++;
-        }
-
-        if(ctx.namelist() == null)
-            return;
-        for (String name : ctx.namelist().identifier().stream().map(ParseTree::getText).collect(Collectors.toList())) {
-
-            LLVMValueRef llvmValueRef = null;
-            if (Variable.isString(name)) {
-                String val = Variable.getStringValue(name);
-                llvmValueRef = LLVMConstString(val, val.length(), 1);
-                cod.c().i("str: " + llvmValueRef.address());
-            } else if (Variable.isInteger(name)) {
-                llvmValueRef = LLVMConstInt(LLVMInt32Type(), Variable.getIntegerValue(name), 0);
-                cod.c().i("int: " + llvmValueRef.address());
-            } else if (Variable.isInMap(name, valueRefs)) {
-                llvmValueRef = LLVMBuildLoad(builder, Variable.getFromMap(name, valueRefs), "");
-                cod.c().i("var: " + llvmValueRef.address());
-            }
-            //Something else pushed/will push it to the megaStack?
-
-            if (llvmValueRef != null) {
-                cod.c().i("\t[" + megaStack.size() + "]PUSH ASSIGN: " + llvmValueRef.address());
-                megaStack.push(llvmValueRef);
-            }
-        }
-    }
-
-    @Override
-    public void exitFunctionStatement(fortran77Parser.FunctionStatementContext ctx) {
-//        cod.i("exitFunctionStatement: MS: " + megaStack.size());
+        valueRefs.put(funName, fun);
     }
 
     @Override
     public void exitFunctionSubprogram(fortran77Parser.FunctionSubprogramContext ctx) {
-//        cod.i("exitFunctionSubprogram: MS: " + megaStack.size());
+        this.args = null;
+        megaStack.endSection();
     }
 }

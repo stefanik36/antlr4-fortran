@@ -179,5 +179,4 @@ public class MegaStack {
         return !sections.empty() && sections.peek().useStack;
     }
 
-
 }

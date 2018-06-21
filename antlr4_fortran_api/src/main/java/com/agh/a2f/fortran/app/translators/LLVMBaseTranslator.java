@@ -6,6 +6,7 @@ import com.agh.a2f.fortran.generated.fortran77Parser;
 import com.stefanik.cod.controller.COD;
 import com.stefanik.cod.controller.CODFactory;
 import org.antlr.v4.runtime.BufferedTokenStream;
+import org.apache.commons.lang3.ArrayUtils;
 import org.bytedeco.javacpp.PointerPointer;
 
 import static org.bytedeco.javacpp.LLVM.*;
@@ -27,12 +28,8 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
     MegaStack megaStack = new MegaStack();
     Map<String, LLVMValueRef> valueRefs = new HashMap<>();
 
-    Map<String, Integer> functionArguments = new HashMap<>();
-    List<LLVMValueRef> functionArgumentsRef = new ArrayList<>();
-
     FunctionType functionType = null;
-    Map<String, LLVMTypeRef> argsType = null;
-    List<fortran77Parser.IdentifierContext> args = null;
+    List<String> args = null;
 
 
     enum FunctionType {
@@ -99,22 +96,32 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
     @Override
     public void exitVarRef(fortran77Parser.VarRefContext ctx) {
         if (isFunctionCall(ctx)) {
-            Stack<LLVMValueRef> args = new Stack<>();
-            cod.c().off().i("MS" + megaStack.size());
-            while (megaStack.size() > 0) {
-                args.push(megaStack.popValue());
-            }
 
+            LLVMValueRef[] args = handleLoad(true);
+            LLVMValueRef fun = megaStack.popValue();
 
-            LLVMValueRef func = args.pop();
-            LLVMValueRef argsL[] = new LLVMValueRef[args.size()];
-            args.toArray(argsL);
-            functionArgumentsRef.addAll(args);
-
-            LLVMValueRef result = LLVMBuildCall(builder, func, new PointerPointer<>(argsL), argsL.length, "");
+            LLVMValueRef result = LLVMBuildCall(builder, fun, new PointerPointer<>(args), args.length, "");
             megaStack.endSection();
             megaStack.push(result);
         }
+    }
+
+    protected LLVMValueRef[] handleLoad(boolean isFunction){
+        Stack<LLVMValueRef> args = new Stack<>();
+        while (megaStack.size() > (isFunction? 1 : 0)) {
+            LLVMValueRef val = megaStack.popValue();
+            LLVMTypeRef type = LLVMGetAllocatedType(val);
+            if(type != null && type.equals(LLVMInt32Type())){
+                args.push(LLVMBuildLoad(builder, val, ""));
+            }
+            else{
+                args.push(val);
+            }
+        }
+        LLVMValueRef argsL[] = new LLVMValueRef[args.size()];
+        args.toArray(argsL);
+        ArrayUtils.reverse(argsL);
+        return argsL;
     }
 
 
@@ -124,24 +131,10 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
         LLVMBasicBlockRef entry = LLVMAppendBasicBlock(valueRefs.get(executableUnitName), "entry_" + executableUnitName);
         builder = LLVMCreateBuilder();
         LLVMPositionBuilderAtEnd(builder, entry);
-        allocateMemoryForFunctionArgs();
 
     }
 
-    private void allocateMemoryForFunctionArgs() {
-        if (args != null) {
-            int i = 0;
-            LLVMValueRef fun = valueRefs.get(executableUnitName);
-            for (fortran77Parser.IdentifierContext arg : args) {
-                String name = arg.getText();
-                LLVMTypeRef type = argsType.get(name);
-                LLVMValueRef allocated = LLVMBuildAlloca(builder, type, name);
-                valueRefs.put(name, allocated);
-                LLVMBuildStore(builder, LLVMGetParam(fun, i), allocated);
-                i++;
-            }
-        }
-    }
+
 
     @Override
     public void exitSubprogramBody(fortran77Parser.SubprogramBodyContext ctx) {
