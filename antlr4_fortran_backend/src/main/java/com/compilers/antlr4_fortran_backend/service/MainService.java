@@ -19,7 +19,10 @@ public class MainService {
 
         //TODO
         response.setLlvm(llvm);
-        response.setResult("RESULT \nDATA");
+        if (llvm != null)
+            response.setResult("Ok");
+        else
+            response.setResult("Error");
 
         return response;
     }
