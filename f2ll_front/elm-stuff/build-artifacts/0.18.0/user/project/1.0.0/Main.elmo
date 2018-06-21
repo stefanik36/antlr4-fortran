@@ -1,0 +1,442 @@
+var _user$project$Main$myStyle = _elm_lang$html$Html_Attributes$style(
+	{
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'white-space', _1: 'pre-wrap'},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'padding', _1: '10px'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'font-size', _1: '1em'},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'border-width', _1: '1px'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'border-style', _1: 'solid'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'border-color', _1: 'grey'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'background-color', _1: 'white'},
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			}
+		}
+	});
+var _user$project$Main$statusStyle = function (str) {
+	var margin_style = {ctor: '_Tuple2', _0: 'margin-right', _1: '20px'};
+	var _p0 = str;
+	switch (_p0) {
+		case 'Ok':
+			return _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'color', _1: 'green'},
+					_1: {
+						ctor: '::',
+						_0: margin_style,
+						_1: {ctor: '[]'}
+					}
+				});
+		case '':
+			return _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: margin_style,
+					_1: {ctor: '[]'}
+				});
+		default:
+			return _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'color', _1: 'red'},
+					_1: {
+						ctor: '::',
+						_0: margin_style,
+						_1: {ctor: '[]'}
+					}
+				});
+	}
+};
+var _user$project$Main$body = function (str) {
+	return _elm_lang$http$Http$jsonBody(
+		_elm_lang$core$Json_Encode$object(
+			{
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'fortranCode',
+					_1: _elm_lang$core$Json_Encode$string(str)
+				},
+				_1: {ctor: '[]'}
+			}));
+};
+var _user$project$Main$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$none;
+};
+var _user$project$Main$Model = F3(
+	function (a, b, c) {
+		return {fortran: a, llvm: b, result: c};
+	});
+var _user$project$Main$init = {
+	ctor: '_Tuple2',
+	_0: A3(_user$project$Main$Model, '', '', ''),
+	_1: _elm_lang$core$Platform_Cmd$none
+};
+var _user$project$Main$ResponseS = F2(
+	function (a, b) {
+		return {llvm: a, result: b};
+	});
+var _user$project$Main$decodeResult = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_user$project$Main$ResponseS,
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'llvm',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$string),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'result',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$string));
+var _user$project$Main$IpAddr = function (a) {
+	return {ctor: 'IpAddr', _0: a};
+};
+var _user$project$Main$getRandomGif = function (str) {
+	var url = 'http://localhost:8080/api/main/run';
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$Main$IpAddr,
+		A3(
+			_elm_lang$http$Http$post,
+			url,
+			_user$project$Main$body(str),
+			_user$project$Main$decodeResult));
+};
+var _user$project$Main$update = F2(
+	function (msg, model) {
+		var _p1 = msg;
+		switch (_p1.ctor) {
+			case 'NewContent':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{fortran: _p1._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Send':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$Main$getRandomGif(model.fortran)
+				};
+			default:
+				if (_p1._0.ctor === 'Ok') {
+					var _p2 = _p1._0._0;
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{llvm: _p2.llvm, result: _p2.result}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				}
+		}
+	});
+var _user$project$Main$Send = {ctor: 'Send'};
+var _user$project$Main$NewContent = function (a) {
+	return {ctor: 'NewContent', _0: a};
+};
+var _user$project$Main$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_rundis$elm_bootstrap$Bootstrap_Grid$container,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _rundis$elm_bootstrap$Bootstrap_CDN$stylesheet,
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_rundis$elm_bootstrap$Bootstrap_Grid$row,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: A2(
+									_rundis$elm_bootstrap$Bootstrap_Grid$col,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$h1,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Fortran to LLVM6 translator!'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_rundis$elm_bootstrap$Bootstrap_Grid$row,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A2(
+										_rundis$elm_bootstrap$Bootstrap_Grid$col,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$div,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$class('form-group'),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$label,
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$for('insert_fortran'),
+															_1: {ctor: '[]'}
+														},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('Fortran code:'),
+															_1: {ctor: '[]'}
+														}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$textarea,
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$class('form-control'),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$id('insert_fortran'),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$html$Html_Attributes$rows(10),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$html$Html_Attributes$placeholder('insert code'),
+																			_1: {
+																				ctor: '::',
+																				_0: _elm_lang$html$Html_Events$onInput(_user$project$Main$NewContent),
+																				_1: {ctor: '[]'}
+																			}
+																		}
+																	}
+																}
+															},
+															{ctor: '[]'}),
+														_1: {ctor: '[]'}
+													}
+												}),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_rundis$elm_bootstrap$Bootstrap_Grid$row,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: A2(
+											_rundis$elm_bootstrap$Bootstrap_Grid$col,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$div,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('text-right'),
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$button,
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$class('btn btn-success'),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$style(
+																		{
+																			ctor: '::',
+																			_0: {ctor: '_Tuple2', _0: 'margin-right', _1: '15px'},
+																			_1: {
+																				ctor: '::',
+																				_0: {ctor: '_Tuple2', _0: 'margin-bottom', _1: '15px'},
+																				_1: {ctor: '[]'}
+																			}
+																		}),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$Send),
+																		_1: {ctor: '[]'}
+																	}
+																}
+															},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('Translate'),
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_rundis$elm_bootstrap$Bootstrap_Grid$row,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: A2(
+												_rundis$elm_bootstrap$Bootstrap_Grid$col,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$label,
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$for('output'),
+															_1: {ctor: '[]'}
+														},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('LLVM result code:'),
+															_1: {ctor: '[]'}
+														}),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_rundis$elm_bootstrap$Bootstrap_Grid$col,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$div,
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$class('text-right'),
+																_1: {
+																	ctor: '::',
+																	_0: _user$project$Main$statusStyle(model.result),
+																	_1: {ctor: '[]'}
+																}
+															},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text(
+																	A2(_elm_lang$core$Basics_ops['++'], 'Status: ', model.result)),
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_rundis$elm_bootstrap$Bootstrap_Grid$row,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: A2(
+													_rundis$elm_bootstrap$Bootstrap_Grid$col,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$textarea,
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$readonly(true),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$class('form-control'),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$html$Html_Attributes$style(
+																			{
+																				ctor: '::',
+																				_0: {ctor: '_Tuple2', _0: 'background-color', _1: 'white'},
+																				_1: {ctor: '[]'}
+																			}),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$html$Html_Attributes$id('output'),
+																			_1: {
+																				ctor: '::',
+																				_0: _elm_lang$html$Html_Attributes$rows(10),
+																				_1: {
+																					ctor: '::',
+																					_0: _elm_lang$html$Html_Attributes$placeholder('Click on translate button to translate'),
+																					_1: {ctor: '[]'}
+																				}
+																			}
+																		}
+																	}
+																}
+															},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text(model.llvm),
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Main$main = _elm_lang$html$Html$program(
+	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})();
