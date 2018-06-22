@@ -40,36 +40,29 @@ abstract class AssignmentAndArithmeticTranslator extends LLVMBaseTranslator {
     @Override
     public void exitAssignmentStatement(fortran77Parser.AssignmentStatementContext ctx) {
         if (ctx.expression() != null) {
-            cod.c().off().i("enterAssignmentStatement: " + ctx.getText() + " | " + ctx.expression().getText());
+
             LLVMValueRef llvmValueRef = null;
             String strVal = ctx.expression().getText();
             if (Variable.isString(strVal)) {
                 String val = Variable.getStringValue(strVal);
                 llvmValueRef = LLVMConstString(val, val.length(), 1);
-                cod.c().off().i("str: " + llvmValueRef.address());
             } else if (Variable.isInteger(strVal)) {
                 llvmValueRef = LLVMConstInt(LLVMInt32Type(), Variable.getIntegerValue(strVal), 0);
-                cod.c().off().i("int: " + llvmValueRef.address());
             } else if (Variable.isInMap(strVal, valueRefs)) {
                 llvmValueRef = LLVMBuildLoad(builder, Variable.getFromMap(strVal, valueRefs), "");
-                cod.c().off().i("var: " + llvmValueRef.address());
+            }
+            else {
+                llvmValueRef = megaStack.popValue();
+//                throw new RuntimeException("Right side can't be compute. llvmValueRef is null");
             }
             //Something else pushed/will push it to the megaStack?
 
-            if (llvmValueRef != null) {
-                cod.c().off().i("\t[" + megaStack.size() + "]PUSH ASSIGN: " + llvmValueRef.address());
-                megaStack.push(llvmValueRef);
-            }
-        }
-        if (ctx.children != null) {
-            cod.c().off().i("exitAssignmentStatement: " + ctx.getText() + " | REF: " + ctx.varRef().getText());
             String name = preventFuncName(ctx.varRef().getText());
-            Optional.ofNullable(valueRefs.get(name)).ifPresent(var -> {
-                LLVMValueRef value = megaStack.popValue();
-                LLVMBuildStore(builder, value, var);
-                cod.c().off().i("\tX: " + value.address());
-                cod.c().off().i("\t[" + megaStack.size() + "]POP ASSIGN: " + value.address());
-            });
+            LLVMValueRef var = valueRefs.get(name);
+            if(var == null)
+                throw new RuntimeException("Variable named '" + name + "' not allocated!");
+            LLVMBuildStore(builder, llvmValueRef, var);
+
         }
         megaStack.endSection();
     }
@@ -78,6 +71,7 @@ abstract class AssignmentAndArithmeticTranslator extends LLVMBaseTranslator {
     @Override
     public void enterAexpr0(fortran77Parser.Aexpr0Context ctx) {
         if (ctx.aexpr1().size() > 1) {
+            megaStack.startSection();
             arithmeticComponentsStack.push(ctx.aexpr1().stream()
                     .map(RuleContext::getText)
                     .collect(Collectors.toList())
@@ -105,7 +99,11 @@ abstract class AssignmentAndArithmeticTranslator extends LLVMBaseTranslator {
             megaStack.push(val);
             arithmeticMapResults.put(ctx.getText(), val);
 
+            LLVMValueRef result = megaStack.popValue();
+            megaStack.endSection();
+            megaStack.push(result);
         }
+
     }
 
     @Override
@@ -175,7 +173,7 @@ abstract class AssignmentAndArithmeticTranslator extends LLVMBaseTranslator {
     private List<LLVMValueRef> getArithmeticComponents(List<String> componentsStrings, Map<String, LLVMValueRef> resultsMap) {
         List<LLVMValueRef> components = new ArrayList<>();
         for (String c : componentsStrings) {
-            String strVal = Arithmetic.removeBrackets(c);
+            String strVal = preventFuncName(Arithmetic.removeBrackets(c));
 
             LLVMValueRef llvmValueRef = null;
             if (Variable.isInteger(strVal)) {
@@ -186,7 +184,8 @@ abstract class AssignmentAndArithmeticTranslator extends LLVMBaseTranslator {
                 llvmValueRef = Variable.getFromMap(strVal, resultsMap);
 //                    resultsMap.remove(strVal);//TODO remove from map {String, Id}
             } else {
-                throw new RuntimeException("no values in map");
+                llvmValueRef = megaStack.popValue(); //TODO check this out
+//                throw new RuntimeException("no values in map");
             }
             components.add(llvmValueRef);
         }

@@ -31,6 +31,13 @@ abstract class LoopTranslator extends PrintTranslator {
         megaStack.push(orgLoopItrRef);
     }// stack: $->orgLoopItrRef->loopItrName
 
+    private LLVMValueRef loadIfNeeded(LLVMValueRef val){
+        LLVMTypeRef type = LLVMGetAllocatedType(val);
+        if(type != null && type.equals(LLVMInt32Type())){
+            return LLVMBuildLoad(builder, val, "");
+        }
+        return val;
+    }
 
     @Override
     public void enterDoBody(fortran77Parser.DoBodyContext ctx) {
@@ -38,9 +45,10 @@ abstract class LoopTranslator extends PrintTranslator {
         LLVM.LLVMValueRef function = valueRefs.get(executableUnitName);
 
         LLVMValueRef itrVal = megaStack.popValue();
-        LLVMValueRef inc = megaStack.getSize() > 2 ? megaStack.popValue() : LLVMConstInt(LLVMInt32Type(), 1, 1);
-        LLVMValueRef limit = megaStack.popValue();
-        LLVMValueRef initVal = megaStack.popValue();
+        LLVMValueRef inc = megaStack.getSize() > 2 ? loadIfNeeded(megaStack.popValue()) : LLVMConstInt(LLVMInt32Type(), 1, 1);
+        LLVMValueRef limit = loadIfNeeded(megaStack.popValue());
+        LLVMValueRef initVal = loadIfNeeded(megaStack.popValue());
+
 
         LLVMBuildStore(builder, initVal, itrVal);
 

@@ -30,7 +30,10 @@ public abstract class FunctionTranslator extends ReadTranslator {
     @Override
     public void enterFunctionSubprogram(fortran77Parser.FunctionSubprogramContext ctx) {
         megaStack.startSection();
-        this.args = ctx.functionStatement().namelist().identifier().stream().map(RuleContext::getText).collect(Collectors.toList());
+        if(ctx.functionStatement().namelist() !=null) {
+            this.args = ctx.functionStatement().namelist()
+                    .identifier().stream().map(RuleContext::getText).collect(Collectors.toList());
+        }
         String funName = ctx.functionStatement().identifier().getText();
 
         FunctionArgManager manager = new FunctionArgManager(ctx.subprogramBody(), this.args);

@@ -28,6 +28,6 @@
         sq = 6
       end if
        kkk = 'Ov fire and the void'
-       it = 12-3*2
+       it = 12
       print *, 'Jakieś proste rzeczy to tak', it, sq, kkk, 12
       end

@@ -1,9 +1,12 @@
 package com.agh.a2f.fortran.app.translators;
 
 import com.agh.a2f.fortran.app.util.LLVMFunctions;
+import com.agh.a2f.fortran.app.util.MegaStack;
 import com.agh.a2f.fortran.generated.fortran77Lexer;
 import com.agh.a2f.fortran.generated.fortran77Parser;
+import com.agh.a2f.fortran.generated.fortran77Parser.*;
 import org.antlr.v4.runtime.BufferedTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.bytedeco.javacpp.LLVM;
 import org.bytedeco.javacpp.PointerPointer;
 
@@ -73,7 +76,19 @@ abstract class PrintTranslator extends ConditionalTranslator {
     public void enterPrintStatement(fortran77Parser.PrintStatementContext ctx) {
         megaStack.startSection();
         ioListContexts = ctx.ioList();
-        ctx.children.removeIf(node -> !fortran77Parser.Aexpr0Context.class.isInstance(skipSingleChildNodes(node)));
+        ctx.children.removeIf(node -> {
+            ParseTree v = skipSingleChildNodes(node);
+            return !Aexpr0Context.class.isInstance(v) &&
+                    !Aexpr4Context.class.isInstance(v);
+        });
+    }
+
+    private Stack<LLVMValueRef> reverseStack(MegaStack megaStack){
+        Stack<LLVMValueRef> resultStack = new Stack<>();
+       while (megaStack.size() > 0){
+           resultStack.push(megaStack.popValue());
+       }
+       return resultStack;
     }
 
     @Override
@@ -82,13 +97,16 @@ abstract class PrintTranslator extends ConditionalTranslator {
         printfArgs = new ArrayList<>();
         formatJoiner = new StringBuilder();
 
+        Stack<LLVMValueRef> stack = reverseStack(megaStack);
+
         for (fortran77Parser.IoListContext l : ioListContexts) {
             String txt = l.getText();
             switch (l.getStop().getType()) {
                 case fortran77Lexer.ICON: //number (?integer)
                 case fortran77Lexer.MYNUM:
+                case fortran77Lexer.RPAREN:
                     if (!prepareNumber(txt)) {
-                        prepareMathExpr(txt);
+                        prepareMathExpr(stack);
                     }
                     break;
 
@@ -147,11 +165,11 @@ abstract class PrintTranslator extends ConditionalTranslator {
         }
     }
 
-    private void prepareMathExpr(String txt) {
+    private void prepareMathExpr(Stack<LLVMValueRef> stack) {
         //TODO coś stack się nie czyści
-//        LLVMValueRef result = megaStack.popValue();
-//        printfArgs.add(result);
-//        formatJoiner.append("          %d ");
+        LLVMValueRef result = stack.pop();
+        printfArgs.add(result);
+        formatJoiner.append("          %d ");
     }
 
 }

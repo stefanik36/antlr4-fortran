@@ -71,11 +71,15 @@ abstract class LLVMBaseTranslator extends fortran77BaseListener {
 
     @Override
     public void enterVarRef(fortran77Parser.VarRefContext ctx) {
-        String sName = preventFuncName(ctx.identifier().getText());
-        LLVMValueRef valRef = valueRefs.get(sName);
+        String sName;
         if (isFunctionCall(ctx)) {
             megaStack.startSection();
+            sName = ctx.identifier().getText();
         }
+        else {
+            sName = preventFuncName(ctx.identifier().getText());
+        }
+        LLVMValueRef valRef = valueRefs.get(sName);
         if (valRef != null && megaStack.wantData()) {
             megaStack.push(valRef);
         }

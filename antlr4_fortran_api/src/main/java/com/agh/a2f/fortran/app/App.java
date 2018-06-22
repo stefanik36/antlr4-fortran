@@ -22,7 +22,9 @@ public class App {
 //        String path = "src/main/resources/code/fortran/doLoops.f";
 //        String path = "src/main/resources/code/fortran/write.f90";
 //        String path = "src/main/resources/code/fortran/addExample.f";
-        String path = "src/main/resources/code/fortran/subroutine.f90";
+//        String path = "src/main/resources/code/fortran/subroutine.f90";
+//        String path = "src/main/resources/code/fortran/silnia.f90";
+        String path = "src/main/resources/code/fortran/fibo.f90";
 
 
         System.out.println("===================== FORTRAN FILE ======================");

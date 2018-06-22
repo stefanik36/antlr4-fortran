@@ -57,6 +57,9 @@ public class FunctionArgManager{
     }
 
     public LLVM.LLVMTypeRef[] getArgsTypeArray(){
+        if(args == null)
+            return new LLVM.LLVMTypeRef[0];
+
         prepareArgumentsType();
         LLVM.LLVMTypeRef args [] = new LLVM.LLVMTypeRef[this.args.size()];
         for(int i = 0; i < args.length; i++){

@@ -36,7 +36,10 @@ public abstract class SubroutineTranslator extends FunctionTranslator {
     public void enterSubroutineSubprogram(fortran77Parser.SubroutineSubprogramContext ctx) {
         megaStack.startSection();
 
-        this.args = ctx.subroutineStatement().namelist().identifier().stream().map(RuleContext::getText).collect(Collectors.toList());
+        if(ctx.subroutineStatement().namelist() !=null) {
+            this.args = ctx.subroutineStatement().namelist()
+                    .identifier().stream().map(RuleContext::getText).collect(Collectors.toList());
+        }
         String subName = ctx.subroutineStatement().identifier().getText();
 
         FunctionArgManager manager = new FunctionArgManager(ctx.subprogramBody(), this.args);
